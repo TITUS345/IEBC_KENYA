@@ -1,0 +1,26 @@
+<Project Sdk="Aspire.AppHost.Sdk/13.2.1">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net10.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <UserSecretsId>97799272-d755-409a-8b46-42627156d13c</UserSecretsId>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Aspire.Hosting.AppHost" Version="13.2.1" />
+    <PackageReference Include="Aspire.Hosting.PostgreSQL" Version="13.2.1" />
+    <PackageReference Include="CommunityToolkit.Aspire.Hosting.NodeJS.Extensions" Version="9.9.0" />
+    <PackageReference Include="DotNetEnv" Version="3.1.1" />
+    <PackageReference Include="MailKit" Version="4.15.1" />
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="10.0.5" />
+
+    
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\IEBCVotingSystemV10\IEBCVotingSystemV10.csproj" />
+  </ItemGroup>
+
+</Project>

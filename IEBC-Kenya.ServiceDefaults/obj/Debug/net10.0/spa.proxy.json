@@ -1,0 +1,10 @@
+{
+"SpaProxyServer": {
+"ServerUrl": "",
+"RedirectUrl": "",
+"LaunchCommand": "",
+"WorkingDirectory": "/home/hozy/IEBC-Kenya/IEBC-Kenya.ServiceDefaults",
+"MaxTimeoutInSeconds": "120",
+"KeepRunning": "false"
+}
+}

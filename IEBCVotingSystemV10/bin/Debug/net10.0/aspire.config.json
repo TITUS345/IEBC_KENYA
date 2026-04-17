@@ -1,0 +1,6 @@
+{
+    "appHost": {
+        "language": "csharp",
+        "path": "../IEBC-Kenya.AppHost/IEBC-Kenya.AppHost.csproj"
+    }
+}

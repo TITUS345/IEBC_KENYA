@@ -1,0 +1,6 @@
+@IEBCVotingSystemV10_HostAddress = http://localhost:5007
+
+GET {{IEBCVotingSystemV10_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
