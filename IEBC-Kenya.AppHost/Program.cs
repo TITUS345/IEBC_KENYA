@@ -10,8 +10,7 @@ var api = builder.AddProject<Projects.IEBCVotingSystemV10>("api")
     .WithEnvironment("JWT_KEY", jwtKey)
     .WithReference(db)
     .WithHttpHealthCheck("/health")
-    .WithHttpEndpoint(targetPort: 5007, name: "api-http")
-    .WithExternalHttpEndpoints();
+    .WithHttpEndpoint(targetPort: 5007, name: "api-http");
 
 // Define the frontend using AddDockerfile
 // This avoids the 'executable.v0' error because azd can host Docker containers, but not raw host executables.
