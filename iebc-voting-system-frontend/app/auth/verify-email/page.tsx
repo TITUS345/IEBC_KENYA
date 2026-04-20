@@ -60,7 +60,7 @@ function VerifyEmailContent() {
         <div className="p-20 text-center">
             <p className="text-xl font-bold">{status}</p>
             <button 
-                onClick={verifyEmail} 
+                onClick={() => verifyEmail()} 
                 disabled={isVerifying}
                 className="mt-4 px-6 py-2 bg-blue-600 text-white rounded disabled:opacity-50"
             >
