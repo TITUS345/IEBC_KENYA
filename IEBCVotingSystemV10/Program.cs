@@ -26,12 +26,13 @@ builder.Services.AddCors(options =>
     });
 });
 
-//---1. CONFIGURATION & ENVIRONMENT---
-if (builder.Environment.IsDevelopment()) DotNetEnv.Env.Load();
+// --- 1. CONFIGURATION & ENVIRONMENT ---
+// Aspire handles environment variables; DotNetEnv is only needed for standalone local runs.
+if (builder.Environment.IsDevelopment() && File.Exists(".env")) DotNetEnv.Env.Load();
 
 builder.Configuration.AddEnvironmentVariables();
 
-//handle null vallues
+// handle null values
 var signInKey = builder.Configuration["JWT_KEY"]
 ?? throw new InvalidOperationException("Missing or invalid signin key");
 

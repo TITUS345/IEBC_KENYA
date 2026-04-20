@@ -1,54 +1,22 @@
 'use client';
 
-import { Suspense, useEffect, useState } from 'react';
-import { useSearchParams } from 'next/navigation';
+import Link from 'next/link';
 
-function VerificationContent() {
-  const searchParams = useSearchParams();
-  const token = searchParams.get('token');
-  const [status, setStatus] = useState<'loading' | 'success' | 'error'>('loading');
-
-  useEffect(() => {
-    if (!token) {
-      setStatus('error');
-      return;
-    }
-
-    const controller = new AbortController();
-    const verifyToken = async () => {
-      const timeoutId = setTimeout(() => controller.abort(), 10000); // 10s timeout
-
-      try {
-        const response = await fetch(`/api/auth/verify?token=${token}`, {
-          signal: controller.signal
-        });
-        clearTimeout(timeoutId);
-        
-        if (response.ok) setStatus('success');
-        else setStatus('error');
-      } catch (err) {
-        setStatus('error');
-      }
-    };
-
-    verifyToken();
-    
-    return () => controller.abort();
-  }, [token]);
-
+export default function LandingPage() {
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen">
-      {status === 'loading' && <p>Verifying your email, please wait...</p>}
-      {status === 'success' && <p className="text-green-600">Email verified successfully!</p>}
-      {status === 'error' && <p className="text-red-600">Verification failed or request timed out.</p>}
+    <div className="flex flex-col items-center justify-center min-h-screen bg-gray-50 px-4">
+      <h1 className="text-4xl font-bold text-blue-900 mb-4 text-center">
+        IEBC Kenya Voting System
+      </h1>
+      <p className="text-gray-600 text-lg mb-8 text-center max-w-md">
+        Welcome to the official digital voting platform. Please sign in to cast your vote securely.
+      </p>
+      <Link 
+        href="/auth/signIn"
+        className="px-8 py-3 bg-blue-700 text-white rounded-lg font-semibold hover:bg-blue-800 transition-colors"
+      >
+        Access Portal
+      </Link>
     </div>
-  );
-}
-
-export default function VerifyEmailPage() {
-  return (
-    <Suspense fallback={<div>Initializing verification...</div>}>
-      <VerificationContent />
-    </Suspense>
   );
 }
