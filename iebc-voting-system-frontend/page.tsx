@@ -14,8 +14,8 @@ function VerificationContent() {
       return;
     }
 
+    const controller = new AbortController();
     const verifyToken = async () => {
-      const controller = new AbortController();
       const timeoutId = setTimeout(() => controller.abort(), 10000); // 10s timeout
 
       try {
@@ -32,6 +32,8 @@ function VerificationContent() {
     };
 
     verifyToken();
+    
+    return () => controller.abort();
   }, [token]);
 
   return (

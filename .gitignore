@@ -12,14 +12,8 @@
 **/obj/
 [Bb]in/
 [Oo]bj/
-*.user
-*.userosscache
-*.sln.docstates
 .vs/
 *.suo
-*.user
-*.userosscache
-*.sln.docstates
 
 # --- Node.js / Frontend ---
 iebc-voting-system-frontend/.next/
@@ -43,3 +37,4 @@ Thumbs.db
 
 # --- GitHub ---
 !.github/workflows/
+.azure

@@ -23,7 +23,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("IEBC-Kenya.AppHost")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+971d1b581cc4e43ebc55c5496cc0b36483aa1939")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+35cc8c73aa950df4e7ddb34113fca7d8e9e59212")]
 [assembly: System.Reflection.AssemblyProductAttribute("IEBC-Kenya.AppHost")]
 [assembly: System.Reflection.AssemblyTitleAttribute("IEBC-Kenya.AppHost")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

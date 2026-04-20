@@ -11,7 +11,7 @@ function VerifyEmailContent() {
     const [status, setStatus] = useState("Verifying your email...");
     const [isVerifying, setIsVerifying] = useState(false);
 
-    const verifyEmail = async () => {
+    const verifyEmail = async (signal?: AbortSignal) => {
         if (isVerifying) return;
         setIsVerifying(true);
 
@@ -29,6 +29,7 @@ function VerifyEmailContent() {
             console.log(`[VERIFY-DEBUG]: Calling ${apiUrl} for ${email}`);
             const response = await axios.get(apiUrl, {
                 params: { token, email },
+                signal,
                 timeout: 30000, // Increase to 30s
             });
             if (response.status === 200) {
@@ -49,8 +50,11 @@ function VerifyEmailContent() {
     };
 
     useEffect(() => {
-        verifyEmail();
-    }, [searchParams]);
+        const controller = new AbortController();
+        verifyEmail(controller.signal);
+
+        return () => controller.abort();
+    }, [searchParams]); // Re-verify if URL parameters change
 
     return (
         <div className="p-20 text-center">
