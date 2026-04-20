@@ -5,5 +5,6 @@
     <Import Project="$(NuGetPackageRoot)microsoft.extensions.http.resilience/10.2.0/buildTransitive/net8.0/Microsoft.Extensions.Http.Resilience.targets" Condition="Exists('$(NuGetPackageRoot)microsoft.extensions.http.resilience/10.2.0/buildTransitive/net8.0/Microsoft.Extensions.Http.Resilience.targets')" />
     <Import Project="$(NuGetPackageRoot)microsoft.aspnetcore.spaproxy/10.0.0/build/Microsoft.AspNetCore.SpaProxy.targets" Condition="Exists('$(NuGetPackageRoot)microsoft.aspnetcore.spaproxy/10.0.0/build/Microsoft.AspNetCore.SpaProxy.targets')" />
     <Import Project="$(NuGetPackageRoot)microsoft.aspnetcore.components.webassembly.devserver/10.0.0/build/Microsoft.AspNetCore.Components.WebAssembly.DevServer.targets" Condition="Exists('$(NuGetPackageRoot)microsoft.aspnetcore.components.webassembly.devserver/10.0.0/build/Microsoft.AspNetCore.Components.WebAssembly.DevServer.targets')" />
+    <Import Project="$(NuGetPackageRoot)aspire.hosting/13.2.2/buildTransitive/net8.0/Aspire.Hosting.targets" Condition="Exists('$(NuGetPackageRoot)aspire.hosting/13.2.2/buildTransitive/net8.0/Aspire.Hosting.targets')" />
   </ImportGroup>
 </Project>

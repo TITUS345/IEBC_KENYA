@@ -1,10 +1,11 @@
 {
   "version": 2,
-  "dgSpecHash": "/KwgC1s4wnQ=",
+  "dgSpecHash": "cvVgcfV9pfM=",
   "success": true,
   "projectFilePath": "/home/hozy/IEBC-Kenya/IEBCVotingSystemV10/IEBCVotingSystemV10.csproj",
   "expectedPackageFiles": [
-    "/home/hozy/.nuget/packages/aspire.hosting/13.2.1/aspire.hosting.13.2.1.nupkg.sha512",
+    "/home/hozy/.nuget/packages/aspire.hosting/13.2.2/aspire.hosting.13.2.2.nupkg.sha512",
+    "/home/hozy/.nuget/packages/aspire.hosting.docker/13.2.2/aspire.hosting.docker.13.2.2.nupkg.sha512",
     "/home/hozy/.nuget/packages/aspire.hosting.postgresql/13.2.1/aspire.hosting.postgresql.13.2.1.nupkg.sha512",
     "/home/hozy/.nuget/packages/aspire.npgsql.entityframeworkcore.postgresql/13.2.1/aspire.npgsql.entityframeworkcore.postgresql.13.2.1.nupkg.sha512",
     "/home/hozy/.nuget/packages/aspnetcore.healthchecks.npgsql/9.0.0/aspnetcore.healthchecks.npgsql.9.0.0.nupkg.sha512",
@@ -32,7 +33,6 @@
     "/home/hozy/.nuget/packages/messagepack/2.5.192/messagepack.2.5.192.nupkg.sha512",
     "/home/hozy/.nuget/packages/messagepack.annotations/2.5.192/messagepack.annotations.2.5.192.nupkg.sha512",
     "/home/hozy/.nuget/packages/microsoft.aspnetcore.authentication.jwtbearer/10.0.5/microsoft.aspnetcore.authentication.jwtbearer.10.0.5.nupkg.sha512",
-    "/home/hozy/.nuget/packages/microsoft.aspnetcore.components.webassembly.devserver/10.0.0/microsoft.aspnetcore.components.webassembly.devserver.10.0.0.nupkg.sha512",
     "/home/hozy/.nuget/packages/microsoft.aspnetcore.identity.entityframeworkcore/10.0.5/microsoft.aspnetcore.identity.entityframeworkcore.10.0.5.nupkg.sha512",
     "/home/hozy/.nuget/packages/microsoft.aspnetcore.openapi/10.0.0/microsoft.aspnetcore.openapi.10.0.0.nupkg.sha512",
     "/home/hozy/.nuget/packages/microsoft.aspnetcore.spaproxy/10.0.0/microsoft.aspnetcore.spaproxy.10.0.0.nupkg.sha512",
@@ -55,21 +55,10 @@
     "/home/hozy/.nuget/packages/microsoft.entityframeworkcore.sqlserver/10.0.5/microsoft.entityframeworkcore.sqlserver.10.0.5.nupkg.sha512",
     "/home/hozy/.nuget/packages/microsoft.entityframeworkcore.tools/10.0.5/microsoft.entityframeworkcore.tools.10.0.5.nupkg.sha512",
     "/home/hozy/.nuget/packages/microsoft.extensions.ai.abstractions/10.3.0/microsoft.extensions.ai.abstractions.10.3.0.nupkg.sha512",
-    "/home/hozy/.nuget/packages/microsoft.extensions.ambientmetadata.application/10.2.0/microsoft.extensions.ambientmetadata.application.10.2.0.nupkg.sha512",
     "/home/hozy/.nuget/packages/microsoft.extensions.apidescription.server/10.0.0/microsoft.extensions.apidescription.server.10.0.0.nupkg.sha512",
-    "/home/hozy/.nuget/packages/microsoft.extensions.compliance.abstractions/10.2.0/microsoft.extensions.compliance.abstractions.10.2.0.nupkg.sha512",
-    "/home/hozy/.nuget/packages/microsoft.extensions.dependencyinjection.autoactivation/10.2.0/microsoft.extensions.dependencyinjection.autoactivation.10.2.0.nupkg.sha512",
     "/home/hozy/.nuget/packages/microsoft.extensions.dependencymodel/10.0.5/microsoft.extensions.dependencymodel.10.0.5.nupkg.sha512",
-    "/home/hozy/.nuget/packages/microsoft.extensions.diagnostics.exceptionsummarization/10.2.0/microsoft.extensions.diagnostics.exceptionsummarization.10.2.0.nupkg.sha512",
     "/home/hozy/.nuget/packages/microsoft.extensions.diagnostics.healthchecks.entityframeworkcore/10.0.5/microsoft.extensions.diagnostics.healthchecks.entityframeworkcore.10.0.5.nupkg.sha512",
     "/home/hozy/.nuget/packages/microsoft.extensions.fileproviders.embedded/1.0.0/microsoft.extensions.fileproviders.embedded.1.0.0.nupkg.sha512",
-    "/home/hozy/.nuget/packages/microsoft.extensions.http.diagnostics/10.2.0/microsoft.extensions.http.diagnostics.10.2.0.nupkg.sha512",
-    "/home/hozy/.nuget/packages/microsoft.extensions.http.resilience/10.2.0/microsoft.extensions.http.resilience.10.2.0.nupkg.sha512",
-    "/home/hozy/.nuget/packages/microsoft.extensions.resilience/10.2.0/microsoft.extensions.resilience.10.2.0.nupkg.sha512",
-    "/home/hozy/.nuget/packages/microsoft.extensions.servicediscovery/10.2.0/microsoft.extensions.servicediscovery.10.2.0.nupkg.sha512",
-    "/home/hozy/.nuget/packages/microsoft.extensions.servicediscovery.abstractions/10.2.0/microsoft.extensions.servicediscovery.abstractions.10.2.0.nupkg.sha512",
-    "/home/hozy/.nuget/packages/microsoft.extensions.telemetry/10.2.0/microsoft.extensions.telemetry.10.2.0.nupkg.sha512",
-    "/home/hozy/.nuget/packages/microsoft.extensions.telemetry.abstractions/10.2.0/microsoft.extensions.telemetry.abstractions.10.2.0.nupkg.sha512",
     "/home/hozy/.nuget/packages/microsoft.identity.client/4.73.1/microsoft.identity.client.4.73.1.nupkg.sha512",
     "/home/hozy/.nuget/packages/microsoft.identity.client.extensions.msal/4.73.1/microsoft.identity.client.extensions.msal.4.73.1.nupkg.sha512",
     "/home/hozy/.nuget/packages/microsoft.identitymodel.abstractions/8.0.1/microsoft.identitymodel.abstractions.8.0.1.nupkg.sha512",
@@ -105,14 +94,8 @@
     "/home/hozy/.nuget/packages/opentelemetry/1.15.0/opentelemetry.1.15.0.nupkg.sha512",
     "/home/hozy/.nuget/packages/opentelemetry.api/1.15.0/opentelemetry.api.1.15.0.nupkg.sha512",
     "/home/hozy/.nuget/packages/opentelemetry.api.providerbuilderextensions/1.15.0/opentelemetry.api.providerbuilderextensions.1.15.0.nupkg.sha512",
-    "/home/hozy/.nuget/packages/opentelemetry.exporter.opentelemetryprotocol/1.15.0/opentelemetry.exporter.opentelemetryprotocol.1.15.0.nupkg.sha512",
     "/home/hozy/.nuget/packages/opentelemetry.extensions.hosting/1.15.0/opentelemetry.extensions.hosting.1.15.0.nupkg.sha512",
-    "/home/hozy/.nuget/packages/opentelemetry.instrumentation.aspnetcore/1.15.0/opentelemetry.instrumentation.aspnetcore.1.15.0.nupkg.sha512",
-    "/home/hozy/.nuget/packages/opentelemetry.instrumentation.http/1.15.0/opentelemetry.instrumentation.http.1.15.0.nupkg.sha512",
-    "/home/hozy/.nuget/packages/opentelemetry.instrumentation.runtime/1.15.0/opentelemetry.instrumentation.runtime.1.15.0.nupkg.sha512",
     "/home/hozy/.nuget/packages/polly.core/8.6.5/polly.core.8.6.5.nupkg.sha512",
-    "/home/hozy/.nuget/packages/polly.extensions/8.4.2/polly.extensions.8.4.2.nupkg.sha512",
-    "/home/hozy/.nuget/packages/polly.ratelimiting/8.4.2/polly.ratelimiting.8.4.2.nupkg.sha512",
     "/home/hozy/.nuget/packages/scalar.aspnetcore/2.13.15/scalar.aspnetcore.2.13.15.nupkg.sha512",
     "/home/hozy/.nuget/packages/semver/3.0.0/semver.3.0.0.nupkg.sha512",
     "/home/hozy/.nuget/packages/sprache/2.3.1/sprache.2.3.1.nupkg.sha512",
@@ -137,5 +120,18 @@
     "/home/hozy/.nuget/packages/system.security.cryptography.protecteddata/9.0.4/system.security.cryptography.protecteddata.9.0.4.nupkg.sha512",
     "/home/hozy/.nuget/packages/yamldotnet/16.3.0/yamldotnet.16.3.0.nupkg.sha512"
   ],
-  "logs": []
+  "logs": [
+    {
+      "code": "NU1902",
+      "level": "Warning",
+      "message": "Package 'MailKit' 4.15.1 has a known moderate severity vulnerability, https://github.com/advisories/GHSA-9j88-vvj5-vhgr",
+      "projectPath": "/home/hozy/IEBC-Kenya/IEBCVotingSystemV10/IEBCVotingSystemV10.csproj",
+      "warningLevel": 1,
+      "filePath": "/home/hozy/IEBC-Kenya/IEBCVotingSystemV10/IEBCVotingSystemV10.csproj",
+      "libraryId": "MailKit",
+      "targetGraphs": [
+        "net10.0"
+      ]
+    }
+  ]
 }

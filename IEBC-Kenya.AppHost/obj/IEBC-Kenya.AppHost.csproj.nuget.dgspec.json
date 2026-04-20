@@ -54,6 +54,10 @@
               "target": "Package",
               "version": "[13.2.1, )"
             },
+            "Aspire.Hosting.Docker": {
+              "target": "Package",
+              "version": "[13.2.2, )"
+            },
             "Aspire.Hosting.Orchestration.linux-x64": {
               "target": "Package",
               "version": "[13.2.1, )",
@@ -96,7 +100,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "/usr/lib/dotnet/sdk/10.0.104/PortableRuntimeIdentifierGraph.json",
+          "runtimeIdentifierGraphPath": "/usr/lib/dotnet/sdk/10.0.106/PortableRuntimeIdentifierGraph.json",
           "packagesToPrune": {
             "Microsoft.CSharp": "(,4.7.32767]",
             "Microsoft.VisualBasic": "(,10.4.32767]",

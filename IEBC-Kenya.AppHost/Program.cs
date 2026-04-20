@@ -29,16 +29,17 @@ else
 
 
 
-    var frontend = builder.AddNpmApp("frontend", "../iebc-voting-system-frontend", "dev")
-        .WithReference(api) // Injects the API URL into the frontend
-        .WithEnvironment("NEXT_PUBLIC_API_URL", "http://192.168.100.34:5007")
-        .WithHttpEndpoint(targetPort: 3000, port: 3000, env: "PORT", isProxied: false) // Bind frontend to 3000 externally without proxying
-        .WithExternalHttpEndpoints();
+    builder.AddNpmApp("frontend", "../iebc-voting-system-frontend", "dev")
+            .WithReference(api) // Injects the API URL into the frontend
+            .WithEnvironment("NEXT_PUBLIC_API_URL", "http://192.168.100.34:5007")
+            .WithHttpEndpoint(targetPort: 3000, port: 3000, env: "PORT", isProxied: false) // Bind frontend to 3000 externally without proxying
+            .WithExternalHttpEndpoints();
 
 }
 //Pass external URL for email links
 api.WithEnvironment("FRONTEND_BASE_URL", "http://192.168.100.34:3000");
 
+builder.AddDockerComposeEnvironment("docker-env");
 
 
 builder.Build().Run();

@@ -1,0 +1,45 @@
+# --- Secrets & Environment Variables ---
+# Ignore all .env files in any directory
+.env
+.env.*
+*.env.local
+*.env.development.local
+*.env.test.local
+*.env.production.local
+
+# Specifically targeting the aspire-output directory
+**/aspire-output/.env
+**/obj/
+[Bb]in/
+[Oo]bj/
+*.user
+*.userosscache
+*.sln.docstates
+.vs/
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+
+# --- Node.js / Frontend ---
+iebc-voting-system-frontend/.next/
+iebc-voting-system-frontend/out/
+iebc-voting-system-frontend/build/
+iebc-voting-system-frontend/dist/
+node_modules/
+.next/
+out/
+build/
+dist/
+.npm/
+
+# --- IDEs & OS ---
+.idea/
+.vscode/
+*.swp
+*.swo
+.DS_Store
+Thumbs.db
+
+# --- GitHub ---
+!.github/workflows/

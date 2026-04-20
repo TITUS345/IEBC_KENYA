@@ -1,0 +1,53 @@
+services:
+  docker-env-dashboard:
+    image: "mcr.microsoft.com/dotnet/nightly/aspire-dashboard:latest"
+    ports:
+      - "18888:18888"
+    expose:
+      - "18889"
+      - "18890"
+    networks:
+      - "aspire"
+    restart: "always"
+  api:
+    image: "${API_IMAGE}"
+    build:
+      context: "../../IEBCVotingSystemV10"
+    environment:
+      OTEL_DOTNET_EXPERIMENTAL_OTLP_RETRY: "in_memory"
+      ASPNETCORE_FORWARDEDHEADERS_ENABLED: "true"
+      HTTP_PORTS: "${API_PORT};5007"
+      JWT_KEY: "${JWT_KEY}"
+      EMAIL: "${EMAIL}"
+      EMAIL_PASSWORD: "${EMAIL_PASSWORD}"
+      HOST: "${HOST}"
+      ConnectionStrings__votingdb: "${VOTINGDB}"
+      FRONTEND_BASE_URL: "${FRONTEND_BASE_URL}"
+      OTEL_EXPORTER_OTLP_ENDPOINT: "http://docker-env-dashboard:18889"
+      OTEL_EXPORTER_OTLP_PROTOCOL: "grpc"
+      OTEL_SERVICE_NAME: "api"
+      # Set environment to Development to see better errors if it crashes
+      ASPNETCORE_ENVIRONMENT: "Development"
+    ports:
+      - "${API_PORT}:${API_PORT}"
+      - "5007:5007"
+    networks:
+      - "aspire"
+  frontend:
+    image: "${FRONTEND_IMAGE}"
+    build:
+      context: "../../iebc-voting-system-frontend"
+    environment:
+      PORT: "3000"
+      API_HTTP: "http://api:${API_PORT}"
+      services__api__http__0: "http://api:${API_PORT}"
+      API_HTTPS: "https://api:${API_PORT}"
+      API_API_HTTP: "http://api:5007"
+      services__api__http__1: "http://api:5007"
+    ports:
+      - "3000:3000"
+    networks:
+      - "aspire"
+networks:
+  aspire:
+    driver: "bridge"

@@ -8,6 +8,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Aspire.Hosting.Docker" Version="13.2.2" />
     <PackageReference Include="Aspire.Hosting.PostgreSQL" Version="13.2.1" />
     <PackageReference Include="Aspire.Npgsql.EntityFrameworkCore.PostgreSQL" Version="13.2.1" />
     <PackageReference Include="DotNetEnv" Version="3.1.1" />
@@ -37,8 +38,6 @@
     <Folder Include="Utils/" />
   </ItemGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\IEBC-Kenya.ServiceDefaults\IEBC-Kenya.ServiceDefaults.csproj" />
-  </ItemGroup>
+
 
 </Project>

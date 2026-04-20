@@ -1,7 +1,6 @@
 using System.Text;
 using IEBCVotingSystemV10;
 using IEBCVotingSystemV10.Data;
-//using IEBCVotingSystemV10.DataSeeder;
 using IEBCVotingSystemV10.Model;
 using IEBCVotingSystemV10.Model.Entity;
 using IEBCVotingSystemV10.Services;
@@ -15,28 +14,20 @@ using Microsoft.IdentityModel.Tokens;
 
 
 var builder = WebApplication.CreateBuilder(args);
-//uncheck for production
-// builder.Services.AddCors(options =>
-// {
-//     options.AddPolicy("AllowNextJS",
-//         policy => policy.WithOrigins("http://localhost:3000") // Your UI URL
-//                         .AllowAnyMethod()
-//                         .AllowAnyHeader());
-// });
-
-//comment on production
 builder.Services.AddCors(options =>
 {
-    options.AddPolicy("AllowAll", policy =>
+    options.AddPolicy("ProductionPolicy", policy =>
     {
-        policy.AllowAnyOrigin()
+        var frontendUrl = builder.Configuration["FRONTEND_BASE_URL"] ?? "http://localhost:3000";
+        policy.WithOrigins(frontendUrl)
               .AllowAnyMethod()
-              .AllowAnyHeader();
+              .AllowAnyHeader()
+              .AllowCredentials();
     });
 });
 
 //---1. CONFIGURATION & ENVIRONMENT---
-DotNetEnv.Env.Load(); // This reads your .env file
+if (builder.Environment.IsDevelopment()) DotNetEnv.Env.Load();
 
 builder.Configuration.AddEnvironmentVariables();
 
@@ -48,11 +39,12 @@ var signInKey = builder.Configuration["JWT_KEY"]
 
 // . Register the health check service
 builder.Services.AddHealthChecks();
-// . Add Aspire Service Defaults (Important!)
-builder.AddServiceDefaults();
 
 // Add services to the container.
-builder.Services.AddControllers()
+builder.Services.AddControllersWithViews(options =>
+{
+    options.SuppressAsyncSuffixInActionNames = false;
+})
     .AddJsonOptions(options =>
     {
         options.JsonSerializerOptions.Converters.Add(new System.Text.Json.Serialization.JsonStringEnumConverter());
@@ -65,8 +57,11 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddOpenApi();
 
 // --- 3. DATABASE & IDENTITY ---
+var connectionString = builder.Configuration.GetConnectionString("votingdb")
+    ?? throw new InvalidOperationException("Connection string 'votingdb' not found.");
+
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
-    options.UseNpgsql(builder.Configuration.GetConnectionString("votingdb")));
+    options.UseNpgsql(connectionString));
 
 builder.Services.AddIdentity<ApplicationUser, AppUserRoles>(options =>
 {
@@ -104,32 +99,21 @@ builder.Services.AddAuthentication(options =>
 
 var app = builder.Build();
 
-// using (var scope = app.Services.CreateScope())
-// {
-//     var services = scope.ServiceProvider;
-//     await DataSeeder.SeedRolesAsync(services);
-// }
-
 // --- 5. MIDDLEWARE PIPELINE ---
-app.MapDefaultEndpoints();
 
-
-// Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
 }
 
-
-
-app.UseCors("AllowAll");
-// app.UseHttpsRedirection();
 app.UseRouting();
+app.UseCors("ProductionPolicy");
+
 app.UseAuthentication();
 app.UseAuthorization();
+
+app.MapHealthChecks("/health");
 app.MapControllers();
 
 app.Run();
-
-

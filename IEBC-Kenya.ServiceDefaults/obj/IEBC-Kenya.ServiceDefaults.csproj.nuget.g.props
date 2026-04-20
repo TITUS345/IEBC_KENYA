@@ -17,5 +17,6 @@
   </ImportGroup>
   <PropertyGroup Condition=" '$(ExcludeRestorePackageImports)' != 'true' ">
     <PkgMicrosoft_AspNetCore_Components_WebAssembly_DevServer Condition=" '$(PkgMicrosoft_AspNetCore_Components_WebAssembly_DevServer)' == '' ">/home/hozy/.nuget/packages/microsoft.aspnetcore.components.webassembly.devserver/10.0.0</PkgMicrosoft_AspNetCore_Components_WebAssembly_DevServer>
+    <PkgGrpc_Tools Condition=" '$(PkgGrpc_Tools)' == '' ">/home/hozy/.nuget/packages/grpc.tools/2.78.0</PkgGrpc_Tools>
   </PropertyGroup>
 </Project>

@@ -22,12 +22,12 @@ namespace IEBCVotingSystemV10.Services
         {
             var email = new MimeMessage();
 
-            //fetch directly from .env
-            var senderEmail = Environment.GetEnvironmentVariable("EMAIL")
+            // Use the injected IConfiguration service
+            var senderEmail = _config["EMAIL"]
             ?? throw new InvalidOperationException("The sender Email is invalid or missing");
-            var senderPass = Environment.GetEnvironmentVariable("EMAIL_PASSWORD")
+            var senderPass = _config["EMAIL_PASSWORD"]
             ?? throw new InvalidOperationException("The sender Password is invalid or missing");
-            var smtpHost = Environment.GetEnvironmentVariable("HOST")
+            var smtpHost = _config["HOST"]
             ?? throw new InvalidOperationException("The smtp Host is invalid or missing");
 
             email.From.Add(MailboxAddress.Parse(senderEmail));
@@ -39,11 +39,22 @@ namespace IEBCVotingSystemV10.Services
             email.Body = builder.ToMessageBody();
 
             using var smtp = new SmtpClient();
-            await smtp.ConnectAsync(smtpHost, 587, MailKit.Security.SecureSocketOptions.StartTls);
-            await smtp.AuthenticateAsync(senderEmail, senderPass);
-            await smtp.SendAsync(email);
-            await smtp.DisconnectAsync(true);
-
+            try
+            {
+                smtp.Timeout = 10000; // 10 second timeout for SMTP
+                await smtp.ConnectAsync(smtpHost, 587, MailKit.Security.SecureSocketOptions.StartTls);
+                await smtp.AuthenticateAsync(senderEmail, senderPass);
+                await smtp.SendAsync(email);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"[EMAIL-SERVICE-ERROR]: Failed to send email to {toEmail}. Error: {ex.Message}");
+                throw;
+            }
+            finally
+            {
+                await smtp.DisconnectAsync(true);
+            }
 
 
         }

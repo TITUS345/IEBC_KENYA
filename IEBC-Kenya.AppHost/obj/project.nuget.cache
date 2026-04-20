@@ -1,12 +1,13 @@
 {
   "version": 2,
-  "dgSpecHash": "ZYFl+2/bD00=",
+  "dgSpecHash": "Zr7POv6sXaE=",
   "success": true,
   "projectFilePath": "/home/hozy/IEBC-Kenya/IEBC-Kenya.AppHost/IEBC-Kenya.AppHost.csproj",
   "expectedPackageFiles": [
     "/home/hozy/.nuget/packages/aspire.dashboard.sdk.linux-x64/13.2.1/aspire.dashboard.sdk.linux-x64.13.2.1.nupkg.sha512",
-    "/home/hozy/.nuget/packages/aspire.hosting/13.2.1/aspire.hosting.13.2.1.nupkg.sha512",
+    "/home/hozy/.nuget/packages/aspire.hosting/13.2.2/aspire.hosting.13.2.2.nupkg.sha512",
     "/home/hozy/.nuget/packages/aspire.hosting.apphost/13.2.1/aspire.hosting.apphost.13.2.1.nupkg.sha512",
+    "/home/hozy/.nuget/packages/aspire.hosting.docker/13.2.2/aspire.hosting.docker.13.2.2.nupkg.sha512",
     "/home/hozy/.nuget/packages/aspire.hosting.nodejs/9.5.2/aspire.hosting.nodejs.9.5.2.nupkg.sha512",
     "/home/hozy/.nuget/packages/aspire.hosting.orchestration.linux-x64/13.2.1/aspire.hosting.orchestration.linux-x64.13.2.1.nupkg.sha512",
     "/home/hozy/.nuget/packages/aspire.hosting.postgresql/13.2.1/aspire.hosting.postgresql.13.2.1.nupkg.sha512",
@@ -93,5 +94,18 @@
     "/home/hozy/.nuget/packages/system.security.cryptography.pkcs/10.0.0/system.security.cryptography.pkcs.10.0.0.nupkg.sha512",
     "/home/hozy/.nuget/packages/yamldotnet/16.3.0/yamldotnet.16.3.0.nupkg.sha512"
   ],
-  "logs": []
+  "logs": [
+    {
+      "code": "NU1902",
+      "level": "Warning",
+      "message": "Package 'MailKit' 4.15.1 has a known moderate severity vulnerability, https://github.com/advisories/GHSA-9j88-vvj5-vhgr",
+      "projectPath": "/home/hozy/IEBC-Kenya/IEBC-Kenya.AppHost/IEBC-Kenya.AppHost.csproj",
+      "warningLevel": 1,
+      "filePath": "/home/hozy/IEBC-Kenya/IEBC-Kenya.AppHost/IEBC-Kenya.AppHost.csproj",
+      "libraryId": "MailKit",
+      "targetGraphs": [
+        "net10.0"
+      ]
+    }
+  ]
 }

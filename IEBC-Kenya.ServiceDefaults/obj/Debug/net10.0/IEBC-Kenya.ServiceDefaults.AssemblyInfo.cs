@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("IEBC-Kenya.ServiceDefaults")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+971d1b581cc4e43ebc55c5496cc0b36483aa1939")]
 [assembly: System.Reflection.AssemblyProductAttribute("IEBC-Kenya.ServiceDefaults")]
 [assembly: System.Reflection.AssemblyTitleAttribute("IEBC-Kenya.ServiceDefaults")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

@@ -2,14 +2,13 @@
   "version": 3,
   "targets": {
     "net10.0": {
-      "Aspire.Hosting/13.2.1": {
+      "Aspire.Hosting/13.2.2": {
         "type": "package",
         "dependencies": {
           "AspNetCore.HealthChecks.Uris": "9.0.0",
           "Google.Protobuf": "3.33.5",
           "Grpc.AspNetCore": "2.76.0",
           "Grpc.Net.ClientFactory": "2.76.0",
-          "Grpc.Tools": "2.78.0",
           "Humanizer.Core": "2.14.1",
           "JsonPatch.Net": "3.3.0",
           "KubernetesClient": "18.0.13",
@@ -73,6 +72,36 @@
         },
         "build": {
           "buildTransitive/net8.0/Aspire.Hosting.targets": {}
+        }
+      },
+      "Aspire.Hosting.Docker/13.2.2": {
+        "type": "package",
+        "dependencies": {
+          "AspNetCore.HealthChecks.Uris": "9.0.0",
+          "Aspire.Hosting": "13.2.2",
+          "Google.Protobuf": "3.33.5",
+          "Grpc.AspNetCore": "2.76.0",
+          "Grpc.Net.ClientFactory": "2.76.0",
+          "Grpc.Tools": "2.78.0",
+          "Humanizer.Core": "2.14.1",
+          "JsonPatch.Net": "3.3.0",
+          "KubernetesClient": "18.0.13",
+          "ModelContextProtocol": "1.0.0",
+          "Newtonsoft.Json": "13.0.4",
+          "Polly.Core": "8.6.5",
+          "Semver": "3.0.0",
+          "StreamJsonRpc": "2.22.23",
+          "System.IO.Hashing": "10.0.3"
+        },
+        "compile": {
+          "lib/net8.0/Aspire.Hosting.Docker.dll": {
+            "related": ".xml"
+          }
+        },
+        "runtime": {
+          "lib/net8.0/Aspire.Hosting.Docker.dll": {
+            "related": ".xml"
+          }
         }
       },
       "Aspire.Hosting.PostgreSQL/13.2.1": {
@@ -506,12 +535,6 @@
         "frameworkReferences": [
           "Microsoft.AspNetCore.App"
         ]
-      },
-      "Microsoft.AspNetCore.Components.WebAssembly.DevServer/10.0.0": {
-        "type": "package",
-        "build": {
-          "build/_._": {}
-        }
       },
       "Microsoft.AspNetCore.Identity.EntityFrameworkCore/10.0.5": {
         "type": "package",
@@ -1128,22 +1151,6 @@
           }
         }
       },
-      "Microsoft.Extensions.AmbientMetadata.Application/10.2.0": {
-        "type": "package",
-        "compile": {
-          "lib/net10.0/Microsoft.Extensions.AmbientMetadata.Application.dll": {
-            "related": ".xml"
-          }
-        },
-        "runtime": {
-          "lib/net10.0/Microsoft.Extensions.AmbientMetadata.Application.dll": {
-            "related": ".xml"
-          }
-        },
-        "build": {
-          "buildTransitive/net8.0/_._": {}
-        }
-      },
       "Microsoft.Extensions.ApiDescription.Server/10.0.0": {
         "type": "package",
         "build": {
@@ -1155,35 +1162,6 @@
           "buildMultiTargeting/Microsoft.Extensions.ApiDescription.Server.targets": {}
         }
       },
-      "Microsoft.Extensions.Compliance.Abstractions/10.2.0": {
-        "type": "package",
-        "compile": {
-          "lib/net10.0/Microsoft.Extensions.Compliance.Abstractions.dll": {
-            "related": ".xml"
-          }
-        },
-        "runtime": {
-          "lib/net10.0/Microsoft.Extensions.Compliance.Abstractions.dll": {
-            "related": ".xml"
-          }
-        }
-      },
-      "Microsoft.Extensions.DependencyInjection.AutoActivation/10.2.0": {
-        "type": "package",
-        "compile": {
-          "lib/net10.0/Microsoft.Extensions.DependencyInjection.AutoActivation.dll": {
-            "related": ".xml"
-          }
-        },
-        "runtime": {
-          "lib/net10.0/Microsoft.Extensions.DependencyInjection.AutoActivation.dll": {
-            "related": ".xml"
-          }
-        },
-        "build": {
-          "buildTransitive/net8.0/_._": {}
-        }
-      },
       "Microsoft.Extensions.DependencyModel/10.0.5": {
         "type": "package",
         "compile": {
@@ -1193,22 +1171,6 @@
         },
         "runtime": {
           "lib/net10.0/Microsoft.Extensions.DependencyModel.dll": {
-            "related": ".xml"
-          }
-        },
-        "build": {
-          "buildTransitive/net8.0/_._": {}
-        }
-      },
-      "Microsoft.Extensions.Diagnostics.ExceptionSummarization/10.2.0": {
-        "type": "package",
-        "compile": {
-          "lib/net10.0/Microsoft.Extensions.Diagnostics.ExceptionSummarization.dll": {
-            "related": ".xml"
-          }
-        },
-        "runtime": {
-          "lib/net10.0/Microsoft.Extensions.Diagnostics.ExceptionSummarization.dll": {
             "related": ".xml"
           }
         },
@@ -1243,137 +1205,6 @@
           "lib/netstandard1.0/Microsoft.Extensions.FileProviders.Embedded.dll": {
             "related": ".xml"
           }
-        }
-      },
-      "Microsoft.Extensions.Http.Diagnostics/10.2.0": {
-        "type": "package",
-        "dependencies": {
-          "Microsoft.Extensions.Telemetry": "10.2.0"
-        },
-        "compile": {
-          "lib/net10.0/Microsoft.Extensions.Http.Diagnostics.dll": {
-            "related": ".xml"
-          }
-        },
-        "runtime": {
-          "lib/net10.0/Microsoft.Extensions.Http.Diagnostics.dll": {
-            "related": ".xml"
-          }
-        },
-        "build": {
-          "buildTransitive/net8.0/_._": {}
-        }
-      },
-      "Microsoft.Extensions.Http.Resilience/10.2.0": {
-        "type": "package",
-        "dependencies": {
-          "Microsoft.Extensions.Http.Diagnostics": "10.2.0",
-          "Microsoft.Extensions.Resilience": "10.2.0"
-        },
-        "compile": {
-          "lib/net10.0/Microsoft.Extensions.Http.Resilience.dll": {
-            "related": ".xml"
-          }
-        },
-        "runtime": {
-          "lib/net10.0/Microsoft.Extensions.Http.Resilience.dll": {
-            "related": ".xml"
-          }
-        },
-        "build": {
-          "buildTransitive/net8.0/Microsoft.Extensions.Http.Resilience.targets": {}
-        }
-      },
-      "Microsoft.Extensions.Resilience/10.2.0": {
-        "type": "package",
-        "dependencies": {
-          "Microsoft.Extensions.Diagnostics.ExceptionSummarization": "10.2.0",
-          "Microsoft.Extensions.Telemetry.Abstractions": "10.2.0",
-          "Polly.Extensions": "8.4.2",
-          "Polly.RateLimiting": "8.4.2"
-        },
-        "compile": {
-          "lib/net10.0/Microsoft.Extensions.Resilience.dll": {
-            "related": ".xml"
-          }
-        },
-        "runtime": {
-          "lib/net10.0/Microsoft.Extensions.Resilience.dll": {
-            "related": ".xml"
-          }
-        },
-        "build": {
-          "buildTransitive/net8.0/_._": {}
-        }
-      },
-      "Microsoft.Extensions.ServiceDiscovery/10.2.0": {
-        "type": "package",
-        "dependencies": {
-          "Microsoft.Extensions.ServiceDiscovery.Abstractions": "10.2.0"
-        },
-        "compile": {
-          "lib/net10.0/Microsoft.Extensions.ServiceDiscovery.dll": {
-            "related": ".xml"
-          }
-        },
-        "runtime": {
-          "lib/net10.0/Microsoft.Extensions.ServiceDiscovery.dll": {
-            "related": ".xml"
-          }
-        }
-      },
-      "Microsoft.Extensions.ServiceDiscovery.Abstractions/10.2.0": {
-        "type": "package",
-        "compile": {
-          "lib/net10.0/Microsoft.Extensions.ServiceDiscovery.Abstractions.dll": {
-            "related": ".xml"
-          }
-        },
-        "runtime": {
-          "lib/net10.0/Microsoft.Extensions.ServiceDiscovery.Abstractions.dll": {
-            "related": ".xml"
-          }
-        }
-      },
-      "Microsoft.Extensions.Telemetry/10.2.0": {
-        "type": "package",
-        "dependencies": {
-          "Microsoft.Extensions.AmbientMetadata.Application": "10.2.0",
-          "Microsoft.Extensions.DependencyInjection.AutoActivation": "10.2.0",
-          "Microsoft.Extensions.Telemetry.Abstractions": "10.2.0"
-        },
-        "compile": {
-          "lib/net10.0/Microsoft.Extensions.Telemetry.dll": {
-            "related": ".xml"
-          }
-        },
-        "runtime": {
-          "lib/net10.0/Microsoft.Extensions.Telemetry.dll": {
-            "related": ".xml"
-          }
-        },
-        "build": {
-          "buildTransitive/net8.0/_._": {}
-        }
-      },
-      "Microsoft.Extensions.Telemetry.Abstractions/10.2.0": {
-        "type": "package",
-        "dependencies": {
-          "Microsoft.Extensions.Compliance.Abstractions": "10.2.0"
-        },
-        "compile": {
-          "lib/net10.0/Microsoft.Extensions.Telemetry.Abstractions.dll": {
-            "related": ".xml"
-          }
-        },
-        "runtime": {
-          "lib/net10.0/Microsoft.Extensions.Telemetry.Abstractions.dll": {
-            "related": ".xml"
-          }
-        },
-        "build": {
-          "buildTransitive/net8.0/Microsoft.Extensions.Telemetry.Abstractions.props": {},
-          "buildTransitive/net8.0/Microsoft.Extensions.Telemetry.Abstractions.targets": {}
         }
       },
       "Microsoft.Identity.Client/4.73.1": {
@@ -1986,22 +1817,6 @@
           }
         }
       },
-      "OpenTelemetry.Exporter.OpenTelemetryProtocol/1.15.0": {
-        "type": "package",
-        "dependencies": {
-          "OpenTelemetry": "1.15.0"
-        },
-        "compile": {
-          "lib/net10.0/OpenTelemetry.Exporter.OpenTelemetryProtocol.dll": {
-            "related": ".dll.sigstore.json;.xml"
-          }
-        },
-        "runtime": {
-          "lib/net10.0/OpenTelemetry.Exporter.OpenTelemetryProtocol.dll": {
-            "related": ".dll.sigstore.json;.xml"
-          }
-        }
-      },
       "OpenTelemetry.Extensions.Hosting/1.15.0": {
         "type": "package",
         "dependencies": {
@@ -2018,57 +1833,6 @@
           }
         }
       },
-      "OpenTelemetry.Instrumentation.AspNetCore/1.15.0": {
-        "type": "package",
-        "dependencies": {
-          "OpenTelemetry.Api.ProviderBuilderExtensions": "[1.15.0, 2.0.0)"
-        },
-        "compile": {
-          "lib/net10.0/OpenTelemetry.Instrumentation.AspNetCore.dll": {
-            "related": ".xml"
-          }
-        },
-        "runtime": {
-          "lib/net10.0/OpenTelemetry.Instrumentation.AspNetCore.dll": {
-            "related": ".xml"
-          }
-        },
-        "frameworkReferences": [
-          "Microsoft.AspNetCore.App"
-        ]
-      },
-      "OpenTelemetry.Instrumentation.Http/1.15.0": {
-        "type": "package",
-        "dependencies": {
-          "OpenTelemetry.Api.ProviderBuilderExtensions": "[1.15.0, 2.0.0)"
-        },
-        "compile": {
-          "lib/net10.0/OpenTelemetry.Instrumentation.Http.dll": {
-            "related": ".xml"
-          }
-        },
-        "runtime": {
-          "lib/net10.0/OpenTelemetry.Instrumentation.Http.dll": {
-            "related": ".xml"
-          }
-        }
-      },
-      "OpenTelemetry.Instrumentation.Runtime/1.15.0": {
-        "type": "package",
-        "dependencies": {
-          "OpenTelemetry.Api": "[1.15.0, 2.0.0)"
-        },
-        "compile": {
-          "lib/net10.0/OpenTelemetry.Instrumentation.Runtime.dll": {
-            "related": ".xml"
-          }
-        },
-        "runtime": {
-          "lib/net10.0/OpenTelemetry.Instrumentation.Runtime.dll": {
-            "related": ".xml"
-          }
-        }
-      },
       "Polly.Core/8.6.5": {
         "type": "package",
         "compile": {
@@ -2078,38 +1842,6 @@
         },
         "runtime": {
           "lib/net8.0/Polly.Core.dll": {
-            "related": ".pdb;.xml"
-          }
-        }
-      },
-      "Polly.Extensions/8.4.2": {
-        "type": "package",
-        "dependencies": {
-          "Polly.Core": "8.4.2"
-        },
-        "compile": {
-          "lib/net8.0/Polly.Extensions.dll": {
-            "related": ".pdb;.xml"
-          }
-        },
-        "runtime": {
-          "lib/net8.0/Polly.Extensions.dll": {
-            "related": ".pdb;.xml"
-          }
-        }
-      },
-      "Polly.RateLimiting/8.4.2": {
-        "type": "package",
-        "dependencies": {
-          "Polly.Core": "8.4.2"
-        },
-        "compile": {
-          "lib/net8.0/Polly.RateLimiting.dll": {
-            "related": ".pdb;.xml"
-          }
-        },
-        "runtime": {
-          "lib/net8.0/Polly.RateLimiting.dll": {
             "related": ".pdb;.xml"
           }
         }
@@ -2543,48 +2275,21 @@
             "related": ".xml"
           }
         }
-      },
-      "IEBC-Kenya.ServiceDefaults/1.0.0": {
-        "type": "project",
-        "framework": ".NETCoreApp,Version=v10.0",
-        "dependencies": {
-          "DotNetEnv": "3.1.1",
-          "MailKit": "4.15.1",
-          "Microsoft.AspNetCore.Authentication.JwtBearer": "10.0.5",
-          "Microsoft.AspNetCore.Components.WebAssembly.DevServer": "10.0.0",
-          "Microsoft.AspNetCore.SpaProxy": "10.0.0",
-          "Microsoft.Extensions.Http.Resilience": "10.2.0",
-          "Microsoft.Extensions.ServiceDiscovery": "10.2.0",
-          "OpenTelemetry.Exporter.OpenTelemetryProtocol": "1.15.0",
-          "OpenTelemetry.Extensions.Hosting": "1.15.0",
-          "OpenTelemetry.Instrumentation.AspNetCore": "1.15.0",
-          "OpenTelemetry.Instrumentation.Http": "1.15.0",
-          "OpenTelemetry.Instrumentation.Runtime": "1.15.0"
-        },
-        "compile": {
-          "bin/placeholder/IEBC-Kenya.ServiceDefaults.dll": {}
-        },
-        "runtime": {
-          "bin/placeholder/IEBC-Kenya.ServiceDefaults.dll": {}
-        },
-        "frameworkReferences": [
-          "Microsoft.AspNetCore.App"
-        ]
       }
     }
   },
   "libraries": {
-    "Aspire.Hosting/13.2.1": {
-      "sha512": "GY/T5iK2F4K3Sk60VUeVnTX1MhCjSaX48+qPUjA/rI1x1ONHevHzFj+Gc3fNlGEaZGY8L87hSxwGrV+Bjd5EJw==",
+    "Aspire.Hosting/13.2.2": {
+      "sha512": "jocP+/rGMBsQqiol5b6LRvWIRYng+o80UikCUuVXhMWIOsrOAL/T6RPye70k43IltcWo3wl3xVGSiSfR1rORGQ==",
       "type": "package",
-      "path": "aspire.hosting/13.2.1",
+      "path": "aspire.hosting/13.2.2",
       "files": [
         ".nupkg.metadata",
         ".signature.p7s",
         "Icon.png",
         "README.md",
         "THIRD-PARTY-NOTICES.TXT",
-        "aspire.hosting.13.2.1.nupkg.sha512",
+        "aspire.hosting.13.2.2.nupkg.sha512",
         "aspire.hosting.nuspec",
         "buildTransitive/net8.0/Aspire.Hosting.Integration.Analyzers.dll",
         "buildTransitive/net8.0/Aspire.Hosting.targets",
@@ -2603,6 +2308,22 @@
         "lib/net8.0/tr/Aspire.Hosting.resources.dll",
         "lib/net8.0/zh-Hans/Aspire.Hosting.resources.dll",
         "lib/net8.0/zh-Hant/Aspire.Hosting.resources.dll"
+      ]
+    },
+    "Aspire.Hosting.Docker/13.2.2": {
+      "sha512": "BVKfOv3hbQT8Sn9RgVMmnm4d8HVm0hCvwbXsvFw/lMLAh/GWj7HhGRT/laHzs5ilHnOONerwDYNwwvdek/rRKw==",
+      "type": "package",
+      "path": "aspire.hosting.docker/13.2.2",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "Icon.png",
+        "README.md",
+        "THIRD-PARTY-NOTICES.TXT",
+        "aspire.hosting.docker.13.2.2.nupkg.sha512",
+        "aspire.hosting.docker.nuspec",
+        "lib/net8.0/Aspire.Hosting.Docker.dll",
+        "lib/net8.0/Aspire.Hosting.Docker.xml"
       ]
     },
     "Aspire.Hosting.PostgreSQL/13.2.1": {
@@ -3196,177 +2917,6 @@
         "lib/net10.0/Microsoft.AspNetCore.Authentication.JwtBearer.xml",
         "microsoft.aspnetcore.authentication.jwtbearer.10.0.5.nupkg.sha512",
         "microsoft.aspnetcore.authentication.jwtbearer.nuspec"
-      ]
-    },
-    "Microsoft.AspNetCore.Components.WebAssembly.DevServer/10.0.0": {
-      "sha512": "PNlgKpY8yHbECR7lrJDV7BJ0xk39NCYTt2sFh4HQPFKc5gP7a6JH/rwruFbaoOc8zjSJxQfI3zGubBHVlNJt8A==",
-      "type": "package",
-      "path": "microsoft.aspnetcore.components.webassembly.devserver/10.0.0",
-      "hasTools": true,
-      "files": [
-        ".nupkg.metadata",
-        ".signature.p7s",
-        "Icon.png",
-        "THIRD-PARTY-NOTICES.txt",
-        "build/Microsoft.AspNetCore.Components.WebAssembly.DevServer.targets",
-        "microsoft.aspnetcore.components.webassembly.devserver.10.0.0.nupkg.sha512",
-        "microsoft.aspnetcore.components.webassembly.devserver.nuspec",
-        "tools/BlazorDebugProxy/BrowserDebugHost.dll",
-        "tools/BlazorDebugProxy/BrowserDebugHost.runtimeconfig.json",
-        "tools/BlazorDebugProxy/BrowserDebugProxy.dll",
-        "tools/BlazorDebugProxy/Microsoft.CodeAnalysis.CSharp.Scripting.dll",
-        "tools/BlazorDebugProxy/Microsoft.CodeAnalysis.CSharp.dll",
-        "tools/BlazorDebugProxy/Microsoft.CodeAnalysis.Scripting.dll",
-        "tools/BlazorDebugProxy/Microsoft.CodeAnalysis.dll",
-        "tools/BlazorDebugProxy/Microsoft.FileFormats.dll",
-        "tools/BlazorDebugProxy/Microsoft.NET.WebAssembly.Webcil.dll",
-        "tools/BlazorDebugProxy/Microsoft.SymbolStore.dll",
-        "tools/BlazorDebugProxy/Newtonsoft.Json.dll",
-        "tools/Microsoft.AspNetCore.Antiforgery.dll",
-        "tools/Microsoft.AspNetCore.Antiforgery.xml",
-        "tools/Microsoft.AspNetCore.Authentication.Abstractions.dll",
-        "tools/Microsoft.AspNetCore.Authentication.Abstractions.xml",
-        "tools/Microsoft.AspNetCore.Authentication.Core.dll",
-        "tools/Microsoft.AspNetCore.Authentication.Core.xml",
-        "tools/Microsoft.AspNetCore.Authentication.dll",
-        "tools/Microsoft.AspNetCore.Authentication.xml",
-        "tools/Microsoft.AspNetCore.Authorization.Policy.dll",
-        "tools/Microsoft.AspNetCore.Authorization.Policy.xml",
-        "tools/Microsoft.AspNetCore.Authorization.dll",
-        "tools/Microsoft.AspNetCore.Authorization.xml",
-        "tools/Microsoft.AspNetCore.Components.Authorization.dll",
-        "tools/Microsoft.AspNetCore.Components.Authorization.xml",
-        "tools/Microsoft.AspNetCore.Components.Endpoints.dll",
-        "tools/Microsoft.AspNetCore.Components.Endpoints.xml",
-        "tools/Microsoft.AspNetCore.Components.Forms.dll",
-        "tools/Microsoft.AspNetCore.Components.Forms.xml",
-        "tools/Microsoft.AspNetCore.Components.Web.dll",
-        "tools/Microsoft.AspNetCore.Components.Web.xml",
-        "tools/Microsoft.AspNetCore.Components.WebAssembly.Server.dll",
-        "tools/Microsoft.AspNetCore.Components.WebAssembly.Server.xml",
-        "tools/Microsoft.AspNetCore.Components.WebAssembly.dll",
-        "tools/Microsoft.AspNetCore.Components.WebAssembly.xml",
-        "tools/Microsoft.AspNetCore.Components.dll",
-        "tools/Microsoft.AspNetCore.Components.xml",
-        "tools/Microsoft.AspNetCore.Connections.Abstractions.dll",
-        "tools/Microsoft.AspNetCore.Connections.Abstractions.xml",
-        "tools/Microsoft.AspNetCore.Cryptography.Internal.dll",
-        "tools/Microsoft.AspNetCore.Cryptography.Internal.xml",
-        "tools/Microsoft.AspNetCore.DataProtection.Abstractions.dll",
-        "tools/Microsoft.AspNetCore.DataProtection.Abstractions.xml",
-        "tools/Microsoft.AspNetCore.DataProtection.Extensions.dll",
-        "tools/Microsoft.AspNetCore.DataProtection.Extensions.xml",
-        "tools/Microsoft.AspNetCore.DataProtection.dll",
-        "tools/Microsoft.AspNetCore.DataProtection.xml",
-        "tools/Microsoft.AspNetCore.Diagnostics.Abstractions.dll",
-        "tools/Microsoft.AspNetCore.Diagnostics.Abstractions.xml",
-        "tools/Microsoft.AspNetCore.Diagnostics.dll",
-        "tools/Microsoft.AspNetCore.Diagnostics.xml",
-        "tools/Microsoft.AspNetCore.HostFiltering.dll",
-        "tools/Microsoft.AspNetCore.HostFiltering.xml",
-        "tools/Microsoft.AspNetCore.Hosting.Abstractions.dll",
-        "tools/Microsoft.AspNetCore.Hosting.Abstractions.xml",
-        "tools/Microsoft.AspNetCore.Hosting.Server.Abstractions.dll",
-        "tools/Microsoft.AspNetCore.Hosting.Server.Abstractions.xml",
-        "tools/Microsoft.AspNetCore.Hosting.dll",
-        "tools/Microsoft.AspNetCore.Hosting.xml",
-        "tools/Microsoft.AspNetCore.Html.Abstractions.dll",
-        "tools/Microsoft.AspNetCore.Html.Abstractions.xml",
-        "tools/Microsoft.AspNetCore.Http.Abstractions.dll",
-        "tools/Microsoft.AspNetCore.Http.Abstractions.xml",
-        "tools/Microsoft.AspNetCore.Http.Extensions.dll",
-        "tools/Microsoft.AspNetCore.Http.Extensions.xml",
-        "tools/Microsoft.AspNetCore.Http.Features.dll",
-        "tools/Microsoft.AspNetCore.Http.Features.xml",
-        "tools/Microsoft.AspNetCore.Http.dll",
-        "tools/Microsoft.AspNetCore.Http.xml",
-        "tools/Microsoft.AspNetCore.HttpOverrides.dll",
-        "tools/Microsoft.AspNetCore.HttpOverrides.xml",
-        "tools/Microsoft.AspNetCore.Metadata.dll",
-        "tools/Microsoft.AspNetCore.Metadata.xml",
-        "tools/Microsoft.AspNetCore.Routing.Abstractions.dll",
-        "tools/Microsoft.AspNetCore.Routing.Abstractions.xml",
-        "tools/Microsoft.AspNetCore.Routing.dll",
-        "tools/Microsoft.AspNetCore.Routing.xml",
-        "tools/Microsoft.AspNetCore.Server.HttpSys.dll",
-        "tools/Microsoft.AspNetCore.Server.HttpSys.xml",
-        "tools/Microsoft.AspNetCore.Server.IIS.dll",
-        "tools/Microsoft.AspNetCore.Server.IIS.xml",
-        "tools/Microsoft.AspNetCore.Server.IISIntegration.dll",
-        "tools/Microsoft.AspNetCore.Server.IISIntegration.xml",
-        "tools/Microsoft.AspNetCore.Server.Kestrel.Core.dll",
-        "tools/Microsoft.AspNetCore.Server.Kestrel.Core.xml",
-        "tools/Microsoft.AspNetCore.Server.Kestrel.Transport.NamedPipes.dll",
-        "tools/Microsoft.AspNetCore.Server.Kestrel.Transport.NamedPipes.xml",
-        "tools/Microsoft.AspNetCore.Server.Kestrel.Transport.Quic.dll",
-        "tools/Microsoft.AspNetCore.Server.Kestrel.Transport.Quic.xml",
-        "tools/Microsoft.AspNetCore.Server.Kestrel.Transport.Sockets.dll",
-        "tools/Microsoft.AspNetCore.Server.Kestrel.Transport.Sockets.xml",
-        "tools/Microsoft.AspNetCore.Server.Kestrel.dll",
-        "tools/Microsoft.AspNetCore.Server.Kestrel.xml",
-        "tools/Microsoft.AspNetCore.StaticAssets.dll",
-        "tools/Microsoft.AspNetCore.StaticAssets.xml",
-        "tools/Microsoft.AspNetCore.StaticFiles.dll",
-        "tools/Microsoft.AspNetCore.StaticFiles.xml",
-        "tools/Microsoft.AspNetCore.WebUtilities.dll",
-        "tools/Microsoft.AspNetCore.WebUtilities.xml",
-        "tools/Microsoft.AspNetCore.dll",
-        "tools/Microsoft.AspNetCore.xml",
-        "tools/Microsoft.Extensions.Configuration.Abstractions.dll",
-        "tools/Microsoft.Extensions.Configuration.Binder.dll",
-        "tools/Microsoft.Extensions.Configuration.CommandLine.dll",
-        "tools/Microsoft.Extensions.Configuration.EnvironmentVariables.dll",
-        "tools/Microsoft.Extensions.Configuration.FileExtensions.dll",
-        "tools/Microsoft.Extensions.Configuration.Json.dll",
-        "tools/Microsoft.Extensions.Configuration.UserSecrets.dll",
-        "tools/Microsoft.Extensions.Configuration.dll",
-        "tools/Microsoft.Extensions.DependencyInjection.Abstractions.dll",
-        "tools/Microsoft.Extensions.DependencyInjection.dll",
-        "tools/Microsoft.Extensions.Diagnostics.Abstractions.dll",
-        "tools/Microsoft.Extensions.Diagnostics.dll",
-        "tools/Microsoft.Extensions.Features.dll",
-        "tools/Microsoft.Extensions.Features.xml",
-        "tools/Microsoft.Extensions.FileProviders.Abstractions.dll",
-        "tools/Microsoft.Extensions.FileProviders.Composite.dll",
-        "tools/Microsoft.Extensions.FileProviders.Physical.dll",
-        "tools/Microsoft.Extensions.FileSystemGlobbing.dll",
-        "tools/Microsoft.Extensions.Hosting.Abstractions.dll",
-        "tools/Microsoft.Extensions.Hosting.dll",
-        "tools/Microsoft.Extensions.Logging.Abstractions.dll",
-        "tools/Microsoft.Extensions.Logging.Configuration.dll",
-        "tools/Microsoft.Extensions.Logging.Console.dll",
-        "tools/Microsoft.Extensions.Logging.Debug.dll",
-        "tools/Microsoft.Extensions.Logging.EventLog.dll",
-        "tools/Microsoft.Extensions.Logging.EventSource.dll",
-        "tools/Microsoft.Extensions.Logging.dll",
-        "tools/Microsoft.Extensions.ObjectPool.dll",
-        "tools/Microsoft.Extensions.ObjectPool.xml",
-        "tools/Microsoft.Extensions.Options.ConfigurationExtensions.dll",
-        "tools/Microsoft.Extensions.Options.dll",
-        "tools/Microsoft.Extensions.Primitives.dll",
-        "tools/Microsoft.Extensions.Validation.ValidationsGenerator.dll",
-        "tools/Microsoft.Extensions.Validation.dll",
-        "tools/Microsoft.Extensions.Validation.xml",
-        "tools/Microsoft.Extensions.WebEncoders.dll",
-        "tools/Microsoft.Extensions.WebEncoders.xml",
-        "tools/Microsoft.JSInterop.WebAssembly.dll",
-        "tools/Microsoft.JSInterop.WebAssembly.xml",
-        "tools/Microsoft.JSInterop.dll",
-        "tools/Microsoft.JSInterop.xml",
-        "tools/Microsoft.Net.Http.Headers.dll",
-        "tools/Microsoft.Net.Http.Headers.xml",
-        "tools/System.Diagnostics.EventLog.dll",
-        "tools/System.Security.Cryptography.Pkcs.dll",
-        "tools/System.Security.Cryptography.Xml.dll",
-        "tools/blazor-devserver.deps.json",
-        "tools/blazor-devserver.dll",
-        "tools/blazor-devserver.exe",
-        "tools/blazor-devserver.runtimeconfig.json",
-        "tools/blazor-devserver.xml",
-        "tools/runtimes/win/lib/net10.0/System.Diagnostics.EventLog.Messages.dll",
-        "tools/runtimes/win/lib/net10.0/System.Diagnostics.EventLog.dll",
-        "tools/runtimes/win/lib/net10.0/System.Security.Cryptography.Pkcs.dll",
-        "tools/x64/aspnetcorev2_inprocess.dll"
       ]
     },
     "Microsoft.AspNetCore.Identity.EntityFrameworkCore/10.0.5": {
@@ -4779,31 +4329,6 @@
         "microsoft.extensions.ai.abstractions.nuspec"
       ]
     },
-    "Microsoft.Extensions.AmbientMetadata.Application/10.2.0": {
-      "sha512": "CNrEjaOCZ8d1HtB0mvpiX4EWxLkee2xy+CsYXxmsEYJSFgw3OmF9pIhP/tCTeYBHhpsKJj5wM63G8IBFGxAcsw==",
-      "type": "package",
-      "path": "microsoft.extensions.ambientmetadata.application/10.2.0",
-      "files": [
-        ".nupkg.metadata",
-        ".signature.p7s",
-        "Icon.png",
-        "README.md",
-        "buildTransitive/net462/Microsoft.Extensions.AmbientMetadata.Application.targets",
-        "buildTransitive/net8.0/_._",
-        "lib/net10.0/Microsoft.Extensions.AmbientMetadata.Application.dll",
-        "lib/net10.0/Microsoft.Extensions.AmbientMetadata.Application.xml",
-        "lib/net462/Microsoft.Extensions.AmbientMetadata.Application.dll",
-        "lib/net462/Microsoft.Extensions.AmbientMetadata.Application.xml",
-        "lib/net8.0/Microsoft.Extensions.AmbientMetadata.Application.dll",
-        "lib/net8.0/Microsoft.Extensions.AmbientMetadata.Application.xml",
-        "lib/net9.0/Microsoft.Extensions.AmbientMetadata.Application.dll",
-        "lib/net9.0/Microsoft.Extensions.AmbientMetadata.Application.xml",
-        "lib/netstandard2.0/Microsoft.Extensions.AmbientMetadata.Application.dll",
-        "lib/netstandard2.0/Microsoft.Extensions.AmbientMetadata.Application.xml",
-        "microsoft.extensions.ambientmetadata.application.10.2.0.nupkg.sha512",
-        "microsoft.extensions.ambientmetadata.application.nuspec"
-      ]
-    },
     "Microsoft.Extensions.ApiDescription.Server/10.0.0": {
       "sha512": "NCWCGiwRwje8773yzPQhvucYnnfeR+ZoB1VRIrIMp4uaeUNw7jvEPHij3HIbwCDuNCrNcphA00KSAR9yD9qmbg==",
       "type": "package",
@@ -5064,52 +4589,6 @@
         "tools/net462/netstandard.dll"
       ]
     },
-    "Microsoft.Extensions.Compliance.Abstractions/10.2.0": {
-      "sha512": "1a4xDAT6fRyP8t419q3WvWMmMslDTvI7OAZLWBhn5rysFG0bl5xFenTswd1xAbT/3u3mx4Xyb5bPx+V+18tJeQ==",
-      "type": "package",
-      "path": "microsoft.extensions.compliance.abstractions/10.2.0",
-      "files": [
-        ".nupkg.metadata",
-        ".signature.p7s",
-        "Icon.png",
-        "README.md",
-        "lib/net10.0/Microsoft.Extensions.Compliance.Abstractions.dll",
-        "lib/net10.0/Microsoft.Extensions.Compliance.Abstractions.xml",
-        "lib/net8.0/Microsoft.Extensions.Compliance.Abstractions.dll",
-        "lib/net8.0/Microsoft.Extensions.Compliance.Abstractions.xml",
-        "lib/net9.0/Microsoft.Extensions.Compliance.Abstractions.dll",
-        "lib/net9.0/Microsoft.Extensions.Compliance.Abstractions.xml",
-        "lib/netstandard2.0/Microsoft.Extensions.Compliance.Abstractions.dll",
-        "lib/netstandard2.0/Microsoft.Extensions.Compliance.Abstractions.xml",
-        "microsoft.extensions.compliance.abstractions.10.2.0.nupkg.sha512",
-        "microsoft.extensions.compliance.abstractions.nuspec"
-      ]
-    },
-    "Microsoft.Extensions.DependencyInjection.AutoActivation/10.2.0": {
-      "sha512": "Z/OI261l7LnxyODKPx0trQyIHFyicCR/akfn64lGOjPcf4FpAZ7ePAGl2HPvQBUBSNfPTF0gWeCfuFmyftMgYA==",
-      "type": "package",
-      "path": "microsoft.extensions.dependencyinjection.autoactivation/10.2.0",
-      "files": [
-        ".nupkg.metadata",
-        ".signature.p7s",
-        "Icon.png",
-        "README.md",
-        "buildTransitive/net462/Microsoft.Extensions.DependencyInjection.AutoActivation.targets",
-        "buildTransitive/net8.0/_._",
-        "lib/net10.0/Microsoft.Extensions.DependencyInjection.AutoActivation.dll",
-        "lib/net10.0/Microsoft.Extensions.DependencyInjection.AutoActivation.xml",
-        "lib/net462/Microsoft.Extensions.DependencyInjection.AutoActivation.dll",
-        "lib/net462/Microsoft.Extensions.DependencyInjection.AutoActivation.xml",
-        "lib/net8.0/Microsoft.Extensions.DependencyInjection.AutoActivation.dll",
-        "lib/net8.0/Microsoft.Extensions.DependencyInjection.AutoActivation.xml",
-        "lib/net9.0/Microsoft.Extensions.DependencyInjection.AutoActivation.dll",
-        "lib/net9.0/Microsoft.Extensions.DependencyInjection.AutoActivation.xml",
-        "lib/netstandard2.0/Microsoft.Extensions.DependencyInjection.AutoActivation.dll",
-        "lib/netstandard2.0/Microsoft.Extensions.DependencyInjection.AutoActivation.xml",
-        "microsoft.extensions.dependencyinjection.autoactivation.10.2.0.nupkg.sha512",
-        "microsoft.extensions.dependencyinjection.autoactivation.nuspec"
-      ]
-    },
     "Microsoft.Extensions.DependencyModel/10.0.5": {
       "sha512": "xA4kkL+QS6KCAOKz/O0oquHs44Ob8J7zpBCNt3wjkBWDg5aCqfwG8rWWLsg5V86AM0sB849g9JjPjIdksTCIKg==",
       "type": "package",
@@ -5139,31 +4618,6 @@
         "useSharedDesignerContext.txt"
       ]
     },
-    "Microsoft.Extensions.Diagnostics.ExceptionSummarization/10.2.0": {
-      "sha512": "3qMK1D40D10kb5TdBtFJpzz6/WH0NinWs68ZZS8jCFgHMXDiOjGiPOneMmIocCP/wnUUW4Hzf8lMsIE1xIGxDA==",
-      "type": "package",
-      "path": "microsoft.extensions.diagnostics.exceptionsummarization/10.2.0",
-      "files": [
-        ".nupkg.metadata",
-        ".signature.p7s",
-        "Icon.png",
-        "README.md",
-        "buildTransitive/net462/Microsoft.Extensions.Diagnostics.ExceptionSummarization.targets",
-        "buildTransitive/net8.0/_._",
-        "lib/net10.0/Microsoft.Extensions.Diagnostics.ExceptionSummarization.dll",
-        "lib/net10.0/Microsoft.Extensions.Diagnostics.ExceptionSummarization.xml",
-        "lib/net462/Microsoft.Extensions.Diagnostics.ExceptionSummarization.dll",
-        "lib/net462/Microsoft.Extensions.Diagnostics.ExceptionSummarization.xml",
-        "lib/net8.0/Microsoft.Extensions.Diagnostics.ExceptionSummarization.dll",
-        "lib/net8.0/Microsoft.Extensions.Diagnostics.ExceptionSummarization.xml",
-        "lib/net9.0/Microsoft.Extensions.Diagnostics.ExceptionSummarization.dll",
-        "lib/net9.0/Microsoft.Extensions.Diagnostics.ExceptionSummarization.xml",
-        "lib/netstandard2.0/Microsoft.Extensions.Diagnostics.ExceptionSummarization.dll",
-        "lib/netstandard2.0/Microsoft.Extensions.Diagnostics.ExceptionSummarization.xml",
-        "microsoft.extensions.diagnostics.exceptionsummarization.10.2.0.nupkg.sha512",
-        "microsoft.extensions.diagnostics.exceptionsummarization.nuspec"
-      ]
-    },
     "Microsoft.Extensions.Diagnostics.HealthChecks.EntityFrameworkCore/10.0.5": {
       "sha512": "RtNhAwrnZcUZgi3SUMvaDVF405ZtKVR7l/6OHcqFj6JY5nT7QOdBxxULnby9dUQ6Jhnfl7cdDlMjsexfASNyjg==",
       "type": "package",
@@ -5191,183 +4645,6 @@
         "lib/netstandard1.0/Microsoft.Extensions.FileProviders.Embedded.xml",
         "microsoft.extensions.fileproviders.embedded.1.0.0.nupkg.sha512",
         "microsoft.extensions.fileproviders.embedded.nuspec"
-      ]
-    },
-    "Microsoft.Extensions.Http.Diagnostics/10.2.0": {
-      "sha512": "I0FBgF6yZRwYH9E3KQ2vHm80YZ7YBj+52GDsmOWXPBv/p15b/wUoNupV9kw3LnSNVsWMqlGbiuZgBnHpMwPh+Q==",
-      "type": "package",
-      "path": "microsoft.extensions.http.diagnostics/10.2.0",
-      "files": [
-        ".nupkg.metadata",
-        ".signature.p7s",
-        "Icon.png",
-        "README.md",
-        "buildTransitive/net462/Microsoft.Extensions.Http.Diagnostics.targets",
-        "buildTransitive/net8.0/_._",
-        "lib/net10.0/Microsoft.Extensions.Http.Diagnostics.dll",
-        "lib/net10.0/Microsoft.Extensions.Http.Diagnostics.xml",
-        "lib/net462/Microsoft.Extensions.Http.Diagnostics.dll",
-        "lib/net462/Microsoft.Extensions.Http.Diagnostics.xml",
-        "lib/net8.0/Microsoft.Extensions.Http.Diagnostics.dll",
-        "lib/net8.0/Microsoft.Extensions.Http.Diagnostics.xml",
-        "lib/net9.0/Microsoft.Extensions.Http.Diagnostics.dll",
-        "lib/net9.0/Microsoft.Extensions.Http.Diagnostics.xml",
-        "lib/netstandard2.0/Microsoft.Extensions.Http.Diagnostics.dll",
-        "lib/netstandard2.0/Microsoft.Extensions.Http.Diagnostics.xml",
-        "microsoft.extensions.http.diagnostics.10.2.0.nupkg.sha512",
-        "microsoft.extensions.http.diagnostics.nuspec"
-      ]
-    },
-    "Microsoft.Extensions.Http.Resilience/10.2.0": {
-      "sha512": "Lg+OjBW+ODDbM4Ax4LoERvQ1dqSZ8I2gQc2+B0/WOWl2+PunLJ3xb3x8MtHGfcb/Mp98RoMpwRKm6Aj9mzXwrA==",
-      "type": "package",
-      "path": "microsoft.extensions.http.resilience/10.2.0",
-      "files": [
-        ".nupkg.metadata",
-        ".signature.p7s",
-        "Icon.png",
-        "README.md",
-        "buildTransitive/net462/Microsoft.Extensions.Http.Resilience.net462.targets",
-        "buildTransitive/net462/Microsoft.Extensions.Http.Resilience.targets",
-        "buildTransitive/net8.0/Microsoft.Extensions.Http.Resilience.targets",
-        "lib/net10.0/Microsoft.Extensions.Http.Resilience.dll",
-        "lib/net10.0/Microsoft.Extensions.Http.Resilience.xml",
-        "lib/net462/Microsoft.Extensions.Http.Resilience.dll",
-        "lib/net462/Microsoft.Extensions.Http.Resilience.xml",
-        "lib/net8.0/Microsoft.Extensions.Http.Resilience.dll",
-        "lib/net8.0/Microsoft.Extensions.Http.Resilience.xml",
-        "lib/net9.0/Microsoft.Extensions.Http.Resilience.dll",
-        "lib/net9.0/Microsoft.Extensions.Http.Resilience.xml",
-        "lib/netstandard2.0/Microsoft.Extensions.Http.Resilience.dll",
-        "lib/netstandard2.0/Microsoft.Extensions.Http.Resilience.xml",
-        "microsoft.extensions.http.resilience.10.2.0.nupkg.sha512",
-        "microsoft.extensions.http.resilience.nuspec"
-      ]
-    },
-    "Microsoft.Extensions.Resilience/10.2.0": {
-      "sha512": "v4WOdAOFxB3AcsUkZWNcHL3mYzs4KAPtHO8rkoQlFKOBoD3KyjjAL+h3tRwSK5i4UpF/yhxsQRY0JxKj4osxxw==",
-      "type": "package",
-      "path": "microsoft.extensions.resilience/10.2.0",
-      "files": [
-        ".nupkg.metadata",
-        ".signature.p7s",
-        "Icon.png",
-        "README.md",
-        "buildTransitive/net462/Microsoft.Extensions.Resilience.targets",
-        "buildTransitive/net8.0/_._",
-        "lib/net10.0/Microsoft.Extensions.Resilience.dll",
-        "lib/net10.0/Microsoft.Extensions.Resilience.xml",
-        "lib/net462/Microsoft.Extensions.Resilience.dll",
-        "lib/net462/Microsoft.Extensions.Resilience.xml",
-        "lib/net8.0/Microsoft.Extensions.Resilience.dll",
-        "lib/net8.0/Microsoft.Extensions.Resilience.xml",
-        "lib/net9.0/Microsoft.Extensions.Resilience.dll",
-        "lib/net9.0/Microsoft.Extensions.Resilience.xml",
-        "lib/netstandard2.0/Microsoft.Extensions.Resilience.dll",
-        "lib/netstandard2.0/Microsoft.Extensions.Resilience.xml",
-        "microsoft.extensions.resilience.10.2.0.nupkg.sha512",
-        "microsoft.extensions.resilience.nuspec"
-      ]
-    },
-    "Microsoft.Extensions.ServiceDiscovery/10.2.0": {
-      "sha512": "AHTPfiKodj66xA8RwRkFD4q11V2AvzcuDsujv6ViPkOPtvBEYcPVplHakK56pPzWlX08MDS+TAQXfFXAeP7J5w==",
-      "type": "package",
-      "path": "microsoft.extensions.servicediscovery/10.2.0",
-      "files": [
-        ".nupkg.metadata",
-        ".signature.p7s",
-        "Icon.png",
-        "README.md",
-        "lib/net10.0/Microsoft.Extensions.ServiceDiscovery.dll",
-        "lib/net10.0/Microsoft.Extensions.ServiceDiscovery.xml",
-        "lib/net462/Microsoft.Extensions.ServiceDiscovery.dll",
-        "lib/net462/Microsoft.Extensions.ServiceDiscovery.xml",
-        "lib/net8.0/Microsoft.Extensions.ServiceDiscovery.dll",
-        "lib/net8.0/Microsoft.Extensions.ServiceDiscovery.xml",
-        "lib/net9.0/Microsoft.Extensions.ServiceDiscovery.dll",
-        "lib/net9.0/Microsoft.Extensions.ServiceDiscovery.xml",
-        "lib/netstandard2.0/Microsoft.Extensions.ServiceDiscovery.dll",
-        "lib/netstandard2.0/Microsoft.Extensions.ServiceDiscovery.xml",
-        "microsoft.extensions.servicediscovery.10.2.0.nupkg.sha512",
-        "microsoft.extensions.servicediscovery.nuspec"
-      ]
-    },
-    "Microsoft.Extensions.ServiceDiscovery.Abstractions/10.2.0": {
-      "sha512": "sANlOvfqfw/yfych4CLlHSKSWzIie6mQG7w83gVur1foNOafyHxcgpoQMvBf+KiB4Tpls6P1/Z77IIQSK8hxFg==",
-      "type": "package",
-      "path": "microsoft.extensions.servicediscovery.abstractions/10.2.0",
-      "files": [
-        ".nupkg.metadata",
-        ".signature.p7s",
-        "Icon.png",
-        "README.md",
-        "lib/net10.0/Microsoft.Extensions.ServiceDiscovery.Abstractions.dll",
-        "lib/net10.0/Microsoft.Extensions.ServiceDiscovery.Abstractions.xml",
-        "lib/net462/Microsoft.Extensions.ServiceDiscovery.Abstractions.dll",
-        "lib/net462/Microsoft.Extensions.ServiceDiscovery.Abstractions.xml",
-        "lib/net8.0/Microsoft.Extensions.ServiceDiscovery.Abstractions.dll",
-        "lib/net8.0/Microsoft.Extensions.ServiceDiscovery.Abstractions.xml",
-        "lib/net9.0/Microsoft.Extensions.ServiceDiscovery.Abstractions.dll",
-        "lib/net9.0/Microsoft.Extensions.ServiceDiscovery.Abstractions.xml",
-        "lib/netstandard2.0/Microsoft.Extensions.ServiceDiscovery.Abstractions.dll",
-        "lib/netstandard2.0/Microsoft.Extensions.ServiceDiscovery.Abstractions.xml",
-        "microsoft.extensions.servicediscovery.abstractions.10.2.0.nupkg.sha512",
-        "microsoft.extensions.servicediscovery.abstractions.nuspec"
-      ]
-    },
-    "Microsoft.Extensions.Telemetry/10.2.0": {
-      "sha512": "ssW5gosYlewNH/ISTyaLD/XfJT4GSjwShOUKv61fpXrqVmHkhuIA/5bBAGStM1XbzJjt9IG2vzfdHTu4zlX9Ew==",
-      "type": "package",
-      "path": "microsoft.extensions.telemetry/10.2.0",
-      "files": [
-        ".nupkg.metadata",
-        ".signature.p7s",
-        "Icon.png",
-        "README.md",
-        "buildTransitive/net462/Microsoft.Extensions.Telemetry.targets",
-        "buildTransitive/net8.0/_._",
-        "lib/net10.0/Microsoft.Extensions.Telemetry.dll",
-        "lib/net10.0/Microsoft.Extensions.Telemetry.xml",
-        "lib/net462/Microsoft.Extensions.Telemetry.dll",
-        "lib/net462/Microsoft.Extensions.Telemetry.xml",
-        "lib/net8.0/Microsoft.Extensions.Telemetry.dll",
-        "lib/net8.0/Microsoft.Extensions.Telemetry.xml",
-        "lib/net9.0/Microsoft.Extensions.Telemetry.dll",
-        "lib/net9.0/Microsoft.Extensions.Telemetry.xml",
-        "lib/netstandard2.0/Microsoft.Extensions.Telemetry.dll",
-        "lib/netstandard2.0/Microsoft.Extensions.Telemetry.xml",
-        "microsoft.extensions.telemetry.10.2.0.nupkg.sha512",
-        "microsoft.extensions.telemetry.nuspec"
-      ]
-    },
-    "Microsoft.Extensions.Telemetry.Abstractions/10.2.0": {
-      "sha512": "6V4V6NX6RLUYWwV89DeW/4zK5xOycYHWhsfMXSpKVGgMHfXcczmbk6hBeqTnRPzhpATYcOWlmA6hk1jgdxUugA==",
-      "type": "package",
-      "path": "microsoft.extensions.telemetry.abstractions/10.2.0",
-      "files": [
-        ".nupkg.metadata",
-        ".signature.p7s",
-        "Icon.png",
-        "README.md",
-        "analyzers/dotnet/cs/Microsoft.Gen.Logging.dll",
-        "analyzers/dotnet/cs/Microsoft.Gen.Metrics.dll",
-        "buildTransitive/net462/Microsoft.Extensions.Telemetry.Abstractions.targets",
-        "buildTransitive/net6.0/Microsoft.Extensions.Telemetry.Abstractions.props",
-        "buildTransitive/net6.0/Microsoft.Extensions.Telemetry.Abstractions.targets",
-        "buildTransitive/net8.0/Microsoft.Extensions.Telemetry.Abstractions.props",
-        "buildTransitive/net8.0/Microsoft.Extensions.Telemetry.Abstractions.targets",
-        "lib/net10.0/Microsoft.Extensions.Telemetry.Abstractions.dll",
-        "lib/net10.0/Microsoft.Extensions.Telemetry.Abstractions.xml",
-        "lib/net462/Microsoft.Extensions.Telemetry.Abstractions.dll",
-        "lib/net462/Microsoft.Extensions.Telemetry.Abstractions.xml",
-        "lib/net8.0/Microsoft.Extensions.Telemetry.Abstractions.dll",
-        "lib/net8.0/Microsoft.Extensions.Telemetry.Abstractions.xml",
-        "lib/net9.0/Microsoft.Extensions.Telemetry.Abstractions.dll",
-        "lib/net9.0/Microsoft.Extensions.Telemetry.Abstractions.xml",
-        "lib/netstandard2.0/Microsoft.Extensions.Telemetry.Abstractions.dll",
-        "lib/netstandard2.0/Microsoft.Extensions.Telemetry.Abstractions.xml",
-        "microsoft.extensions.telemetry.abstractions.10.2.0.nupkg.sha512",
-        "microsoft.extensions.telemetry.abstractions.nuspec"
       ]
     },
     "Microsoft.Identity.Client/4.73.1": {
@@ -6202,39 +5479,6 @@
         "opentelemetry.api.providerbuilderextensions.nuspec"
       ]
     },
-    "OpenTelemetry.Exporter.OpenTelemetryProtocol/1.15.0": {
-      "sha512": "VH8ANc/js9IRvfYt0Q2UaAxNCOWm+IU+vWrtoH7pfx4oWPVdISUt+9uWfBCFMWZg5WzQip5dhslyDjeyZXXfSQ==",
-      "type": "package",
-      "path": "opentelemetry.exporter.opentelemetryprotocol/1.15.0",
-      "files": [
-        ".nupkg.metadata",
-        ".signature.p7s",
-        "LICENSE.TXT",
-        "README.md",
-        "THIRD-PARTY-NOTICES.TXT",
-        "lib/net10.0/OpenTelemetry.Exporter.OpenTelemetryProtocol.dll",
-        "lib/net10.0/OpenTelemetry.Exporter.OpenTelemetryProtocol.dll.sigstore.json",
-        "lib/net10.0/OpenTelemetry.Exporter.OpenTelemetryProtocol.xml",
-        "lib/net462/OpenTelemetry.Exporter.OpenTelemetryProtocol.dll",
-        "lib/net462/OpenTelemetry.Exporter.OpenTelemetryProtocol.dll.sigstore.json",
-        "lib/net462/OpenTelemetry.Exporter.OpenTelemetryProtocol.xml",
-        "lib/net8.0/OpenTelemetry.Exporter.OpenTelemetryProtocol.dll",
-        "lib/net8.0/OpenTelemetry.Exporter.OpenTelemetryProtocol.dll.sigstore.json",
-        "lib/net8.0/OpenTelemetry.Exporter.OpenTelemetryProtocol.xml",
-        "lib/net9.0/OpenTelemetry.Exporter.OpenTelemetryProtocol.dll",
-        "lib/net9.0/OpenTelemetry.Exporter.OpenTelemetryProtocol.dll.sigstore.json",
-        "lib/net9.0/OpenTelemetry.Exporter.OpenTelemetryProtocol.xml",
-        "lib/netstandard2.0/OpenTelemetry.Exporter.OpenTelemetryProtocol.dll",
-        "lib/netstandard2.0/OpenTelemetry.Exporter.OpenTelemetryProtocol.dll.sigstore.json",
-        "lib/netstandard2.0/OpenTelemetry.Exporter.OpenTelemetryProtocol.xml",
-        "lib/netstandard2.1/OpenTelemetry.Exporter.OpenTelemetryProtocol.dll",
-        "lib/netstandard2.1/OpenTelemetry.Exporter.OpenTelemetryProtocol.dll.sigstore.json",
-        "lib/netstandard2.1/OpenTelemetry.Exporter.OpenTelemetryProtocol.xml",
-        "opentelemetry-icon-color.png",
-        "opentelemetry.exporter.opentelemetryprotocol.1.15.0.nupkg.sha512",
-        "opentelemetry.exporter.opentelemetryprotocol.nuspec"
-      ]
-    },
     "OpenTelemetry.Extensions.Hosting/1.15.0": {
       "sha512": "RixjKyB1pbYGhWdvPto4KJs+exdQknJsnjUO9WszdLles5Vcd0EYzxPNJdwmLjYfP+Jfbr4B5nktM4ZgeHSWtg==",
       "type": "package",
@@ -6265,70 +5509,6 @@
         "opentelemetry.extensions.hosting.nuspec"
       ]
     },
-    "OpenTelemetry.Instrumentation.AspNetCore/1.15.0": {
-      "sha512": "mte1nRYefxjed2syXgVWq3UCfMKO7MkebvTZmf0O1aLgVgCktLsVjQ6mftyjIbWGBBCHN0wg+Glxj8BSFS70pQ==",
-      "type": "package",
-      "path": "opentelemetry.instrumentation.aspnetcore/1.15.0",
-      "files": [
-        ".nupkg.metadata",
-        ".signature.p7s",
-        "LICENSE.TXT",
-        "README.md",
-        "lib/net10.0/OpenTelemetry.Instrumentation.AspNetCore.dll",
-        "lib/net10.0/OpenTelemetry.Instrumentation.AspNetCore.xml",
-        "lib/net8.0/OpenTelemetry.Instrumentation.AspNetCore.dll",
-        "lib/net8.0/OpenTelemetry.Instrumentation.AspNetCore.xml",
-        "lib/netstandard2.0/OpenTelemetry.Instrumentation.AspNetCore.dll",
-        "lib/netstandard2.0/OpenTelemetry.Instrumentation.AspNetCore.xml",
-        "opentelemetry-icon-color.png",
-        "opentelemetry.instrumentation.aspnetcore.1.15.0.nupkg.sha512",
-        "opentelemetry.instrumentation.aspnetcore.nuspec"
-      ]
-    },
-    "OpenTelemetry.Instrumentation.Http/1.15.0": {
-      "sha512": "uToc7bUp8IEdb0ny9mKsL6FrrYelINPzxxiSShJgOf4XmQc4Azww6S5RjRj24YhsOn2a1MABOrxfVTZXtDk4Eg==",
-      "type": "package",
-      "path": "opentelemetry.instrumentation.http/1.15.0",
-      "files": [
-        ".nupkg.metadata",
-        ".signature.p7s",
-        "LICENSE.TXT",
-        "README.md",
-        "lib/net10.0/OpenTelemetry.Instrumentation.Http.dll",
-        "lib/net10.0/OpenTelemetry.Instrumentation.Http.xml",
-        "lib/net462/OpenTelemetry.Instrumentation.Http.dll",
-        "lib/net462/OpenTelemetry.Instrumentation.Http.xml",
-        "lib/net8.0/OpenTelemetry.Instrumentation.Http.dll",
-        "lib/net8.0/OpenTelemetry.Instrumentation.Http.xml",
-        "lib/netstandard2.0/OpenTelemetry.Instrumentation.Http.dll",
-        "lib/netstandard2.0/OpenTelemetry.Instrumentation.Http.xml",
-        "opentelemetry-icon-color.png",
-        "opentelemetry.instrumentation.http.1.15.0.nupkg.sha512",
-        "opentelemetry.instrumentation.http.nuspec"
-      ]
-    },
-    "OpenTelemetry.Instrumentation.Runtime/1.15.0": {
-      "sha512": "OOvpqR/j2Pb6+tWhHNODIbSJ53Or/MDtTiXEyrsWI02K2lLAgvBFcxUOrHggS/8015cYR3AdSaXv6NZrkz5yQA==",
-      "type": "package",
-      "path": "opentelemetry.instrumentation.runtime/1.15.0",
-      "files": [
-        ".nupkg.metadata",
-        ".signature.p7s",
-        "LICENSE.TXT",
-        "README.md",
-        "lib/net10.0/OpenTelemetry.Instrumentation.Runtime.dll",
-        "lib/net10.0/OpenTelemetry.Instrumentation.Runtime.xml",
-        "lib/net462/OpenTelemetry.Instrumentation.Runtime.dll",
-        "lib/net462/OpenTelemetry.Instrumentation.Runtime.xml",
-        "lib/net8.0/OpenTelemetry.Instrumentation.Runtime.dll",
-        "lib/net8.0/OpenTelemetry.Instrumentation.Runtime.xml",
-        "lib/netstandard2.0/OpenTelemetry.Instrumentation.Runtime.dll",
-        "lib/netstandard2.0/OpenTelemetry.Instrumentation.Runtime.xml",
-        "opentelemetry-icon-color.png",
-        "opentelemetry.instrumentation.runtime.1.15.0.nupkg.sha512",
-        "opentelemetry.instrumentation.runtime.nuspec"
-      ]
-    },
     "Polly.Core/8.6.5": {
       "sha512": "t+sUVrIwvo7UmsgHGgOG9F0GDZSRIm47u2ylH17Gvcv1q5hNEwgD5GoBlFyc0kh/pebmPyrAgvGsR/65ZBaXlg==",
       "type": "package",
@@ -6356,62 +5536,6 @@
         "package-readme.md",
         "polly.core.8.6.5.nupkg.sha512",
         "polly.core.nuspec"
-      ]
-    },
-    "Polly.Extensions/8.4.2": {
-      "sha512": "GZ9vRVmR0jV2JtZavt+pGUsQ1O1cuRKG7R7VOZI6ZDy9y6RNPvRvXK1tuS4ffUrv8L0FTea59oEuQzgS0R7zSA==",
-      "type": "package",
-      "path": "polly.extensions/8.4.2",
-      "files": [
-        ".nupkg.metadata",
-        ".signature.p7s",
-        "lib/net462/Polly.Extensions.dll",
-        "lib/net462/Polly.Extensions.pdb",
-        "lib/net462/Polly.Extensions.xml",
-        "lib/net472/Polly.Extensions.dll",
-        "lib/net472/Polly.Extensions.pdb",
-        "lib/net472/Polly.Extensions.xml",
-        "lib/net6.0/Polly.Extensions.dll",
-        "lib/net6.0/Polly.Extensions.pdb",
-        "lib/net6.0/Polly.Extensions.xml",
-        "lib/net8.0/Polly.Extensions.dll",
-        "lib/net8.0/Polly.Extensions.pdb",
-        "lib/net8.0/Polly.Extensions.xml",
-        "lib/netstandard2.0/Polly.Extensions.dll",
-        "lib/netstandard2.0/Polly.Extensions.pdb",
-        "lib/netstandard2.0/Polly.Extensions.xml",
-        "package-icon.png",
-        "package-readme.md",
-        "polly.extensions.8.4.2.nupkg.sha512",
-        "polly.extensions.nuspec"
-      ]
-    },
-    "Polly.RateLimiting/8.4.2": {
-      "sha512": "ehTImQ/eUyO07VYW2WvwSmU9rRH200SKJ/3jku9rOkyWE0A2JxNFmAVms8dSn49QLSjmjFRRSgfNyOgr/2PSmA==",
-      "type": "package",
-      "path": "polly.ratelimiting/8.4.2",
-      "files": [
-        ".nupkg.metadata",
-        ".signature.p7s",
-        "lib/net462/Polly.RateLimiting.dll",
-        "lib/net462/Polly.RateLimiting.pdb",
-        "lib/net462/Polly.RateLimiting.xml",
-        "lib/net472/Polly.RateLimiting.dll",
-        "lib/net472/Polly.RateLimiting.pdb",
-        "lib/net472/Polly.RateLimiting.xml",
-        "lib/net6.0/Polly.RateLimiting.dll",
-        "lib/net6.0/Polly.RateLimiting.pdb",
-        "lib/net6.0/Polly.RateLimiting.xml",
-        "lib/net8.0/Polly.RateLimiting.dll",
-        "lib/net8.0/Polly.RateLimiting.pdb",
-        "lib/net8.0/Polly.RateLimiting.xml",
-        "lib/netstandard2.0/Polly.RateLimiting.dll",
-        "lib/netstandard2.0/Polly.RateLimiting.pdb",
-        "lib/netstandard2.0/Polly.RateLimiting.xml",
-        "package-icon.png",
-        "package-readme.md",
-        "polly.ratelimiting.8.4.2.nupkg.sha512",
-        "polly.ratelimiting.nuspec"
       ]
     },
     "Scalar.AspNetCore/2.13.15": {
@@ -7021,19 +6145,14 @@
         "yamldotnet.16.3.0.nupkg.sha512",
         "yamldotnet.nuspec"
       ]
-    },
-    "IEBC-Kenya.ServiceDefaults/1.0.0": {
-      "type": "project",
-      "path": "../IEBC-Kenya.ServiceDefaults/IEBC-Kenya.ServiceDefaults.csproj",
-      "msbuildProject": "../IEBC-Kenya.ServiceDefaults/IEBC-Kenya.ServiceDefaults.csproj"
     }
   },
   "projectFileDependencyGroups": {
     "net10.0": [
+      "Aspire.Hosting.Docker >= 13.2.2",
       "Aspire.Hosting.PostgreSQL >= 13.2.1",
       "Aspire.Npgsql.EntityFrameworkCore.PostgreSQL >= 13.2.1",
       "DotNetEnv >= 3.1.1",
-      "IEBC-Kenya.ServiceDefaults >= 1.0.0",
       "MailKit >= 4.15.1",
       "Microsoft.AspNetCore.Authentication.JwtBearer >= 10.0.5",
       "Microsoft.AspNetCore.Identity.EntityFrameworkCore >= 10.0.5",
@@ -7075,11 +6194,7 @@
       "frameworks": {
         "net10.0": {
           "targetAlias": "net10.0",
-          "projectReferences": {
-            "/home/hozy/IEBC-Kenya/IEBC-Kenya.ServiceDefaults/IEBC-Kenya.ServiceDefaults.csproj": {
-              "projectPath": "/home/hozy/IEBC-Kenya/IEBC-Kenya.ServiceDefaults/IEBC-Kenya.ServiceDefaults.csproj"
-            }
-          }
+          "projectReferences": {}
         }
       },
       "warningProperties": {
@@ -7098,6 +6213,10 @@
       "net10.0": {
         "targetAlias": "net10.0",
         "dependencies": {
+          "Aspire.Hosting.Docker": {
+            "target": "Package",
+            "version": "[13.2.2, )"
+          },
           "Aspire.Hosting.PostgreSQL": {
             "target": "Package",
             "version": "[13.2.1, )"
@@ -7188,7 +6307,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "/usr/lib/dotnet/sdk/10.0.104/PortableRuntimeIdentifierGraph.json",
+        "runtimeIdentifierGraphPath": "/usr/lib/dotnet/sdk/10.0.106/PortableRuntimeIdentifierGraph.json",
         "packagesToPrune": {
           "Microsoft.AspNetCore": "(,10.0.32767]",
           "Microsoft.AspNetCore.Antiforgery": "(,10.0.32767]",
@@ -7605,5 +6724,17 @@
         }
       }
     }
-  }
+  },
+  "logs": [
+    {
+      "code": "NU1902",
+      "level": "Warning",
+      "warningLevel": 1,
+      "message": "Package 'MailKit' 4.15.1 has a known moderate severity vulnerability, https://github.com/advisories/GHSA-9j88-vvj5-vhgr",
+      "libraryId": "MailKit",
+      "targetGraphs": [
+        "net10.0"
+      ]
+    }
+  ]
 }

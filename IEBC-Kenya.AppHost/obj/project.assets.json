@@ -13,14 +13,13 @@
           "buildMultiTargeting/Aspire.Dashboard.Sdk.linux-x64.targets": {}
         }
       },
-      "Aspire.Hosting/13.2.1": {
+      "Aspire.Hosting/13.2.2": {
         "type": "package",
         "dependencies": {
           "AspNetCore.HealthChecks.Uris": "9.0.0",
           "Google.Protobuf": "3.33.5",
           "Grpc.AspNetCore": "2.76.0",
           "Grpc.Net.ClientFactory": "2.76.0",
-          "Grpc.Tools": "2.78.0",
           "Humanizer.Core": "2.14.1",
           "JsonPatch.Net": "3.3.0",
           "KubernetesClient": "18.0.13",
@@ -144,6 +143,47 @@
         "buildMultiTargeting": {
           "buildMultiTargeting/Aspire.Hosting.AppHost.props": {},
           "buildMultiTargeting/Aspire.Hosting.AppHost.targets": {}
+        }
+      },
+      "Aspire.Hosting.Docker/13.2.2": {
+        "type": "package",
+        "dependencies": {
+          "AspNetCore.HealthChecks.Uris": "9.0.0",
+          "Aspire.Hosting": "13.2.2",
+          "Google.Protobuf": "3.33.5",
+          "Grpc.AspNetCore": "2.76.0",
+          "Grpc.Net.ClientFactory": "2.76.0",
+          "Grpc.Tools": "2.78.0",
+          "Humanizer.Core": "2.14.1",
+          "JsonPatch.Net": "3.3.0",
+          "KubernetesClient": "18.0.13",
+          "Microsoft.Extensions.Configuration.Abstractions": "10.0.5",
+          "Microsoft.Extensions.Configuration.Binder": "10.0.5",
+          "Microsoft.Extensions.DependencyInjection.Abstractions": "10.0.5",
+          "Microsoft.Extensions.Diagnostics.HealthChecks": "8.0.25",
+          "Microsoft.Extensions.FileSystemGlobbing": "10.0.5",
+          "Microsoft.Extensions.Hosting": "10.0.5",
+          "Microsoft.Extensions.Hosting.Abstractions": "10.0.5",
+          "Microsoft.Extensions.Http": "10.0.5",
+          "Microsoft.Extensions.Logging.Abstractions": "10.0.5",
+          "Microsoft.Extensions.Options": "10.0.5",
+          "Microsoft.Extensions.Primitives": "10.0.5",
+          "ModelContextProtocol": "1.0.0",
+          "Newtonsoft.Json": "13.0.4",
+          "Polly.Core": "8.6.5",
+          "Semver": "3.0.0",
+          "StreamJsonRpc": "2.22.23",
+          "System.IO.Hashing": "10.0.3"
+        },
+        "compile": {
+          "lib/net8.0/Aspire.Hosting.Docker.dll": {
+            "related": ".xml"
+          }
+        },
+        "runtime": {
+          "lib/net8.0/Aspire.Hosting.Docker.dll": {
+            "related": ".xml"
+          }
         }
       },
       "Aspire.Hosting.NodeJs/9.5.2": {
@@ -1955,17 +1995,17 @@
         "tools/zh-Hant/Aspire.Dashboard.resources.dll"
       ]
     },
-    "Aspire.Hosting/13.2.1": {
-      "sha512": "GY/T5iK2F4K3Sk60VUeVnTX1MhCjSaX48+qPUjA/rI1x1ONHevHzFj+Gc3fNlGEaZGY8L87hSxwGrV+Bjd5EJw==",
+    "Aspire.Hosting/13.2.2": {
+      "sha512": "jocP+/rGMBsQqiol5b6LRvWIRYng+o80UikCUuVXhMWIOsrOAL/T6RPye70k43IltcWo3wl3xVGSiSfR1rORGQ==",
       "type": "package",
-      "path": "aspire.hosting/13.2.1",
+      "path": "aspire.hosting/13.2.2",
       "files": [
         ".nupkg.metadata",
         ".signature.p7s",
         "Icon.png",
         "README.md",
         "THIRD-PARTY-NOTICES.TXT",
-        "aspire.hosting.13.2.1.nupkg.sha512",
+        "aspire.hosting.13.2.2.nupkg.sha512",
         "aspire.hosting.nuspec",
         "buildTransitive/net8.0/Aspire.Hosting.Integration.Analyzers.dll",
         "buildTransitive/net8.0/Aspire.Hosting.targets",
@@ -2013,6 +2053,22 @@
         "lib/net9.0/Aspire.Hosting.AppHost.xml",
         "tools/net472/Aspire.Hosting.Tasks.dll",
         "tools/net8.0/Aspire.Hosting.Tasks.dll"
+      ]
+    },
+    "Aspire.Hosting.Docker/13.2.2": {
+      "sha512": "BVKfOv3hbQT8Sn9RgVMmnm4d8HVm0hCvwbXsvFw/lMLAh/GWj7HhGRT/laHzs5ilHnOONerwDYNwwvdek/rRKw==",
+      "type": "package",
+      "path": "aspire.hosting.docker/13.2.2",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "Icon.png",
+        "README.md",
+        "THIRD-PARTY-NOTICES.TXT",
+        "aspire.hosting.docker.13.2.2.nupkg.sha512",
+        "aspire.hosting.docker.nuspec",
+        "lib/net8.0/Aspire.Hosting.Docker.dll",
+        "lib/net8.0/Aspire.Hosting.Docker.xml"
       ]
     },
     "Aspire.Hosting.NodeJs/9.5.2": {
@@ -4347,6 +4403,7 @@
     "net10.0": [
       "Aspire.Dashboard.Sdk.linux-x64 >= 13.2.1",
       "Aspire.Hosting.AppHost >= 13.2.1",
+      "Aspire.Hosting.Docker >= 13.2.2",
       "Aspire.Hosting.Orchestration.linux-x64 >= 13.2.1",
       "Aspire.Hosting.PostgreSQL >= 13.2.1",
       "CommunityToolkit.Aspire.Hosting.NodeJS.Extensions >= 9.9.0",
@@ -4408,6 +4465,10 @@
             "target": "Package",
             "version": "[13.2.1, )"
           },
+          "Aspire.Hosting.Docker": {
+            "target": "Package",
+            "version": "[13.2.2, )"
+          },
           "Aspire.Hosting.Orchestration.linux-x64": {
             "target": "Package",
             "version": "[13.2.1, )",
@@ -4450,7 +4511,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "/usr/lib/dotnet/sdk/10.0.104/PortableRuntimeIdentifierGraph.json",
+        "runtimeIdentifierGraphPath": "/usr/lib/dotnet/sdk/10.0.106/PortableRuntimeIdentifierGraph.json",
         "packagesToPrune": {
           "Microsoft.CSharp": "(,4.7.32767]",
           "Microsoft.VisualBasic": "(,10.4.32767]",
@@ -4727,5 +4788,17 @@
         }
       }
     }
-  }
+  },
+  "logs": [
+    {
+      "code": "NU1902",
+      "level": "Warning",
+      "warningLevel": 1,
+      "message": "Package 'MailKit' 4.15.1 has a known moderate severity vulnerability, https://github.com/advisories/GHSA-9j88-vvj5-vhgr",
+      "libraryId": "MailKit",
+      "targetGraphs": [
+        "net10.0"
+      ]
+    }
+  ]
 }

@@ -1,4 +1,5 @@
-
+using System.Text;
+using Microsoft.AspNetCore.WebUtilities;
 using IEBCVotingSystemV10.Model;
 using IEBCVotingSystemV10.Model.Entity;
 using IEBCVotingSystemV10.Model.Roles;
@@ -18,6 +19,7 @@ namespace IEBCVotingSystemV10.Controller.Auth
 
         private readonly SignInManager<ApplicationUser> _signInManager;
         private readonly IGenerateJwtBearerToken _tokenService;
+        private readonly IConfiguration _config;
 
         private readonly IEmailService _emailService;
 
@@ -25,12 +27,14 @@ namespace IEBCVotingSystemV10.Controller.Auth
                             UserManager<ApplicationUser> userManager,
                             SignInManager<ApplicationUser> signInManager,
                             IGenerateJwtBearerToken tokenService,
-                            IEmailService emailService)
+                            IEmailService emailService,
+                            IConfiguration config)
         {
             this._userManager = userManager;
             this._signInManager = signInManager;
             this._tokenService = tokenService;
             this._emailService = emailService;
+            this._config = config;
         }
 
         //api/auth/register
@@ -71,9 +75,9 @@ namespace IEBCVotingSystemV10.Controller.Auth
                     //Generate email confirmation token
                     var emailToken = await _userManager.GenerateEmailConfirmationTokenAsync(newUser);
                     //Encode the token for a URL(creates encodedToken variable)
-                    var encodedToken = Uri.EscapeDataString(emailToken);
+                    var encodedToken = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(emailToken));
                     // URL create
-                    var frontendUrl = Environment.GetEnvironmentVariable("FRONTEND_BASE_URL") ?? "http://localhost:3000";
+                    var frontendUrl = _config["FRONTEND_BASE_URL"] ?? "http://localhost:3000";
                     var verifyURL = $"{frontendUrl}/auth/verify-email?token={encodedToken}&email={newUser.Email}";
                     string messageBody = $@"
                     <h1>Welcome to IEBC Voting System</h1>
@@ -102,14 +106,16 @@ namespace IEBCVotingSystemV10.Controller.Auth
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"CRITICAL ERROR: {ex.Message}");
-                Console.WriteLine($"INNER EXCEPTION: {ex.InnerException?.Message}");
-                return StatusCode(500, ex.Message);
+                var detailedError = $"Message: {ex.Message} | Inner: {ex.InnerException?.Message} | StackTrace: {ex.StackTrace}";
+                Console.WriteLine($"[AUTH-REGISTER-ERROR]: {detailedError}");
+
+                return StatusCode(500, new { error = "Registration failed", message = "An internal server error occurred. Please try again later." });
             }
         }
 
-        //api/auth/signIn
-        [HttpPost("signIn")]
+        //api/auth/signin
+        [HttpPost("signin")]
+
 
 
         public async Task<IActionResult> SignIn(SignInDTO signInDTO)
@@ -167,23 +173,38 @@ namespace IEBCVotingSystemV10.Controller.Auth
 
         //api/auth/confirm-email
         [HttpGet("confirm-email")]
-        public async Task<IActionResult> ConfirmEmail(string token, string email)
+        public async Task<IActionResult> ConfirmEmail([FromQuery] string token, [FromQuery] string email)
         {
             try
             {
                 var user = await _userManager.FindByEmailAsync(email);
                 if (user == null) return BadRequest("User not found");
 
-                //decode token
-                // var decodedToken = System.Text.Encoding.UTF8.GetString(
-                //     Microsoft.AspNetCore.WebUtilities.WebEncoders.Base64UrlDecode(token));
+                string decodedToken;
+                try
+                {
+                    var decodedTokenBytes = WebEncoders.Base64UrlDecode(token);
+                    decodedToken = Encoding.UTF8.GetString(decodedTokenBytes);
+                }
+                catch (Exception)
+                {
+                    return BadRequest("Invalid token format.");
+                }
 
-                var result = await _userManager.ConfirmEmailAsync(user, token);
-                if (result.Succeeded) return Ok("Email confirmed");
+                var result = await _userManager.ConfirmEmailAsync(user, decodedToken);
+                if (result.Succeeded)
+                {
+                    Console.WriteLine($"[AUTH-VERIFY-SUCCESS]: {email} verified successfully.");
+                    return Ok(new { message = "Email confirmed successfully" });
+                }
+
+                Console.WriteLine($"[AUTH-VERIFY-FAILED]: Invalid token for {email}. Errors: {string.Join(", ", result.Errors.Select(e => e.Description))}");
                 return BadRequest("Invalid token");
             }
-            catch (Exception)
+            catch (Exception ex)
             {
+                Console.WriteLine($"[AUTH-VERIFY-CRITICAL]: Error verifying {email}. Message: {ex.Message}");
+                if (ex.InnerException != null) Console.WriteLine($"Inner: {ex.InnerException.Message}");
                 return StatusCode(500, "Internal Server Error");
             }
         }

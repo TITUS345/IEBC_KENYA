@@ -2,10 +2,10 @@
 
 import axios from "axios";
 import { useRouter, useSearchParams } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useEffect, useState, Suspense } from "react";
 import { toast } from "sonner";
 
-export default function VerifyEmailPage(){
+function VerifyEmailContent() {
     const searchParams = useSearchParams();
     const router = useRouter();
     const [status, setStatus] = useState("Verifying your email...");
@@ -25,10 +25,11 @@ export default function VerifyEmailPage(){
         }
 
         try {
-            const apiUrl = process.env.NEXT_PUBLIC_API_URL ?? `${window.location.protocol}//${window.location.hostname}:5007`;
-            const response = await axios.get(`${apiUrl}/api/auth/confirm-email`, {
+            const apiUrl = `/api/auth/confirm-email`;
+            console.log(`[VERIFY-DEBUG]: Calling ${apiUrl} for ${email}`);
+            const response = await axios.get(apiUrl, {
                 params: { token, email },
-                timeout: 10000,
+                timeout: 30000, // Increase to 30s
             });
             if (response.status === 200) {
                 setStatus("Email verified successfully! Redirecting...");
@@ -62,5 +63,13 @@ export default function VerifyEmailPage(){
                 {isVerifying ? 'Verifying...' : 'Retry Verification'}
             </button>
         </div>
+    )
+}
+
+export default function VerifyEmailPage() {
+    return (
+        <Suspense fallback={<div className="p-20 text-center"><p className="text-xl font-bold">Loading...</p></div>}>
+            <VerifyEmailContent />
+        </Suspense>
     )
 }

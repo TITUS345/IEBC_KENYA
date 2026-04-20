@@ -1,31 +1,28 @@
 import type { NextConfig } from "next";
 
-const nextConfig = {
-  devIndicators: {
-    buildActivity: false,
-  },
-  experimental: {
-    serverActions: {
-      allowedOrigins: ['localhost:3000', '192.168.100.34:3000'],
-    },
-  },
-  webpackDevMiddleware: (config: any) => {
-    return config;
+const nextConfig: NextConfig = {
+  output: 'standalone',
+  async rewrites() {
+    return [
+      {
+        source: '/api/:path*',
+        destination: 'http://localhost:5007/api/:path*',
+      },
+    ];
   },
   async headers() {
     return [
       {
-        source: '/_next/:path*',
+        source: "/api/:path*",
         headers: [
-          { key: 'Access-Control-Allow-Origin', value: '*' },
-        ],
-      },
-    ];
-  },
-  onDemandEntries: {
-    maxInactiveAge: 60 * 1000,
-    pagesBufferLength: 5,
-  },
+          { key: "Access-Control-Allow-Credentials", value: "true" },
+          { key: "Access-Control-Allow-Origin", value: "*" },
+          { key: "Access-Control-Allow-Methods", value: "GET,DELETE,PATCH,POST,PUT" },
+          { key: "Access-Control-Allow-Headers", value: "X-CSRF-Token, X-Requested-With, Accept, Accept-Version, Content-Length, Content-MD5, Content-Type, Date, X-Api-Version" },
+        ]
+      }
+    ]
+  }
 };
 
 export default nextConfig;
