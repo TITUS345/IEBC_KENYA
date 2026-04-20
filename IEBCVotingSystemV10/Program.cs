@@ -34,7 +34,7 @@ builder.Configuration.AddEnvironmentVariables();
 
 // handle null values
 var signInKey = builder.Configuration["JWT_KEY"]
-?? throw new InvalidOperationException("Missing or invalid signin key");
+?? throw new InvalidOperationException("Missing JWT_KEY. Ensure it is provided via AppHost parameters or environment variables.");
 
 // --- 2. CORE SERVICES ---
 
