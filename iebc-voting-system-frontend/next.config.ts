@@ -2,7 +2,7 @@ import type { NextConfig } from "next";
 
 // BACKEND_URL is injected by the AppHost. 
 // We ensure it removes trailing slashes for consistency.
-const rawBackendUrl = process.env.BACKEND_URL || 'http://localhost:5007';
+const rawBackendUrl = process.env.BACKEND_URL || process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5007';
 const BACKEND_URL = rawBackendUrl.replace(/\/$/, "");
 
 const nextConfig: NextConfig = {

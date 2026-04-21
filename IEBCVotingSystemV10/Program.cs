@@ -18,8 +18,10 @@ builder.Services.AddCors(options =>
 {
     options.AddPolicy("ProductionPolicy", policy =>
     {
-        var frontendUrl = builder.Configuration["FRONTEND_BASE_URL"] ?? "http://localhost:3000";
-        policy.WithOrigins(frontendUrl)
+        var frontendUrls = builder.Configuration["FRONTEND_BASE_URL"]?.Split(',')
+                           ?? new[] { "http://localhost:3000" };
+
+        policy.WithOrigins(frontendUrls)
               .AllowAnyMethod()
               .AllowAnyHeader()
               .AllowCredentials();
