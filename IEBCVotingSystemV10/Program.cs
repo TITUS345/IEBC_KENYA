@@ -18,8 +18,11 @@ builder.Services.AddCors(options =>
 {
     options.AddPolicy("ProductionPolicy", policy =>
     {
-        var frontendUrls = builder.Configuration["FRONTEND_BASE_URL"]?.Split(',')
+        // In Production, allow the specific frontend URL provided in settings
+        var frontendUrls = builder.Configuration["FRONTEND_BASE_URL"]?
+                            .Split(',', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries)
                            ?? new[] { "http://localhost:3000" };
+        Console.WriteLine($"[CORS]: Allowing origins: {string.Join(", ", frontendUrls)}");
 
         policy.WithOrigins(frontendUrls)
               .AllowAnyMethod()
@@ -37,6 +40,10 @@ builder.Configuration.AddEnvironmentVariables();
 // handle null values
 var signInKey = builder.Configuration["JWT_KEY"]
 ?? throw new InvalidOperationException("Missing JWT_KEY. Ensure it is provided via AppHost parameters.");
+var jwtIssuer = builder.Configuration["Jwt:Issuer"]
+?? throw new InvalidOperationException("Missing Jwt:Issuer configuration.");
+var jwtAudience = builder.Configuration["Jwt:Audience"]
+?? throw new InvalidOperationException("Missing Jwt:Audience configuration.");
 
 // --- 2. CORE SERVICES ---
 
@@ -91,8 +98,8 @@ builder.Services.AddAuthentication(options =>
         ValidateAudience = true,
         ValidateLifetime = true,
         ValidateIssuerSigningKey = true,
-        ValidIssuer = builder.Configuration["Jwt:Issuer"],
-        ValidAudience = builder.Configuration["Jwt:Audience"],
+        ValidIssuer = jwtIssuer,
+        ValidAudience = jwtAudience,
         IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(signInKey))
 
 
