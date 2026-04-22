@@ -35,7 +35,7 @@ export default function SignInPage(){
         setLoading(true);
         try {
             
-            const apiUrl = process.env.services__api__http__0 || "http://localhost:5007";
+            const apiUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5007";
             const response = await axios.post(`${apiUrl}/api/auth/signIn`, data);
             toast.message("Successfully logged in")
             //router.push("/")
