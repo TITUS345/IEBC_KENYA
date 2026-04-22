@@ -92,7 +92,7 @@ export default function RegisterCandidatePage() {
 
            const apiURL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5007";
            const response=await axios.post(`${apiURL}/api/candidate/registerCandidate` ,formData,{
-            headers:{'Content-Type':'maltypart/form-data'}
+            headers:{'Content-Type':'multipart/form-data'}
            });
 
            if(response.status==200){
