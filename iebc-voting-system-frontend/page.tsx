@@ -1,10 +1,12 @@
 'use client';
 
 import Link from 'next/link';
+import SignUpPage from './app/auth/signUp/page';
 
 export default function LandingPage() {
   return (
     <div className="flex flex-col items-center justify-center min-h-screen bg-gray-50 px-4">
+
       <h1 className="text-4xl font-bold text-blue-900 mb-4 text-center">
         IEBC Kenya Voting System
       </h1>
@@ -17,6 +19,7 @@ export default function LandingPage() {
       >
         Access Portal
       </Link>
+      <h1><SignUpPage/></h1>
     </div>
   );
 }
