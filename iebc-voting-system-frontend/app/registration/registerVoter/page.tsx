@@ -93,7 +93,7 @@ export default function RegisterVoter() {
                 formData.append("profilePicture", data.profilePicture);
             }
 
-            const apiUrl = "http://localhost:5007";
+            const apiUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5007";
             const response = await axios.post(`${apiUrl}/api/voter/registerVoter`, formData, {
                 headers: { 'Content-Type': 'multipart/form-data' }
             });

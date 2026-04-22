@@ -90,7 +90,7 @@ export default function RegisterCandidatePage() {
                 formData.append("profilepicture",data.profilePicture)
            }
 
-           const apiURL="http://localhost:5007" 
+           const apiURL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5007";
            const response=await axios.post(`${apiURL}/api/candidate/registerCandidate` ,formData,{
             headers:{'Content-Type':'maltypart/form-data'}
            });

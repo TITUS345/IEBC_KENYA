@@ -46,7 +46,7 @@ export default function SignUpPage() {
         setLoading(true);
         try {
             // Note: Ensure port matches your running .NET API
-            const apiUrl = process.env.services__api__http__0 || "http://localhost:5007";
+            const apiUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5007";
             const response = await axios.post(`${apiUrl}/api/auth/register`, data);
             toast.success("Voter account created successfully!");
             router.push("/auth/signIn");
