@@ -25,9 +25,10 @@ function VerifyEmailContent() {
         }
 
         try {
-            const apiUrl = `/api/auth/confirm-email`;
-            console.log(`[VERIFY-DEBUG]: Calling ${apiUrl} for ${email}`);
-            const response = await axios.get(apiUrl, {
+            const baseApiUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5007";
+            const fullUrl = `${baseApiUrl}/api/auth/confirm-email`;
+            console.log(`[VERIFY-DEBUG]: Calling ${fullUrl} for ${email}`);
+            const response = await axios.get(fullUrl, {
                 params: { token, email },
                 signal,
                 timeout: 30000, // Increase to 30s
