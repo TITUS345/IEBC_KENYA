@@ -52,56 +52,87 @@ const FaceRecognition: React.FC<FaceRecognitionProps> = ({ onFaceDetected, onErr
     if (!isModelLoaded || !videoRef.current || !canvasRef.current) return;
 
     setIsDetecting(true);
+    let faceFound = false;
+    let attempts = 0;
+    const maxAttempts = 10;
 
-    const video = videoRef.current;
-    const canvas = canvasRef.current;
-    const displaySize = { width: video.width, height: video.height };
+    while (!faceFound && attempts < maxAttempts) {
+      try {
+        const video = videoRef.current;
+        const canvas = canvasRef.current;
+        
+        // Use videoWidth and videoHeight for actual stream dimensions
+        const displaySize = { width: video.videoWidth, height: video.videoHeight };
 
-    faceapi.matchDimensions(canvas, displaySize);
+        if (displaySize.width === 0 || displaySize.height === 0) {
+          await new Promise(resolve => setTimeout(resolve, 200));
+          attempts++;
+          continue;
+        }
 
-    const detections = await faceapi
-      .detectAllFaces(video, new faceapi.TinyFaceDetectorOptions())
-      .withFaceLandmarks()
-      .withFaceDescriptors();
+        faceapi.matchDimensions(canvas, displaySize);
 
-    if (detections.length > 0) {
-      const resizedDetections = faceapi.resizeResults(detections, displaySize);
-      const ctx = canvas.getContext('2d');
-      if (ctx) {
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
-        faceapi.draw.drawDetections(canvas, resizedDetections);
-        faceapi.draw.drawFaceLandmarks(canvas, resizedDetections);
+        const detections = await faceapi
+          .detectAllFaces(video, new faceapi.TinyFaceDetectorOptions())
+          .withFaceLandmarks()
+          .withFaceDescriptors();
+
+        if (detections.length > 0) {
+          const resizedDetections = faceapi.resizeResults(detections, displaySize);
+          const ctx = canvas.getContext('2d');
+          if (ctx) {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            faceapi.draw.drawDetections(canvas, resizedDetections);
+            faceapi.draw.drawFaceLandmarks(canvas, resizedDetections);
+          }
+
+          // Get the first face descriptor
+          const descriptor = detections[0].descriptor;
+          onFaceDetected(Array.from(descriptor));
+          faceFound = true;
+        } else {
+          await new Promise(resolve => setTimeout(resolve, 300));
+          attempts++;
+        }
+      } catch (error) {
+        const message = error instanceof Error ? error.message : 'Detection error occurred';
+        onError(message);
+        break;
       }
+    }
 
-      // Get the first face descriptor
-      const descriptor = detections[0].descriptor;
-      onFaceDetected(Array.from(descriptor));
-    } else {
-      onError('No face detected');
+    if (!faceFound) {
+      onError('No face detected. Please ensure your face is clearly visible and try again.');
     }
 
     setIsDetecting(false);
   };
 
   return (
-    <div className="face-recognition">
-      <video
-        ref={videoRef}
-        autoPlay
-        muted
-        width="640"
-        height="480"
-        onLoadedMetadata={startVideo}
-      />
-      <canvas ref={canvasRef} />
+    <div className="face-recognition flex flex-col items-center gap-4 w-full">
+      <div className="relative w-full max-w-md">
+        <video
+          ref={videoRef}
+          autoPlay
+          playsInline
+          muted
+          width="640"
+          height="480"
+          className="w-full border-2 border-gray-300 rounded-lg bg-black"
+        />
+        <canvas
+          ref={canvasRef}
+          className="absolute top-0 left-0 w-full border-2 border-transparent rounded-lg"
+        />
+      </div>
       <button
         onClick={detectFace}
         disabled={!isModelLoaded || isDetecting}
-        className="mt-4 px-4 py-2 bg-blue-500 text-white rounded"
+        className="mt-4 px-6 py-2 bg-blue-500 text-white rounded font-semibold hover:bg-blue-600 disabled:opacity-50 disabled:cursor-not-allowed"
       >
-        {isDetecting ? 'Detecting...' : 'Capture Face'}
+        {isDetecting ? 'Detecting... Please hold still' : 'Capture Face'}
       </button>
-      {!isModelLoaded && <p>Loading models...</p>}
+      {!isModelLoaded && <p className="text-sm text-gray-600">Loading models...</p>}
     </div>
   );
 };
