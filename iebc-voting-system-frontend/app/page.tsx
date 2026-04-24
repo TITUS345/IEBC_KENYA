@@ -12,12 +12,21 @@ export default function Home() {
       <p className="text-gray-600 text-lg mb-8 text-center max-w-md">
         Welcome to the official digital voting platform. Please sign in to cast your vote securely.
       </p>
-      <Link 
+      <div className='flex flex-row g-4'>
+        <Link 
         href="/auth/signIn"
         className="px-8 py-3 bg-blue-700 text-white rounded-lg font-semibold hover:bg-blue-800 transition-colors mb-8"
       >
         Access Portal
       </Link>
+      <Link 
+        href="/registration/registerVoter"
+        className="px-8 py-3 bg-blue-700 text-white rounded-lg font-semibold hover:bg-blue-800 transition-colors mb-8"
+      >
+        Access Portal
+      </Link>
+        
+      </div>
       <SignUpPage />
     </div>
   );
