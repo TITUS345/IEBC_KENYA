@@ -19,13 +19,33 @@ builder.Services.AddCors(options =>
 {
     options.AddPolicy("ProductionPolicy", policy =>
     {
-        // In Production, allow the specific frontend URL provided in settings
-        var frontendUrls = builder.Configuration["FRONTEND_BASE_URL"]?
+        // Parse frontend URLs from configuration (comma-separated)
+        var frontendUrlsFromConfig = builder.Configuration["FRONTEND_BASE_URL"]?
                             .Split(',', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries)
-                           ?? new[] { "http://localhost:3000" };
+                           ?? Array.Empty<string>();
+
+        // Always include default URLs + config URLs to ensure production URLs work
+        var frontendUrls = new List<string>();
+
+        // Always add production and local development URLs
+        frontendUrls.AddRange(new[] {
+            "http://localhost:3000",           // Local development
+            "http://localhost:5007",           // Local API
+            "https://iebc-kenya.vercel.app"    // Production frontend
+        });
+
+        // Add any URLs from environment configuration (won't duplicate if already present)
+        foreach (var url in frontendUrlsFromConfig)
+        {
+            if (!frontendUrls.Contains(url))
+            {
+                frontendUrls.Add(url);
+            }
+        }
+
         Console.WriteLine($"[CORS]: Allowing origins: {string.Join(", ", frontendUrls)}");
 
-        policy.WithOrigins(frontendUrls)
+        policy.WithOrigins(frontendUrls.ToArray())
               .AllowAnyMethod()
               .AllowAnyHeader()
               .AllowCredentials();

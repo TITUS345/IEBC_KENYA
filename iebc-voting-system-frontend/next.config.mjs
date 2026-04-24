@@ -2,5 +2,9 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   output: "standalone",
+  optimizeFonts: true,
+  experimental: {
+    optimizePackageImports: ["sonner"],
+  },
 };
 export default nextConfig;   
