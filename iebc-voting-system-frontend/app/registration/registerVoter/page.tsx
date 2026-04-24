@@ -32,14 +32,10 @@ const VoterSchema = z.object({
     selectedRole: z.enum(["User", "Admin", "Voter", "Candidate", "IEBCOfficial"], {
         message: "Please select a valid role",
     }),
-    faceBiometricFile: z.any().optional(),
-    faceEmbeddings: z.string().min(1, "Face embeddings are required")
-}).refine((data) => {
-    // Either faceBiometricFile must be a File or faceEmbeddings must be present (indicating face capture was used)
-    return data.faceBiometricFile instanceof File || data.faceEmbeddings.length > 0;
-}, {
-    message: "Face biometric reference photo is required (upload file or use face capture)",
-    path: ["faceBiometricFile"]
+    faceBiometricFile: z.any().refine((file) => file instanceof File, {
+        message: "Face biometric reference photo is required"
+    }),
+    faceEmbeddings: z.string().min(1, "Face embeddings are required. Please wait for face processing to complete.")
 });
 
 type VoterFormData = z.infer<typeof VoterSchema>
@@ -50,6 +46,7 @@ export default function RegisterVoter() {
     const [faceEmbeddings, setFaceEmbeddings] = useState<number[]>([]);
     const [faceBiometricFile, setFaceBiometricFile] = useState<File | null>(null);
     const [isFaceCaptured, setIsFaceCaptured] = useState(false);
+    const [isProcessingImage, setIsProcessingImage] = useState(false);
     const router = useRouter();
 
     const {
@@ -86,6 +83,11 @@ export default function RegisterVoter() {
             setFaceBiometricFile(file);
             setValue("faceBiometricFile", file, { shouldValidate: true, shouldDirty: true });
             setPreview(URL.createObjectURL(file));
+            // Clear face capture state when uploading file
+            setIsFaceCaptured(false);
+            setFaceEmbeddings([]);
+            setValue("faceEmbeddings", "", { shouldValidate: true, shouldDirty: true });
+            setIsProcessingImage(true); // Start processing
         }
     };
 
@@ -96,6 +98,7 @@ export default function RegisterVoter() {
         setValue("faceBiometricFile", capturedImage, { shouldValidate: true, shouldDirty: true });
         setPreview(URL.createObjectURL(capturedImage));
         setIsFaceCaptured(true);
+        setIsProcessingImage(false); // Processing complete
         toast.success("Face captured successfully!");
     };
 
@@ -233,6 +236,8 @@ export default function RegisterVoter() {
                                 <FaceRecognition 
                                     onFaceDetected={handleFaceDetected} 
                                     onError={handleFaceError} 
+                                    uploadedImage={faceBiometricFile && !isFaceCaptured ? faceBiometricFile : null}
+                                    onProcessing={setIsProcessingImage}
                                 />
                                 {faceEmbeddings.length > 0 && (
                                     <p className="text-green-600 text-sm mt-2">✓ Face captured successfully</p>
@@ -349,11 +354,11 @@ export default function RegisterVoter() {
 
                         <Button 
                             type="submit" 
-                            disabled={loading || !isFaceCaptured} 
+                            disabled={loading || !isFaceCaptured || isProcessingImage} 
                             className="w-full bg-green-700 hover:bg-green-800 disabled:bg-gray-400 text-white h-14 text-xl font-bold shadow-lg transition-colors"
-                            title={!isFaceCaptured ? "Please capture your face first to complete enrollment" : ""}
+                            title={!isFaceCaptured ? "Please capture your face first to complete enrollment" : isProcessingImage ? "Processing image..." : ""}
                         >
-                            {loading ? <Loader2 className="animate-spin mr-2" /> : isFaceCaptured ? "COMPLETE ENROLLMENT" : "CAPTURE FACE TO PROCEED"}
+                            {loading ? <Loader2 className="animate-spin mr-2" /> : isProcessingImage ? "PROCESSING IMAGE..." : isFaceCaptured ? "COMPLETE ENROLLMENT" : "CAPTURE FACE TO PROCEED"}
                         </Button>
                     </form>
                 </CardContent>

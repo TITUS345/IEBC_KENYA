@@ -4,9 +4,11 @@ import * as faceapi from 'face-api.js';
 interface FaceRecognitionProps {
   onFaceDetected: (embeddings: number[], capturedImage: File) => void;
   onError: (error: string) => void;
+  uploadedImage?: File | null;
+  onProcessing?: (isProcessing: boolean) => void;
 }
 
-const FaceRecognition: React.FC<FaceRecognitionProps> = ({ onFaceDetected, onError }) => {
+const FaceRecognition: React.FC<FaceRecognitionProps> = ({ onFaceDetected, onError, uploadedImage, onProcessing }) => {
   const videoRef = useRef<HTMLVideoElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const [isModelLoaded, setIsModelLoaded] = useState(false);
@@ -28,6 +30,40 @@ const FaceRecognition: React.FC<FaceRecognitionProps> = ({ onFaceDetected, onErr
 
     loadModels();
   }, [onError]);
+
+  // Process uploaded image
+  useEffect(() => {
+    if (uploadedImage && isModelLoaded) {
+      processUploadedImage(uploadedImage);
+    }
+  }, [uploadedImage, isModelLoaded]);
+
+  const processUploadedImage = async (imageFile: File) => {
+    setIsDetecting(true);
+    onProcessing?.(true);
+    try {
+      const image = await faceapi.bufferToImage(imageFile);
+      const detection = await faceapi
+        .detectSingleFace(image, new faceapi.TinyFaceDetectorOptions())
+        .withFaceLandmarks()
+        .withFaceDescriptor();
+
+      if (!detection) {
+        onError('No face detected in uploaded image. Please ensure the image clearly shows your face.');
+        setIsDetecting(false);
+        onProcessing?.(false);
+        return;
+      }
+
+      onFaceDetected(Array.from(detection.descriptor), imageFile);
+    } catch (error) {
+      const message = error instanceof Error ? error.message : 'Failed to process uploaded image';
+      onError(message);
+    } finally {
+      setIsDetecting(false);
+      onProcessing?.(false);
+    }
+  };
 
   const startVideo = async () => {
     try {
@@ -81,6 +117,7 @@ const FaceRecognition: React.FC<FaceRecognitionProps> = ({ onFaceDetected, onErr
     if (!isModelLoaded || !videoRef.current || !canvasRef.current) return;
 
     setIsDetecting(true);
+    onProcessing?.(true);
 
     const video = videoRef.current;
     const canvas = canvasRef.current;
@@ -96,6 +133,7 @@ const FaceRecognition: React.FC<FaceRecognitionProps> = ({ onFaceDetected, onErr
     if (displaySize.width === 0 || displaySize.height === 0) {
       onError('Camera is not ready yet. Please wait a moment and try again.');
       setIsDetecting(false);
+      onProcessing?.(false);
       return;
     }
 
@@ -130,6 +168,7 @@ const FaceRecognition: React.FC<FaceRecognitionProps> = ({ onFaceDetected, onErr
       onError(message);
     } finally {
       setIsDetecting(false);
+      onProcessing?.(false);
     }
   };
 
