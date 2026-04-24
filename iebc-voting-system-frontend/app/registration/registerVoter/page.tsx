@@ -32,9 +32,15 @@ const VoterSchema = z.object({
     selectedRole: z.enum(["User", "Admin", "Voter", "Candidate", "IEBCOfficial"], {
         message: "Please select a valid role",
     }),
-    faceBiometricFile: z.any().refine((file) => file instanceof File, "Face biometric reference photo is required"),
+    faceBiometricFile: z.any().optional(),
     faceEmbeddings: z.string().min(1, "Face embeddings are required")
-})
+}).refine((data) => {
+    // Either faceBiometricFile must be a File or faceEmbeddings must be present (indicating face capture was used)
+    return data.faceBiometricFile instanceof File || data.faceEmbeddings.length > 0;
+}, {
+    message: "Face biometric reference photo is required (upload file or use face capture)",
+    path: ["faceBiometricFile"]
+});
 
 type VoterFormData = z.infer<typeof VoterSchema>
 
@@ -80,9 +86,11 @@ export default function RegisterVoter() {
         }
     };
 
-    const handleFaceDetected = (embeddings: number[]) => {
+    const handleFaceDetected = (embeddings: number[], capturedImage: File) => {
         setFaceEmbeddings(embeddings);
         setValue("faceEmbeddings", JSON.stringify(embeddings));
+        setValue("faceBiometricFile", capturedImage);
+        setPreview(URL.createObjectURL(capturedImage));
         toast.success("Face captured successfully!");
     };
 
@@ -193,15 +201,28 @@ export default function RegisterVoter() {
                             ) : (
                                 <UploadCloud className="w-12 h-12 text-blue-400 mb-2" />
                             )}
-                            <Label htmlFor="picture" className="cursor-pointer text-green-700 font-bold hover:underline">
-                                Upload Reference Photo
-                            </Label>
-                            <Input id="picture" type="file" accept="image/*" className="hidden" onChange={handleFileChange} />
+                            
+                            {!preview && (
+                                <>
+                                    <Label htmlFor="picture" className="cursor-pointer text-green-700 font-bold hover:underline">
+                                        Upload Reference Photo (Optional)
+                                    </Label>
+                                    <Input id="picture" type="file" accept="image/*" className="hidden" onChange={handleFileChange} />
+                                    <p className="text-sm text-gray-600 mt-1">or use face capture below</p>
+                                </>
+                            )}
+                            
+                            {preview && faceEmbeddings.length > 0 && (
+                                <p className="text-green-600 text-sm font-semibold">✓ Biometric reference captured via face recognition</p>
+                            )}
+                            
                             {errors.faceBiometricFile && <span className="text-red-500 text-xs">{String(errors.faceBiometricFile.message)}</span>}
 
                             {/* Face Recognition Section */}
                             <div className="mt-4 w-full">
-                                <Label className="text-center block mb-2">Live Face Capture</Label>
+                                <Label className="text-center block mb-2 font-semibold">
+                                    {faceEmbeddings.length > 0 ? 'Face Captured Successfully' : 'Live Face Capture (Required)'}
+                                </Label>
                                 <FaceRecognition 
                                     onFaceDetected={handleFaceDetected} 
                                     onError={handleFaceError} 

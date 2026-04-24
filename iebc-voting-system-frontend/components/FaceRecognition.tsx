@@ -2,7 +2,7 @@ import React, { useRef, useEffect, useState } from 'react';
 import * as faceapi from 'face-api.js';
 
 interface FaceRecognitionProps {
-  onFaceDetected: (embeddings: number[]) => void;
+  onFaceDetected: (embeddings: number[], capturedImage: File) => void;
   onError: (error: string) => void;
 }
 
@@ -42,11 +42,36 @@ const FaceRecognition: React.FC<FaceRecognitionProps> = ({ onFaceDetected, onErr
     }
   };
 
-  useEffect(() => {
-    if (isModelLoaded) {
-      startVideo();
-    }
-  }, [isModelLoaded]);
+  const captureImage = (): Promise<File> => {
+    return new Promise((resolve, reject) => {
+      if (!videoRef.current) {
+        reject(new Error('Video element not available'));
+        return;
+      }
+
+      const canvas = document.createElement('canvas');
+      const video = videoRef.current;
+      canvas.width = video.videoWidth;
+      canvas.height = video.videoHeight;
+      
+      const ctx = canvas.getContext('2d');
+      if (!ctx) {
+        reject(new Error('Could not get canvas context'));
+        return;
+      }
+
+      ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+      
+      canvas.toBlob((blob) => {
+        if (blob) {
+          const file = new File([blob], 'face-capture.jpg', { type: 'image/jpeg' });
+          resolve(file);
+        } else {
+          reject(new Error('Failed to capture image'));
+        }
+      }, 'image/jpeg', 0.9);
+    });
+  };
 
   const detectFace = async () => {
     if (!isModelLoaded || !videoRef.current || !canvasRef.current) return;
@@ -86,10 +111,19 @@ const FaceRecognition: React.FC<FaceRecognitionProps> = ({ onFaceDetected, onErr
             faceapi.draw.drawFaceLandmarks(canvas, resizedDetections);
           }
 
-          // Get the first face descriptor
-          const descriptor = detections[0].descriptor;
-          onFaceDetected(Array.from(descriptor));
-          faceFound = true;
+          try {
+            // Capture the image from the video stream
+            const capturedImage = await captureImage();
+            
+            // Get the first face descriptor
+            const descriptor = detections[0].descriptor;
+            onFaceDetected(Array.from(descriptor), capturedImage);
+            faceFound = true;
+          } catch (captureError) {
+            const message = captureError instanceof Error ? captureError.message : 'Failed to capture image';
+            onError(message);
+            break;
+          }
         } else {
           await new Promise(resolve => setTimeout(resolve, 300));
           attempts++;
