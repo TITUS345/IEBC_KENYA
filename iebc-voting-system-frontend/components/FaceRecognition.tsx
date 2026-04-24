@@ -42,6 +42,10 @@ const FaceRecognition: React.FC<FaceRecognitionProps> = ({ onFaceDetected, onErr
     }
   };
 
+  useEffect(() => {
+    startVideo();
+  }, []);
+
   const captureImage = (): Promise<File> => {
     return new Promise((resolve, reject) => {
       if (!videoRef.current) {
@@ -77,69 +81,56 @@ const FaceRecognition: React.FC<FaceRecognitionProps> = ({ onFaceDetected, onErr
     if (!isModelLoaded || !videoRef.current || !canvasRef.current) return;
 
     setIsDetecting(true);
-    let faceFound = false;
-    let attempts = 0;
-    const maxAttempts = 10;
 
-    while (!faceFound && attempts < maxAttempts) {
-      try {
-        const video = videoRef.current;
-        const canvas = canvasRef.current;
-        
-        // Use videoWidth and videoHeight for actual stream dimensions
-        const displaySize = { width: video.videoWidth, height: video.videoHeight };
+    const video = videoRef.current;
+    const canvas = canvasRef.current;
 
-        if (displaySize.width === 0 || displaySize.height === 0) {
-          await new Promise(resolve => setTimeout(resolve, 200));
-          attempts++;
-          continue;
-        }
+    if (video.videoWidth === 0 || video.videoHeight === 0) {
+      await new Promise<void>((resolve) => {
+        const handler = () => resolve();
+        video.addEventListener('loadedmetadata', handler, { once: true });
+      });
+    }
 
-        faceapi.matchDimensions(canvas, displaySize);
+    const displaySize = { width: video.videoWidth, height: video.videoHeight };
+    if (displaySize.width === 0 || displaySize.height === 0) {
+      onError('Camera is not ready yet. Please wait a moment and try again.');
+      setIsDetecting(false);
+      return;
+    }
 
-        const detections = await faceapi
-          .detectAllFaces(video, new faceapi.TinyFaceDetectorOptions())
-          .withFaceLandmarks()
-          .withFaceDescriptors();
+    canvas.width = displaySize.width;
+    canvas.height = displaySize.height;
+    faceapi.matchDimensions(canvas, displaySize);
 
-        if (detections.length > 0) {
-          const resizedDetections = faceapi.resizeResults(detections, displaySize);
-          const ctx = canvas.getContext('2d');
-          if (ctx) {
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-            faceapi.draw.drawDetections(canvas, resizedDetections);
-            faceapi.draw.drawFaceLandmarks(canvas, resizedDetections);
-          }
+    try {
+      const detection = await faceapi
+        .detectSingleFace(video, new faceapi.TinyFaceDetectorOptions())
+        .withFaceLandmarks()
+        .withFaceDescriptor();
 
-          try {
-            // Capture the image from the video stream
-            const capturedImage = await captureImage();
-            
-            // Get the first face descriptor
-            const descriptor = detections[0].descriptor;
-            onFaceDetected(Array.from(descriptor), capturedImage);
-            faceFound = true;
-          } catch (captureError) {
-            const message = captureError instanceof Error ? captureError.message : 'Failed to capture image';
-            onError(message);
-            break;
-          }
-        } else {
-          await new Promise(resolve => setTimeout(resolve, 300));
-          attempts++;
-        }
-      } catch (error) {
-        const message = error instanceof Error ? error.message : 'Detection error occurred';
-        onError(message);
-        break;
+      if (!detection) {
+        onError('No face detected. Please ensure your face is clearly visible and try again.');
+        setIsDetecting(false);
+        return;
       }
-    }
 
-    if (!faceFound) {
-      onError('No face detected. Please ensure your face is clearly visible and try again.');
-    }
+      const resizedDetection = faceapi.resizeResults(detection, displaySize);
+      const ctx = canvas.getContext('2d');
+      if (ctx) {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        faceapi.draw.drawDetections(canvas, resizedDetection as any);
+        faceapi.draw.drawFaceLandmarks(canvas, resizedDetection as any);
+      }
 
-    setIsDetecting(false);
+      const capturedImage = await captureImage();
+      onFaceDetected(Array.from(detection.descriptor), capturedImage);
+    } catch (error) {
+      const message = error instanceof Error ? error.message : 'Detection error occurred';
+      onError(message);
+    } finally {
+      setIsDetecting(false);
+    }
   };
 
   return (

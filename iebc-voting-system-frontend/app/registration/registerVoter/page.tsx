@@ -48,6 +48,8 @@ export default function RegisterVoter() {
     const [loading, setLoading] = useState(false);
     const [preview, setPreview] = useState<string | null>(null);
     const [faceEmbeddings, setFaceEmbeddings] = useState<number[]>([]);
+    const [faceBiometricFile, setFaceBiometricFile] = useState<File | null>(null);
+    const [isFaceCaptured, setIsFaceCaptured] = useState(false);
     const router = useRouter();
 
     const {
@@ -81,16 +83,19 @@ export default function RegisterVoter() {
     const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const file = e.target.files?.[0];
         if (file) {
-            setValue("faceBiometricFile", file);
+            setFaceBiometricFile(file);
+            setValue("faceBiometricFile", file, { shouldValidate: true, shouldDirty: true });
             setPreview(URL.createObjectURL(file));
         }
     };
 
     const handleFaceDetected = (embeddings: number[], capturedImage: File) => {
         setFaceEmbeddings(embeddings);
-        setValue("faceEmbeddings", JSON.stringify(embeddings));
-        setValue("faceBiometricFile", capturedImage);
+        setFaceBiometricFile(capturedImage);
+        setValue("faceEmbeddings", JSON.stringify(embeddings), { shouldValidate: true, shouldDirty: true });
+        setValue("faceBiometricFile", capturedImage, { shouldValidate: true, shouldDirty: true });
         setPreview(URL.createObjectURL(capturedImage));
+        setIsFaceCaptured(true);
         toast.success("Face captured successfully!");
     };
 
@@ -111,8 +116,8 @@ export default function RegisterVoter() {
             });
 
             // Append file
-            if (data.faceBiometricFile) {
-                formData.append("faceBiometricFile", data.faceBiometricFile);
+            if (faceBiometricFile) {
+                formData.append("faceBiometricFile", faceBiometricFile);
             }
 
             // Append face embeddings
@@ -130,6 +135,8 @@ export default function RegisterVoter() {
                 reset();
                 setPreview(null);
                 setFaceEmbeddings([]);
+                setFaceBiometricFile(null);
+                setIsFaceCaptured(false);
                 //router.push("/dashboard"); 
             }
         } catch (error: unknown) {
@@ -340,8 +347,13 @@ export default function RegisterVoter() {
                             </div>
                         </div>
 
-                        <Button type="submit" disabled={loading} className="w-full bg-green-700 hover:bg-green-800 text-white h-14 text-xl font-bold shadow-lg">
-                            {loading ? <Loader2 className="animate-spin mr-2" /> : "COMPLETE ENROLLMENT"}
+                        <Button 
+                            type="submit" 
+                            disabled={loading || !isFaceCaptured} 
+                            className="w-full bg-green-700 hover:bg-green-800 disabled:bg-gray-400 text-white h-14 text-xl font-bold shadow-lg transition-colors"
+                            title={!isFaceCaptured ? "Please capture your face first to complete enrollment" : ""}
+                        >
+                            {loading ? <Loader2 className="animate-spin mr-2" /> : isFaceCaptured ? "COMPLETE ENROLLMENT" : "CAPTURE FACE TO PROCEED"}
                         </Button>
                     </form>
                 </CardContent>
