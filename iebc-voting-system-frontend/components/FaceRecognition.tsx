@@ -15,7 +15,6 @@ const FaceRecognition: React.FC<FaceRecognitionProps> = ({ onFaceDetected, onErr
   useEffect(() => {
     const loadModels = async () => {
       try {
-        // Load models from CDN
         await Promise.all([
           faceapi.nets.tinyFaceDetector.loadFromUri('/models'),
           faceapi.nets.faceLandmark68Net.loadFromUri('/models'),
@@ -35,11 +34,19 @@ const FaceRecognition: React.FC<FaceRecognitionProps> = ({ onFaceDetected, onErr
       const stream = await navigator.mediaDevices.getUserMedia({ video: true });
       if (videoRef.current) {
         videoRef.current.srcObject = stream;
+        await videoRef.current.play();
       }
     } catch (error) {
-      onError('Failed to access camera');
+      const message = error instanceof Error ? error.message : 'Failed to access camera';
+      onError(message);
     }
   };
+
+  useEffect(() => {
+    if (isModelLoaded) {
+      startVideo();
+    }
+  }, [isModelLoaded]);
 
   const detectFace = async () => {
     if (!isModelLoaded || !videoRef.current || !canvasRef.current) return;
