@@ -170,6 +170,13 @@ namespace IEBCVotingSystemV10.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
+                    b.Property<string>("FaceBiometricImage")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("FaceEmbeddings")
+                        .HasColumnType("text");
+
                     b.Property<string>("FirstName")
                         .IsRequired()
                         .HasColumnType("text");
@@ -191,10 +198,6 @@ namespace IEBCVotingSystemV10.Migrations
                         .HasColumnType("text");
 
                     b.Property<string>("PhoneNumber")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<string>("ProfilePicture")
                         .IsRequired()
                         .HasColumnType("text");
 
@@ -259,6 +262,13 @@ namespace IEBCVotingSystemV10.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
+                    b.Property<string>("FaceBiometricImage")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("FaceEmbeddings")
+                        .HasColumnType("text");
+
                     b.Property<string>("FirstName")
                         .IsRequired()
                         .HasColumnType("text");
@@ -280,10 +290,6 @@ namespace IEBCVotingSystemV10.Migrations
                         .HasColumnType("text");
 
                     b.Property<string>("PhoneNumber")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<string>("ProfilePicture")
                         .IsRequired()
                         .HasColumnType("text");
 

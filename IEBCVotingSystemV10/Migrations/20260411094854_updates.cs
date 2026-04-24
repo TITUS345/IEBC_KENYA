@@ -1,10 +1,14 @@
-﻿using Microsoft.EntityFrameworkCore.Migrations;
+﻿#pragma warning disable CS8981 // The type name only contains lower-cased ascii characters
+
+using System.Diagnostics.CodeAnalysis;
+using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
 namespace IEBCVotingSystemV10.Migrations
 {
     /// <inheritdoc />
+    [SuppressMessage("ReSharper", "InconsistentNaming")] // Suppress warning for lowercase type name
     public partial class updates : Migration
     {
         /// <inheritdoc />

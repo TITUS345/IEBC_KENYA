@@ -36,7 +36,8 @@ namespace IEBCVotingSystemV10.Model.Entity
         [Required]
         public string Region { get; set; } = string.Empty;
         [Required]
-        public string? ProfilePicture { get; set; }
+        public string? FaceBiometricImage { get; set; }
+        public string? FaceEmbeddings { get; set; }
         public string SelectedRole { get; set; } = "Voter";
         public string UserId { get; set; } = string.Empty;
         public ApplicationUser? User { get; set; }

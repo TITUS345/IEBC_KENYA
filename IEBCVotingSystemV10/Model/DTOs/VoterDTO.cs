@@ -40,7 +40,9 @@ namespace IEBCVotingSystemV10.Model.DTOs
         [Required]
         public string Region { get; set; } = string.Empty;
         [Required]
-        public IFormFile? ProfilePicture { get; set; }
+        public IFormFile? FaceBiometricFile { get; set; }
+        [Required]
+        public string FaceEmbeddings { get; set; } = string.Empty;
         public string SelectedRole { get; set; } = "Voter";
         public string UserId { get; set; } = string.Empty;
         public ApplicationUser? User { get; set; }

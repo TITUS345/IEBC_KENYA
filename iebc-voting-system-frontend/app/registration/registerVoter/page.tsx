@@ -13,6 +13,7 @@ import { Loader2, UploadCloud, AlertCircle } from "lucide-react"
 import z from "zod"
 import { toast } from "sonner" 
 import axios, { AxiosError } from "axios"
+import FaceRecognition from "@/components/FaceRecognition"
 
 const VoterSchema = z.object({
     firstName: z.string().min(2, "First Name is required"),
@@ -31,7 +32,8 @@ const VoterSchema = z.object({
     selectedRole: z.enum(["User", "Admin", "Voter", "Candidate", "IEBCOfficial"], {
         message: "Please select a valid role",
     }),
-    profilePicture: z.any().optional()
+    faceBiometricFile: z.any().refine((file) => file instanceof File, "Face biometric reference photo is required"),
+    faceEmbeddings: z.string().min(1, "Face embeddings are required")
 })
 
 type VoterFormData = z.infer<typeof VoterSchema>
@@ -39,6 +41,7 @@ type VoterFormData = z.infer<typeof VoterSchema>
 export default function RegisterVoter() {
     const [loading, setLoading] = useState(false);
     const [preview, setPreview] = useState<string | null>(null);
+    const [faceEmbeddings, setFaceEmbeddings] = useState<number[]>([]);
     const router = useRouter();
 
     const {
@@ -64,16 +67,27 @@ export default function RegisterVoter() {
             constituency: "",
             county: "",
             region: "",
-            ward: ""
+            ward: "",
+            faceEmbeddings: ""
         }
     });
 
     const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const file = e.target.files?.[0];
         if (file) {
-            setValue("profilePicture", file);
+            setValue("faceBiometricFile", file);
             setPreview(URL.createObjectURL(file));
         }
+    };
+
+    const handleFaceDetected = (embeddings: number[]) => {
+        setFaceEmbeddings(embeddings);
+        setValue("faceEmbeddings", JSON.stringify(embeddings));
+        toast.success("Face captured successfully!");
+    };
+
+    const handleFaceError = (error: string) => {
+        toast.error(error);
     };
 
     const onSubmit = async (data: VoterFormData) => {
@@ -83,14 +97,19 @@ export default function RegisterVoter() {
             
             // Append text fields
             Object.entries(data).forEach(([key, value]) => {
-                if (key !== "profilePicture" && value !== undefined) {
+                if (key !== "faceBiometricFile" && value !== undefined) {
                     formData.append(key, value as string);
                 }
             });
 
             // Append file
-            if (data.profilePicture) {
-                formData.append("profilePicture", data.profilePicture);
+            if (data.faceBiometricFile) {
+                formData.append("faceBiometricFile", data.faceBiometricFile);
+            }
+
+            // Append face embeddings
+            if (faceEmbeddings.length > 0) {
+                formData.append("faceEmbeddings", JSON.stringify(faceEmbeddings));
             }
 
             const apiUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5007";
@@ -102,6 +121,7 @@ export default function RegisterVoter() {
                 toast.success("Voter Registered successfully!");
                 reset();
                 setPreview(null);
+                setFaceEmbeddings([]);
                 //router.push("/dashboard"); 
             }
         } catch (error: unknown) {
@@ -171,13 +191,26 @@ export default function RegisterVoter() {
                             {preview ? (
                                 <img src={preview} alt="Preview" className="w-32 h-32 rounded-full object-cover mb-2 border-4 border-green-500 shadow-md" />
                             ) : (
-                                <UploadCloud className="w-12 h-12 text-slate-400 mb-2" />
+                                <UploadCloud className="w-12 h-12 text-blue-400 mb-2" />
                             )}
                             <Label htmlFor="picture" className="cursor-pointer text-green-700 font-bold hover:underline">
-                                Upload Enrollment Photo
+                                Upload Reference Photo
                             </Label>
                             <Input id="picture" type="file" accept="image/*" className="hidden" onChange={handleFileChange} />
+                            {errors.faceBiometricFile && <span className="text-red-500 text-xs">{String(errors.faceBiometricFile.message)}</span>}
 
+                            {/* Face Recognition Section */}
+                            <div className="mt-4 w-full">
+                                <Label className="text-center block mb-2">Live Face Capture</Label>
+                                <FaceRecognition 
+                                    onFaceDetected={handleFaceDetected} 
+                                    onError={handleFaceError} 
+                                />
+                                {faceEmbeddings.length > 0 && (
+                                    <p className="text-green-600 text-sm mt-2">✓ Face captured successfully</p>
+                                )}
+                                {errors.faceEmbeddings && <span className="text-red-500 text-xs">{String(errors.faceEmbeddings.message)}</span>}
+                            </div>
                         </div>
 
                         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
@@ -186,13 +219,13 @@ export default function RegisterVoter() {
                             <div className="space-y-2">
                                 <Label>First Name</Label>
                                 <Input {...register("firstName")} placeholder="Jane" />
-                                {errors.firstName && <span className="text-red-500 text-xs">{errors.firstName.message}</span>}
+                                {errors.firstName && <span className="text-red-500 text-xs">{String(errors.firstName.message)}</span>}
                             </div>
 
                             <div className="space-y-2">
                                 <Label>Last Name</Label>
                                 <Input {...register("lastName")} placeholder="Doe" />
-                                {errors.lastName && <span className="text-red-500 text-xs">{errors.lastName.message}</span>}
+                                {errors.lastName && <span className="text-red-500 text-xs">{String(errors.lastName.message)}</span>}
                             </div>
 
                             <div className="space-y-2">
@@ -221,68 +254,68 @@ export default function RegisterVoter() {
                                         </Select>
                                     )}
                                 />
-                                {errors.selectedRole && <span className="text-red-500 text-xs">{errors.selectedRole.message}</span>}
+                                {errors.selectedRole && <span className="text-red-500 text-xs">{String(errors.selectedRole.message)}</span>}
                             </div>
 
                             <div className="space-y-2">
                                 <Label>National ID No.</Label>
                                 <Input {...register("nationalIdNo")} placeholder="12345678" />
-                                {errors.nationalIdNo && <span className="text-red-500 text-xs">{errors.nationalIdNo.message}</span>}
+                                {errors.nationalIdNo && <span className="text-red-500 text-xs">{String(errors.nationalIdNo.message)}</span>}
                             </div>
 
                             <div className="space-y-2">
                                 <Label>Email Address</Label>
                                 <Input {...register("email")} type="email" placeholder="jane.doe@example.com" />
-                                {errors.email && <span className="text-red-500 text-xs">{errors.email.message}</span>}
+                                {errors.email && <span className="text-red-500 text-xs">{String(errors.email.message)}</span>}
                             </div>
 
                             <div className="space-y-2">
                                 <Label>Phone Number</Label>
                                 <Input {...register("phoneNumber")} placeholder="0711222333" />
-                                {errors.phoneNumber && <span className="text-red-500 text-xs">{errors.phoneNumber.message}</span>}
+                                {errors.phoneNumber && <span className="text-red-500 text-xs">{String(errors.phoneNumber.message)}</span>}
                             </div>
 
                             {/* Geographical Info */}
                             <div className="space-y-2">
                                 <Label>Region</Label>
                                 <Input {...register("region")} placeholder="Coast / Rift Valley" />
-                                {errors.region && <span className="text-red-500 text-xs">{errors.region.message}</span>}
+                                {errors.region && <span className="text-red-500 text-xs">{String(errors.region.message)}</span>}
                             </div>
 
                             <div className="space-y-2">
                                 <Label>County</Label>
                                 <Input {...register("county")} placeholder="Nairobi" />
-                                {errors.county && <span className="text-red-500 text-xs">{errors.county.message}</span>}
+                                {errors.county && <span className="text-red-500 text-xs">{String(errors.county.message)}</span>}
                             </div>
 
                             <div className="space-y-2">
                                 <Label>Constituency</Label>
                                 <Input {...register("constituency")} placeholder="Starehe" />
-                                {errors.constituency && <span className="text-red-500 text-xs">{errors.constituency.message}</span>}
+                                {errors.constituency && <span className="text-red-500 text-xs">{String(errors.constituency.message)}</span>}
                             </div>
 
                             <div className="space-y-2">
                                 <Label>Ward</Label>
                                 <Input {...register("ward")} placeholder="CBD" />
-                                {errors.ward && <span className="text-red-500 text-xs">{errors.ward.message}</span>}
+                                {errors.ward && <span className="text-red-500 text-xs">{String(errors.ward.message)}</span>}
                             </div>
 
                             <div className="space-y-2">
                                 <Label>Location</Label>
                                 <Input {...register("location")} />
-                                {errors.location && <span className="text-red-500 text-xs">{errors.location.message}</span>}
+                                {errors.location && <span className="text-red-500 text-xs">{String(errors.location.message)}</span>}
                             </div>
 
                             <div className="space-y-2">
                                 <Label>Sub-Location</Label>
                                 <Input {...register("sub_Location")} />
-                                {errors.sub_Location && <span className="text-red-500 text-xs">{errors.sub_Location.message}</span>}
+                                {errors.sub_Location && <span className="text-red-500 text-xs">{String(errors.sub_Location.message)}</span>}
                             </div>
 
                             <div className="space-y-2">
                                 <Label>Address</Label>
                                 <Input {...register("address")} placeholder="123 Uhuru Highway" />
-                                {errors.address && <span className="text-red-500 text-xs">{errors.address.message}</span>}
+                                {errors.address && <span className="text-red-500 text-xs">{String(errors.address.message)}</span>}
                             </div>
                         </div>
 

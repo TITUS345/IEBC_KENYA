@@ -40,6 +40,12 @@ builder.Configuration.AddEnvironmentVariables();
 // handle null values
 var signInKey = builder.Configuration["JWT_KEY"]
 ?? throw new InvalidOperationException("Missing JWT_KEY. Ensure it is provided via AppHost parameters.");
+
+if (signInKey.Length < 32)
+{
+    throw new InvalidOperationException("JWT_KEY is too short. It must be at least 32 characters (256 bits) for HS256 security.");
+}
+
 var jwtIssuer = builder.Configuration["Jwt:Issuer"]
 ?? throw new InvalidOperationException("Missing Jwt:Issuer configuration.");
 var jwtAudience = builder.Configuration["Jwt:Audience"]
@@ -83,6 +89,7 @@ builder.Services.AddIdentity<ApplicationUser, AppUserRoles>(options =>
 
 builder.Services.AddScoped<IGenerateJwtBearerToken, GenerateJwtTokentService>();
 builder.Services.AddScoped<IEmailService, EmailService>();
+builder.Services.AddSingleton<IBiometricService, BiometricService>();
 
 // --- 4. AUTHENTICATION (JWT) ---
 builder.Services.AddAuthentication(options =>

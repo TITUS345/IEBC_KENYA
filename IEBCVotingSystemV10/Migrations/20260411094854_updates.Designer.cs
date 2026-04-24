@@ -11,6 +11,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 namespace IEBCVotingSystemV10.Migrations
 {
+#pragma warning disable CS8981 // The type name only contains lower-cased ascii characters
     [DbContext(typeof(ApplicationDbContext))]
     [Migration("20260411094854_updates")]
     partial class updates
@@ -404,5 +405,6 @@ namespace IEBCVotingSystemV10.Migrations
                 });
 #pragma warning restore 612, 618
         }
+#pragma warning restore CS8981 // The type name only contains lower-cased ascii characters
     }
 }
