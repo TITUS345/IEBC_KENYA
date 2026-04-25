@@ -3,7 +3,6 @@
 import Link from 'next/link';
 import { ReactNode } from 'react';
 import { X } from 'lucide-react';
-import { SiteHeader } from './site-header';
 
 interface ContentAreaProps {
   sidebarOpen: boolean;
@@ -14,8 +13,6 @@ interface ContentAreaProps {
 export function ContentArea({ sidebarOpen, setSidebarOpen, children }: ContentAreaProps) {
   return (
     <div className="min-h-screen bg-slate-50">
-      <SiteHeader sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} />
-
       <div className="lg:flex lg:min-h-[calc(100vh-5rem)]">
         <aside className={`fixed inset-y-0 left-0 z-50 w-80 transform bg-white border-r border-slate-200 shadow-2xl shadow-slate-900/5 transition-transform duration-300 ease-in-out lg:fixed lg:translate-x-0 lg:shadow-none ${sidebarOpen ? 'translate-x-0' : '-translate-x-full'}`}>
           <div className="flex h-full flex-col justify-between overflow-hidden px-6 py-8 lg:px-8 lg:py-10">
@@ -89,8 +86,6 @@ export function ContentArea({ sidebarOpen, setSidebarOpen, children }: ContentAr
         {sidebarOpen && <div className="fixed inset-0 z-40 bg-black/40 lg:hidden" onClick={() => setSidebarOpen(false)}></div>}
 
         <div className="lg:ml-80 flex min-h-[calc(100vh-5rem)] flex-col">
-          <SiteHeader sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} />
-
           <main className="flex-1 overflow-y-auto px-4 py-8 sm:px-6 lg:px-8">
             {children}
           </main>
