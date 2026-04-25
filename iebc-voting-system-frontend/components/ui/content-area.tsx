@@ -8,7 +8,7 @@ interface ContentAreaProps {
 
 export function ContentArea({ children }: ContentAreaProps) {
   return (
-    <main className="flex-1 overflow-y-auto pt-20 pb-24 px-4 sm:px-6 lg:px-8">
+    <main className="flex-1 overflow-y-auto pt-28 pb-24 px-4 sm:px-6 lg:px-8">
       {children}
     </main>
   );
