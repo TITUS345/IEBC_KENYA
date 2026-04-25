@@ -2,6 +2,7 @@
 
 import Link from 'next/link';
 import { useState } from 'react';
+import { X } from 'lucide-react';
 import { SiteHeader } from '@/components/ui/site-header';
 
 export default function Home() {
@@ -13,13 +14,30 @@ export default function Home() {
         <div className="flex h-full flex-col justify-between px-6 py-8 lg:px-0 lg:py-0">
           <div className="space-y-8">
             <div className="space-y-3">
-              <Link href="/" className="flex items-center gap-3">
-                <div className="grid h-12 w-12 place-items-center rounded-3xl bg-blue-700 text-base font-bold text-white">IEBC</div>
-                <div className="hidden sm:block">
-                  <p className="text-sm font-semibold text-slate-900">IEBC Kenya</p>
-                  <p className="text-xs text-slate-500">Secure digital voting platform</p>
-                </div>
-              </Link>
+              <div className="flex items-center justify-between lg:hidden">
+                <Link href="/" className="flex items-center gap-3">
+                  <div className="grid h-12 w-12 place-items-center rounded-3xl bg-blue-700 text-base font-bold text-white">IEBC</div>
+                  <div className="hidden sm:block">
+                    <p className="text-sm font-semibold text-slate-900">IEBC Kenya</p>
+                    <p className="text-xs text-slate-500">Secure digital voting platform</p>
+                  </div>
+                </Link>
+                <button
+                  onClick={() => setSidebarOpen(false)}
+                  className="rounded-full p-2 text-slate-400 hover:bg-slate-800 hover:text-white"
+                >
+                  <X className="h-5 w-5" />
+                </button>
+              </div>
+              <div className="hidden lg:block">
+                <Link href="/" className="flex items-center gap-3">
+                  <div className="grid h-12 w-12 place-items-center rounded-3xl bg-blue-700 text-base font-bold text-white">IEBC</div>
+                  <div className="hidden sm:block">
+                    <p className="text-sm font-semibold text-slate-900">IEBC Kenya</p>
+                    <p className="text-xs text-slate-500">Secure digital voting platform</p>
+                  </div>
+                </Link>
+              </div>
               <p className="text-xs font-semibold uppercase tracking-[0.35em] text-slate-400">Navigation</p>
               <nav className="space-y-2">
                 <Link
