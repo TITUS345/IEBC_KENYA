@@ -2,7 +2,7 @@
 
 export function FeaturesSection() {
   return (
-    <section className="grid gap-6 lg:grid-cols-3">
+    <section className="mt-12 grid gap-6 lg:grid-cols-3">
       <div className="rounded-[1.5rem] border border-slate-200 bg-white p-6 shadow-sm">
         <h2 className="text-lg font-semibold text-slate-900">Built for Kenya</h2>
         <p className="mt-3 text-sm leading-6 text-slate-600">
