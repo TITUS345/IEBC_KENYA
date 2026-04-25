@@ -10,8 +10,8 @@ interface SiteHeaderProps {
 export function SiteHeader({ sidebarOpen, setSidebarOpen }: SiteHeaderProps) {
   return (
     <header className="border-b border-slate-200 bg-white/95 backdrop-blur-xl shadow-sm shadow-slate-200/20">
-      <div className="mx-auto flex max-w-7xl flex-col gap-3 px-4 py-4 sm:flex-row sm:items-center sm:justify-between sm:px-6">
-        <div className="flex items-start gap-3 ml-1">
+      <div className="flex w-full flex-col gap-3 px-4 py-4 sm:flex-row sm:items-center sm:justify-between sm:px-6">
+        <div className="flex items-center gap-3 ">
           <Button
             variant="ghost"
             size="sm"
@@ -31,7 +31,7 @@ export function SiteHeader({ sidebarOpen, setSidebarOpen }: SiteHeaderProps) {
           )}
         </div>
 
-        <div className="flex flex-wrap items-start ml-auto gap-3">
+        <div className="flex flex-wrap items-center gap-3">
           <Link
             href="/auth/signIn"
             className="rounded-full border border-green-200 bg-white px-4 py-2 text-sm font-medium text-green-600 transition hover:border-green-300 hover:bg-green-50"
