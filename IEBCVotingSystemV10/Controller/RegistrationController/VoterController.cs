@@ -138,27 +138,46 @@ namespace IEBCVotingSystemV10.Controller.RegistrationController
                         // Use NationalIdNo in filename for easier lookups during verification
                         fileName = $"FaceRef_{voterDTO.NationalIdNo}_{Guid.NewGuid()}{extension}";
 
-                        // Create directory path using _env.WebRootPath for better reliability
-                        string dirPath = Path.Combine(_env.WebRootPath, "Biometrics", "Voters");
+                        // Prefer wwwroot if writable, but fall back to App Content Root if needed
+                        string primaryDir = string.IsNullOrWhiteSpace(_env.WebRootPath)
+                            ? Path.Combine(_env.ContentRootPath, "wwwroot", "Biometrics", "Voters")
+                            : Path.Combine(_env.WebRootPath, "Biometrics", "Voters");
 
-                        _logger.LogInformation("Creating/checking directory: {DirectoryPath}", dirPath);
-                        if (!Directory.Exists(dirPath))
+                        string fallbackDir = Path.Combine(_env.ContentRootPath, "Biometrics", "Voters");
+
+                        async Task<string> SaveFileAsync(string directory)
                         {
-                            Directory.CreateDirectory(dirPath);
-                            _logger.LogInformation("Directory created: {DirectoryPath}", dirPath);
+                            if (!Directory.Exists(directory))
+                            {
+                                Directory.CreateDirectory(directory);
+                                _logger.LogInformation("Directory created: {DirectoryPath}", directory);
+                            }
+
+                            string fullPath = Path.Combine(directory, fileName);
+                            _logger.LogInformation("Saving biometric file to: {FilePath}", fullPath);
+
+                            await using (var stream = new FileStream(fullPath, FileMode.Create, FileAccess.Write, FileShare.None))
+                            {
+                                await voterDTO.FaceBiometricFile.CopyToAsync(stream);
+                                await stream.FlushAsync();
+                            }
+
+                            return fullPath;
                         }
 
-                        string fullPath = Path.Combine(dirPath, fileName);
-                        _logger.LogInformation("Saving biometric file to: {FilePath}", fullPath);
-
-                        // Save file with proper error handling
-                        using (var stream = new FileStream(fullPath, FileMode.Create, FileAccess.Write, FileShare.None))
+                        string savedPath;
+                        try
                         {
-                            await voterDTO.FaceBiometricFile.CopyToAsync(stream);
-                            await stream.FlushAsync();
+                            _logger.LogInformation("Attempting biometric save in primary path: {DirectoryPath}", primaryDir);
+                            savedPath = await SaveFileAsync(primaryDir);
+                        }
+                        catch (UnauthorizedAccessException primaryEx)
+                        {
+                            _logger.LogWarning(primaryEx, "Primary biometric path not writable, trying fallback path: {FallbackPath}", fallbackDir);
+                            savedPath = await SaveFileAsync(fallbackDir);
                         }
 
-                        _logger.LogInformation("Biometric file saved successfully: {FileName}", fileName);
+                        _logger.LogInformation("Biometric file saved successfully: {FileName} at {SavedPath}", fileName, savedPath);
                     }
                     catch (UnauthorizedAccessException ex)
                     {
