@@ -1,0 +1,15 @@
+'use client';
+
+export function Footer() {
+  return (
+    <footer className="fixed bottom-0 left-0 right-0 z-50 lg:left-80 bg-slate-100 border-t border-slate-200 py-6">
+      <div className="mx-auto flex max-w-7xl flex-col gap-4 px-4 text-sm text-slate-600 sm:px-6 lg:flex-row lg:items-center lg:justify-between">
+        <div>
+          <p className="font-semibold text-slate-900">IEBC Voting System</p>
+          <p>Secure voter registration, biometric verification, and election transparency for Kenya.</p>
+        </div>
+        <p>© {new Date().getFullYear()} IEBC Voting System. All rights reserved.</p>
+      </div>
+    </footer>
+  );
+}
