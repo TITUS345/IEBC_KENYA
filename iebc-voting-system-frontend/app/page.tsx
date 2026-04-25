@@ -8,100 +8,129 @@ export default function Home() {
     <div className="min-h-screen bg-slate-50">
       <SiteHeader />
 
-      <div className="mx-auto flex min-h-[calc(100vh-5rem)] max-w-7xl flex-col gap-6 px-4 py-6 sm:px-6 lg:flex-row lg:items-start">
-        <aside className="hidden rounded-3xl border border-slate-200 bg-white/90 p-6 shadow-sm lg:flex lg:w-80 lg:flex-col lg:gap-6">
-          <div className="space-y-3">
-            <p className="text-sm font-semibold uppercase tracking-[0.3em] text-slate-500">Navigation</p>
-            <nav className="space-y-2">
-              <Link href="/" className="block rounded-2xl px-4 py-3 text-sm font-medium text-slate-700 transition hover:bg-slate-100">
-                Home
-              </Link>
-              <Link href="/auth/signIn" className="block rounded-2xl px-4 py-3 text-sm font-medium text-slate-700 transition hover:bg-slate-100">
-                Sign In
-              </Link>
-              <Link href="/auth/signUp" className="block rounded-2xl px-4 py-3 text-sm font-medium text-slate-700 transition hover:bg-slate-100">
-                Create Account
-              </Link>
-              <Link href="/registration/registerVoter" className="block rounded-2xl px-4 py-3 text-sm font-medium text-slate-700 transition hover:bg-slate-100">
-                Register to Vote
-              </Link>
-            </nav>
-          </div>
+      <div className="lg:flex lg:min-h-[calc(100vh-5rem)]">
+        <aside className="hidden bg-slate-950 text-white lg:flex lg:w-80 lg:flex-col lg:justify-between lg:px-6 lg:pt-8 lg:pb-10">
+          <div className="space-y-8">
+            <div className="space-y-3">
+              <p className="text-xs font-semibold uppercase tracking-[0.35em] text-slate-400">Navigation</p>
+              <nav className="space-y-2">
+                <Link
+                  href="/"
+                  className="block rounded-2xl px-4 py-3 text-sm font-medium text-slate-100 transition hover:bg-slate-800"
+                >
+                  Home
+                </Link>
+                <Link
+                  href="/auth/signIn"
+                  className="block rounded-2xl px-4 py-3 text-sm font-medium text-slate-100 transition hover:bg-slate-800"
+                >
+                  Sign In
+                </Link>
+                <Link
+                  href="/auth/signUp"
+                  className="block rounded-2xl px-4 py-3 text-sm font-medium text-slate-100 transition hover:bg-slate-800"
+                >
+                  Create Account
+                </Link>
+                <Link
+                  href="/registration/registerVoter"
+                  className="block rounded-2xl px-4 py-3 text-sm font-medium text-slate-100 transition hover:bg-slate-800"
+                >
+                  Register to Vote
+                </Link>
+              </nav>
+            </div>
 
-          <div className="rounded-3xl border border-slate-200 bg-slate-50 p-4 text-sm text-slate-700">
-            <p className="font-semibold text-slate-900">Key benefits</p>
-            <p className="mt-2 leading-6">
-              Secure voter onboarding with biometric verification, audit-ready registration flows, and responsive access across devices.
-            </p>
+            <div className="rounded-3xl border border-slate-800 bg-slate-900/90 p-5 text-sm leading-6 text-slate-300">
+              <p className="font-semibold text-white">Fast, secure voting</p>
+              <p className="mt-3">
+                Secure voter onboarding with biometric verification and audit-ready workflows for Kenyan election administration.
+              </p>
+            </div>
           </div>
         </aside>
 
-        <main className="flex-1 rounded-3xl bg-white/90 p-6 shadow-xl shadow-slate-200/40 lg:p-10">
-          <section className="space-y-6 text-center sm:text-left">
-            <div className="max-w-3xl">
-              <p className="text-sm font-semibold uppercase tracking-[0.35em] text-blue-700">IEBC Kenya</p>
-              <h1 className="mt-4 text-4xl font-bold tracking-tight text-slate-900 sm:text-5xl">
-                Secure voter registration and biometric verification for Kenya
-              </h1>
-              <p className="mt-6 text-base leading-8 text-slate-600 sm:text-lg">
-                A modern voter registration system built to support transparent elections, secure identity verification and citizen participation at scale.
-              </p>
-            </div>
+        <main className="flex-1 px-4 py-8 sm:px-6 lg:px-8">
+          <div className="mx-auto max-w-7xl space-y-8">
+            <section className="overflow-hidden rounded-[2rem] bg-gradient-to-br from-slate-900 via-slate-950 to-blue-900 text-white shadow-2xl shadow-slate-900/20">
+              <div className="grid gap-8 px-6 py-10 lg:grid-cols-[1.25fr_0.95fr] lg:px-12 lg:py-16">
+                <div className="space-y-6">
+                  <p className="text-sm font-semibold uppercase tracking-[0.35em] text-cyan-300">IEBC Kenya</p>
+                  <h1 className="text-4xl font-semibold tracking-tight sm:text-5xl">
+                    Secure voter registration and biometric verification built for modern elections
+                  </h1>
+                  <p className="max-w-2xl text-base leading-8 text-slate-200 sm:text-lg">
+                    A modern platform for transparent voter registration, secure identity verification, and streamlined election administration across Kenya.
+                  </p>
 
-            <div className="mx-auto grid max-w-3xl gap-4 sm:grid-cols-3">
-              <Link
-                href="/auth/signIn"
-                className="inline-flex items-center justify-center rounded-2xl bg-blue-700 px-5 py-3 text-sm font-semibold text-white transition hover:bg-blue-800"
-              >
-                Access Portal
-              </Link>
-              <Link
-                href="/auth/signUp"
-                className="inline-flex items-center justify-center rounded-2xl bg-green-600 px-5 py-3 text-sm font-semibold text-white transition hover:bg-green-700"
-              >
-                Create Account
-              </Link>
-              <Link
-                href="/registration/registerVoter"
-                className="inline-flex items-center justify-center rounded-2xl border border-slate-200 bg-white px-5 py-3 text-sm font-semibold text-slate-700 transition hover:bg-slate-100"
-              >
-                Register to Vote
-              </Link>
-            </div>
+                  <div className="grid gap-3 sm:grid-cols-3">
+                    <Link
+                      href="/auth/signIn"
+                      className="inline-flex items-center justify-center rounded-2xl bg-cyan-400 px-5 py-3 text-sm font-semibold text-slate-950 transition hover:bg-cyan-300"
+                    >
+                      Access Portal
+                    </Link>
+                    <Link
+                      href="/auth/signUp"
+                      className="inline-flex items-center justify-center rounded-2xl bg-white px-5 py-3 text-sm font-semibold text-slate-950 transition hover:bg-slate-100"
+                    >
+                      Create Account
+                    </Link>
+                    <Link
+                      href="/registration/registerVoter"
+                      className="inline-flex items-center justify-center rounded-2xl border border-white/20 bg-white/10 px-5 py-3 text-sm font-semibold text-white transition hover:bg-white/20"
+                    >
+                      Register to Vote
+                    </Link>
+                  </div>
+                </div>
+                <div className="rounded-[1.75rem] border border-white/10 bg-white/10 p-8 text-slate-100 backdrop-blur-xl">
+                  <p className="text-sm uppercase tracking-[0.3em] text-cyan-200">Platform snapshot</p>
+                  <div className="mt-6 space-y-5">
+                    <div className="rounded-3xl bg-slate-950/70 p-5">
+                      <p className="font-semibold text-white">Biometric Identity</p>
+                      <p className="mt-2 text-sm leading-6 text-slate-300">
+                        Capture face embeddings during registration for secure voter identity verification without storing raw images.
+                      </p>
+                    </div>
+                    <div className="rounded-3xl bg-slate-950/70 p-5">
+                      <p className="font-semibold text-white">Transparent Process</p>
+                      <p className="mt-2 text-sm leading-6 text-slate-300">
+                        Audit-ready workflows for registration and election administration with clear, modern UX.
+                      </p>
+                    </div>
+                    <div className="rounded-3xl bg-slate-950/70 p-5">
+                      <p className="font-semibold text-white">Mobile-ready</p>
+                      <p className="mt-2 text-sm leading-6 text-slate-300">
+                        A responsive interface that adapts to phones, tablets and desktop operations.
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </section>
 
-            <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-              <div className="rounded-3xl border border-slate-200 bg-slate-50 p-5 shadow-sm">
-                <h2 className="text-lg font-semibold text-slate-900">Biometric Identity</h2>
-                <p className="mt-2 text-sm leading-6 text-slate-600">
-                  Capture face embeddings during registration for secure voter identity verification without storing sensitive raw images.
+            <section className="grid gap-6 lg:grid-cols-3">
+              <div className="rounded-[1.5rem] border border-slate-200 bg-white p-6 shadow-sm">
+                <h2 className="text-lg font-semibold text-slate-900">Built for Kenya</h2>
+                <p className="mt-3 text-sm leading-6 text-slate-600">
+                  Designed to support secure voter registration and biometric verification with local election needs in mind.
                 </p>
               </div>
-              <div className="rounded-3xl border border-slate-200 bg-slate-50 p-5 shadow-sm">
-                <h2 className="text-lg font-semibold text-slate-900">Transparent Process</h2>
-                <p className="mt-2 text-sm leading-6 text-slate-600">
-                  Keep registration workflows simple and auditable, with clear steps for voters and election administrators.
+              <div className="rounded-[1.5rem] border border-slate-200 bg-white p-6 shadow-sm">
+                <h2 className="text-lg font-semibold text-slate-900">Modern UX</h2>
+                <p className="mt-3 text-sm leading-6 text-slate-600">
+                  Clear navigation, actionable buttons and a polished layout improve usability for voters and administrators.
                 </p>
               </div>
-              <div className="rounded-3xl border border-slate-200 bg-slate-50 p-5 shadow-sm">
-                <h2 className="text-lg font-semibold text-slate-900">Mobile-ready UI</h2>
-                <p className="mt-2 text-sm leading-6 text-slate-600">
-                  Responsive landing page and sidebar navigation ensure the platform works smoothly on phones and tablets.
+              <div className="rounded-[1.5rem] border border-slate-200 bg-white p-6 shadow-sm">
+                <h2 className="text-lg font-semibold text-slate-900">Secure workflows</h2>
+                <p className="mt-3 text-sm leading-6 text-slate-600">
+                  Biometric onboarding, role-based access, and election transparency help build trust across the voting process.
                 </p>
               </div>
-            </div>
-          </section>
-
-          <section className="mt-12 rounded-3xl border border-slate-200 bg-slate-50 p-6 sm:p-8">
-            <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-              <div>
-                <p className="text-xs uppercase tracking-[0.3em] text-slate-500">Platform benefits</p>
-                <h2 className="mt-2 text-2xl font-semibold text-slate-900">Everything needed to register voters safely and transparently.</h2>
-              </div>
-              <p className="max-w-xl text-sm leading-7 text-slate-600">
-                Secure registration, biometric verification, and easy voter onboarding all in one responsive system designed for Kenyan election administration.
-              </p>
-            </div>
-          </section>
+            </section>
+          </div>
         </main>
       </div>
 
