@@ -10,7 +10,7 @@ interface SiteHeaderProps {
 export function SiteHeader({ sidebarOpen, setSidebarOpen }: SiteHeaderProps) {
   return (
     <header className="border-b border-slate-200 bg-white/95 backdrop-blur-xl shadow-sm shadow-slate-200/20">
-      <div className="flex w-full flex-col gap-3 px-4 py-4 sm:flex-row sm:items-center sm:justify-between sm:px-6">
+      <div className="flex w-full flex-col gap-2 px-4 py-2 sm:gap-3 sm:py-4 sm:flex-row sm:items-center sm:justify-between sm:px-6">
         <div className="flex items-center gap-3 ">
           <Button
             variant="ghost"
