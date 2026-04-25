@@ -1,17 +1,35 @@
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
+import { Menu, X } from "lucide-react"
 
-export function SiteHeader() {
+interface SiteHeaderProps {
+  sidebarOpen: boolean;
+  setSidebarOpen: (open: boolean) => void;
+}
+
+export function SiteHeader({ sidebarOpen, setSidebarOpen }: SiteHeaderProps) {
   return (
     <header className="sticky top-0 z-40 border-b border-slate-200 bg-white/95 backdrop-blur-xl shadow-sm shadow-slate-200/20">
       <div className="mx-auto flex max-w-7xl flex-col gap-3 px-4 py-4 sm:flex-row sm:items-center sm:justify-between sm:px-6">
-        <Link href="/" className="flex items-center gap-3">
-          <div className="grid h-12 w-12 place-items-center rounded-3xl bg-blue-700 text-base font-bold text-white">IEBC</div>
-          <div className="hidden sm:block">
-            <p className="text-sm font-semibold text-slate-900">IEBC Kenya</p>
-            <p className="text-xs text-slate-500">Secure digital voting platform</p>
-          </div>
-        </Link>
+        <div className="flex items-center gap-3">
+          <Button
+            variant="ghost"
+            size="sm"
+            onClick={() => setSidebarOpen(!sidebarOpen)}
+            className="lg:hidden"
+          >
+            {sidebarOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
+          </Button>
+          {!sidebarOpen && (
+            <Link href="/" className="flex items-center gap-3">
+              <div className="grid h-12 w-12 place-items-center rounded-3xl bg-blue-700 text-base font-bold text-white">IEBC</div>
+              <div className="hidden sm:block">
+                <p className="text-sm font-semibold text-slate-900">IEBC Kenya</p>
+                <p className="text-xs text-slate-500">Secure digital voting platform</p>
+              </div>
+            </Link>
+          )}
+        </div>
 
         <div className="flex flex-wrap items-center gap-3">
           <Link
@@ -28,3 +46,4 @@ export function SiteHeader() {
     </header>
   )
 }
+

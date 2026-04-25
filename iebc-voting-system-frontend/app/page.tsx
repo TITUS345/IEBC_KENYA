@@ -1,54 +1,68 @@
 'use client';
 
 import Link from 'next/link';
+import { useState } from 'react';
 import { SiteHeader } from '@/components/ui/site-header';
 
 export default function Home() {
-  return (
-    <div className="min-h-screen bg-slate-50 lg:flex lg:overflow-hidden">
-      <aside className="hidden lg:flex lg:w-80 lg:flex-col lg:justify-between lg:border-r lg:border-slate-200 lg:bg-slate-950 lg:px-6 lg:py-8 lg:h-screen">
-        <div className="space-y-8">
-          <div className="space-y-3">
-            <p className="text-xs font-semibold uppercase tracking-[0.35em] text-slate-400">Navigation</p>
-            <nav className="space-y-2">
-              <Link
-                href="/"
-                className="block rounded-2xl px-4 py-3 text-sm font-medium text-slate-100 transition hover:bg-slate-800"
-              >
-                Home
-              </Link>
-              <Link
-                href="/auth/signIn"
-                className="block rounded-2xl px-4 py-3 text-sm font-medium text-slate-100 transition hover:bg-slate-800"
-              >
-                Sign In
-              </Link>
-              <Link
-                href="/auth/signUp"
-                className="block rounded-2xl px-4 py-3 text-sm font-medium text-slate-100 transition hover:bg-slate-800"
-              >
-                Create Account
-              </Link>
-              <Link
-                href="/registration/registerVoter"
-                className="block rounded-2xl px-4 py-3 text-sm font-medium text-slate-100 transition hover:bg-slate-800"
-              >
-                Register to Vote
-              </Link>
-            </nav>
-          </div>
+  const [sidebarOpen, setSidebarOpen] = useState(false);
 
-          <div className="rounded-3xl border border-slate-800 bg-slate-900/90 p-5 text-sm leading-6 text-slate-300">
-            <p className="font-semibold text-white">Fast, secure voting</p>
-            <p className="mt-3">
-              Secure voter onboarding with biometric verification and audit-ready workflows for Kenyan election administration.
-            </p>
+  return (
+    <div className="min-h-screen bg-slate-50 lg:flex">
+      <aside className={`fixed inset-y-0 left-0 z-50 w-80 transform bg-slate-950 text-white transition-transform duration-300 ease-in-out lg:relative lg:translate-x-0 lg:flex lg:flex-col lg:justify-between lg:border-r lg:border-slate-200 lg:px-6 lg:py-8 ${sidebarOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'}`}>
+        <div className="flex h-full flex-col justify-between px-6 py-8 lg:px-0 lg:py-0">
+          <div className="space-y-8">
+            <div className="space-y-3">
+              <Link href="/" className="flex items-center gap-3">
+                <div className="grid h-12 w-12 place-items-center rounded-3xl bg-blue-700 text-base font-bold text-white">IEBC</div>
+                <div className="hidden sm:block">
+                  <p className="text-sm font-semibold text-slate-900">IEBC Kenya</p>
+                  <p className="text-xs text-slate-500">Secure digital voting platform</p>
+                </div>
+              </Link>
+              <p className="text-xs font-semibold uppercase tracking-[0.35em] text-slate-400">Navigation</p>
+              <nav className="space-y-2">
+                <Link
+                  href="/"
+                  className="block rounded-2xl px-4 py-3 text-sm font-medium text-slate-100 transition hover:bg-slate-800"
+                >
+                  Home
+                </Link>
+                <Link
+                  href="/auth/signIn"
+                  className="block rounded-2xl px-4 py-3 text-sm font-medium text-slate-100 transition hover:bg-slate-800"
+                >
+                  Sign In
+                </Link>
+                <Link
+                  href="/auth/signUp"
+                  className="block rounded-2xl px-4 py-3 text-sm font-medium text-slate-100 transition hover:bg-slate-800"
+                >
+                  Create Account
+                </Link>
+                <Link
+                  href="/registration/registerVoter"
+                  className="block rounded-2xl px-4 py-3 text-sm font-medium text-slate-100 transition hover:bg-slate-800"
+                >
+                  Register to Vote
+                </Link>
+              </nav>
+            </div>
+
+            <div className="rounded-3xl border border-slate-800 bg-slate-900/90 p-5 text-sm leading-6 text-slate-300">
+              <p className="font-semibold text-white">Fast, secure voting</p>
+              <p className="mt-3">
+                Secure voter onboarding with biometric verification and audit-ready workflows for Kenyan election administration.
+              </p>
+            </div>
           </div>
         </div>
       </aside>
 
-      <div className="flex min-h-screen flex-1 flex-col">
-        <SiteHeader />
+      {sidebarOpen && <div className="fixed inset-0 z-40 bg-black bg-opacity-50 lg:hidden" onClick={() => setSidebarOpen(false)}></div>}
+
+      <div className="flex min-h-screen flex-1 flex-col lg:ml-0">
+        <SiteHeader sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} />
 
         <main className="flex-1 px-4 py-8 sm:px-6 lg:px-8">
           <div className="mx-auto max-w-7xl space-y-8">
