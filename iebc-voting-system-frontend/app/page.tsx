@@ -91,7 +91,7 @@ export default function Home() {
         </div>
 
         {/* Content Area - Scrolls */}
-        <div className="flex-1 overflow-y-auto pt-20 pb-20 px-4 sm:px-6 lg:px-8">
+        <div className="flex-1 overflow-y-auto pt-24 pb-20 px-4 sm:px-6 lg:px-8">
           <section className="overflow-hidden rounded-[2rem] bg-gradient-to-br from-slate-900 via-slate-950 to-blue-900 text-white shadow-2xl shadow-slate-900/20">
             <div className="grid gap-8 px-6 py-10 lg:grid-cols-[1.25fr_0.95fr] lg:px-12 lg:py-16">
               <div className="space-y-6">
