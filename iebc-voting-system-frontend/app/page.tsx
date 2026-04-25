@@ -11,7 +11,7 @@ export default function Home() {
   return (
     <div className="flex flex-row min-h-screen bg-slate-50">
       {/* Sidebar */}
-      <aside className={`fixed top-20 left-0 bottom-0 z-50 w-80 transform bg-white border-r border-slate-200 shadow-2xl shadow-slate-900/5 transition-transform duration-300 ease-in-out lg:translate-x-0 lg:shadow-none ${sidebarOpen ? 'translate-x-0' : '-translate-x-full'}`}>
+      <aside className={`fixed top-0 left-0 bottom-0 z-50 w-80 transform bg-white border-r border-slate-200 shadow-2xl shadow-slate-900/5 transition-transform duration-300 ease-in-out lg:translate-x-0 lg:shadow-none ${sidebarOpen ? 'translate-x-0' : '-translate-x-full'}`}>
         <div className="flex h-full flex-col justify-between overflow-hidden px-6 py-8 lg:px-8 lg:py-10">
           <div className="space-y-8">
             <div className="flex items-center justify-between lg:hidden">
@@ -81,12 +81,12 @@ export default function Home() {
       </aside>
 
       {/* Overlay */}
-      {sidebarOpen && <div className="fixed top-20 inset-x-0 bottom-0 z-40 bg-black/40 lg:hidden" onClick={() => setSidebarOpen(false)}></div>}
+      {sidebarOpen && <div className="fixed top-0 inset-x-0 bottom-0 z-40 bg-black/40 lg:hidden" onClick={() => setSidebarOpen(false)}></div>}
 
       {/* Right Column */}
       <div className="flex flex-col flex-1 lg:ml-80">
         {/* Header - Fixed */}
-        <div className="fixed top-0 left-0 right-0 z-50">
+        <div className="fixed top-0 left-0 right-0 z-50 lg:left-80">
           <SiteHeader sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} />
         </div>
 
