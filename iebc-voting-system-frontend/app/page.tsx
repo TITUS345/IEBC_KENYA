@@ -10,7 +10,7 @@ export default function Home() {
 
   return (
     <div className="min-h-screen bg-slate-50 lg:flex">
-      <aside className={`fixed inset-y-0 left-0 z-50 w-80 transform bg-slate-950 text-white transition-transform duration-300 ease-in-out lg:relative lg:translate-x-0 lg:flex lg:flex-col lg:justify-between lg:border-r lg:border-slate-200 lg:px-6 lg:py-8 ${sidebarOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'}`}>
+      <aside className={`fixed inset-y-0 left-0 z-50 w-80 transform bg-white border-r border-slate-200 transition-transform duration-300 ease-in-out lg:translate-x-0 lg:static lg:inset-0 lg:flex lg:flex-col lg:justify-between lg:px-6 lg:py-8 lg:h-screen lg:overflow-hidden ${sidebarOpen ? 'translate-x-0' : '-translate-x-full'}`}>
         <div className="flex h-full flex-col justify-between px-6 py-8 lg:px-0 lg:py-0">
           <div className="space-y-8">
             <div className="space-y-3">
@@ -24,7 +24,7 @@ export default function Home() {
                 </Link>
                 <button
                   onClick={() => setSidebarOpen(false)}
-                  className="rounded-full p-2 text-slate-400 hover:bg-slate-800 hover:text-white"
+                  className="rounded-full p-2 text-slate-400 hover:bg-slate-100 hover:text-slate-600"
                 >
                   <X className="h-5 w-5" />
                 </button>
@@ -38,37 +38,37 @@ export default function Home() {
                   </div>
                 </Link>
               </div>
-              <p className="text-xs font-semibold uppercase tracking-[0.35em] text-slate-400">Navigation</p>
+              <p className="text-xs font-semibold uppercase tracking-[0.35em] text-slate-500">Navigation</p>
               <nav className="space-y-2">
                 <Link
                   href="/"
-                  className="block rounded-2xl px-4 py-3 text-sm font-medium text-slate-100 transition hover:bg-slate-800"
+                  className="block rounded-2xl px-4 py-3 text-sm font-medium text-slate-700 transition hover:bg-slate-100"
                 >
                   Home
                 </Link>
                 <Link
                   href="/auth/signIn"
-                  className="block rounded-2xl px-4 py-3 text-sm font-medium text-slate-100 transition hover:bg-slate-800"
+                  className="block rounded-2xl px-4 py-3 text-sm font-medium text-slate-700 transition hover:bg-slate-100"
                 >
                   Sign In
                 </Link>
                 <Link
                   href="/auth/signUp"
-                  className="block rounded-2xl px-4 py-3 text-sm font-medium text-slate-100 transition hover:bg-slate-800"
+                  className="block rounded-2xl px-4 py-3 text-sm font-medium text-slate-700 transition hover:bg-slate-100"
                 >
                   Create Account
                 </Link>
                 <Link
                   href="/registration/registerVoter"
-                  className="block rounded-2xl px-4 py-3 text-sm font-medium text-slate-100 transition hover:bg-slate-800"
+                  className="block rounded-2xl px-4 py-3 text-sm font-medium text-slate-700 transition hover:bg-slate-100"
                 >
                   Register to Vote
                 </Link>
               </nav>
             </div>
 
-            <div className="rounded-3xl border border-slate-800 bg-slate-900/90 p-5 text-sm leading-6 text-slate-300">
-              <p className="font-semibold text-white">Fast, secure voting</p>
+            <div className="rounded-3xl border border-slate-200 bg-slate-50 p-5 text-sm leading-6 text-slate-600">
+              <p className="font-semibold text-slate-900">Fast, secure voting</p>
               <p className="mt-3">
                 Secure voter onboarding with biometric verification and audit-ready workflows for Kenyan election administration.
               </p>
@@ -79,10 +79,8 @@ export default function Home() {
 
       {sidebarOpen && <div className="fixed inset-0 z-40 bg-black bg-opacity-50 lg:hidden" onClick={() => setSidebarOpen(false)}></div>}
 
-      <div className="flex min-h-screen flex-1 flex-col lg:ml-0">
-        <SiteHeader sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} />
-
-        <main className="flex-1 px-4 py-8 sm:px-6 lg:px-8">
+      <main className="lg:ml-80 overflow-y-auto min-h-[calc(100vh-5rem)]">
+        <div className="px-4 py-8 sm:px-6 lg:px-8">
           <div className="mx-auto max-w-7xl space-y-8">
             <section className="overflow-hidden rounded-[2rem] bg-gradient-to-br from-slate-900 via-slate-950 to-blue-900 text-white shadow-2xl shadow-slate-900/20">
               <div className="grid gap-8 px-6 py-10 lg:grid-cols-[1.25fr_0.95fr] lg:px-12 lg:py-16">
@@ -163,18 +161,18 @@ export default function Home() {
               </div>
             </section>
           </div>
-        </main>
+        </div>
+      </main>
 
-        <footer className="border-t border-slate-200 bg-slate-100 py-6">
-          <div className="mx-auto flex max-w-7xl flex-col gap-4 px-4 text-sm text-slate-600 sm:px-6 lg:flex-row lg:items-center lg:justify-between">
-            <div>
-              <p className="font-semibold text-slate-900">IEBC Voting System</p>
-              <p>Secure voter registration, biometric verification, and election transparency for Kenya.</p>
-            </div>
-            <p>© {new Date().getFullYear()} IEBC Voting System. All rights reserved.</p>
+      <footer className="lg:ml-80 border-t border-slate-200 bg-slate-100 py-6">
+        <div className="mx-auto flex max-w-7xl flex-col gap-4 px-4 text-sm text-slate-600 sm:px-6 lg:flex-row lg:items-center lg:justify-between">
+          <div>
+            <p className="font-semibold text-slate-900">IEBC Voting System</p>
+            <p>Secure voter registration, biometric verification, and election transparency for Kenya.</p>
           </div>
-        </footer>
-      </div>
+          <p>© {new Date().getFullYear()} IEBC Voting System. All rights reserved.</p>
+        </div>
+      </footer>
     </div>
   );
 }
