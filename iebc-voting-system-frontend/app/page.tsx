@@ -5,50 +5,50 @@ import { SiteHeader } from '@/components/ui/site-header';
 
 export default function Home() {
   return (
-    <div className="min-h-screen bg-slate-50">
-      <SiteHeader />
-
-      <div className="lg:flex lg:min-h-[calc(100vh-5rem)]">
-        <aside className="hidden bg-slate-950 text-white lg:flex lg:w-80 lg:flex-col lg:justify-between lg:px-6 lg:pt-8 lg:pb-10">
-          <div className="space-y-8">
-            <div className="space-y-3">
-              <p className="text-xs font-semibold uppercase tracking-[0.35em] text-slate-400">Navigation</p>
-              <nav className="space-y-2">
-                <Link
-                  href="/"
-                  className="block rounded-2xl px-4 py-3 text-sm font-medium text-slate-100 transition hover:bg-slate-800"
-                >
-                  Home
-                </Link>
-                <Link
-                  href="/auth/signIn"
-                  className="block rounded-2xl px-4 py-3 text-sm font-medium text-slate-100 transition hover:bg-slate-800"
-                >
-                  Sign In
-                </Link>
-                <Link
-                  href="/auth/signUp"
-                  className="block rounded-2xl px-4 py-3 text-sm font-medium text-slate-100 transition hover:bg-slate-800"
-                >
-                  Create Account
-                </Link>
-                <Link
-                  href="/registration/registerVoter"
-                  className="block rounded-2xl px-4 py-3 text-sm font-medium text-slate-100 transition hover:bg-slate-800"
-                >
-                  Register to Vote
-                </Link>
-              </nav>
-            </div>
-
-            <div className="rounded-3xl border border-slate-800 bg-slate-900/90 p-5 text-sm leading-6 text-slate-300">
-              <p className="font-semibold text-white">Fast, secure voting</p>
-              <p className="mt-3">
-                Secure voter onboarding with biometric verification and audit-ready workflows for Kenyan election administration.
-              </p>
-            </div>
+    <div className="min-h-screen bg-slate-50 lg:flex lg:overflow-hidden">
+      <aside className="hidden lg:flex lg:w-80 lg:flex-col lg:justify-between lg:border-r lg:border-slate-200 lg:bg-slate-950 lg:px-6 lg:py-8 lg:h-screen">
+        <div className="space-y-8">
+          <div className="space-y-3">
+            <p className="text-xs font-semibold uppercase tracking-[0.35em] text-slate-400">Navigation</p>
+            <nav className="space-y-2">
+              <Link
+                href="/"
+                className="block rounded-2xl px-4 py-3 text-sm font-medium text-slate-100 transition hover:bg-slate-800"
+              >
+                Home
+              </Link>
+              <Link
+                href="/auth/signIn"
+                className="block rounded-2xl px-4 py-3 text-sm font-medium text-slate-100 transition hover:bg-slate-800"
+              >
+                Sign In
+              </Link>
+              <Link
+                href="/auth/signUp"
+                className="block rounded-2xl px-4 py-3 text-sm font-medium text-slate-100 transition hover:bg-slate-800"
+              >
+                Create Account
+              </Link>
+              <Link
+                href="/registration/registerVoter"
+                className="block rounded-2xl px-4 py-3 text-sm font-medium text-slate-100 transition hover:bg-slate-800"
+              >
+                Register to Vote
+              </Link>
+            </nav>
           </div>
-        </aside>
+
+          <div className="rounded-3xl border border-slate-800 bg-slate-900/90 p-5 text-sm leading-6 text-slate-300">
+            <p className="font-semibold text-white">Fast, secure voting</p>
+            <p className="mt-3">
+              Secure voter onboarding with biometric verification and audit-ready workflows for Kenyan election administration.
+            </p>
+          </div>
+        </div>
+      </aside>
+
+      <div className="flex min-h-screen flex-1 flex-col">
+        <SiteHeader />
 
         <main className="flex-1 px-4 py-8 sm:px-6 lg:px-8">
           <div className="mx-auto max-w-7xl space-y-8">
@@ -132,17 +132,17 @@ export default function Home() {
             </section>
           </div>
         </main>
-      </div>
 
-      <footer className="border-t border-slate-200 bg-slate-100 py-6">
-        <div className="mx-auto flex max-w-7xl flex-col gap-4 px-4 text-sm text-slate-600 sm:px-6 lg:flex-row lg:items-center lg:justify-between">
-          <div>
-            <p className="font-semibold text-slate-900">IEBC Voting System</p>
-            <p>Secure voter registration, biometric verification, and election transparency for Kenya.</p>
+        <footer className="border-t border-slate-200 bg-slate-100 py-6">
+          <div className="mx-auto flex max-w-7xl flex-col gap-4 px-4 text-sm text-slate-600 sm:px-6 lg:flex-row lg:items-center lg:justify-between">
+            <div>
+              <p className="font-semibold text-slate-900">IEBC Voting System</p>
+              <p>Secure voter registration, biometric verification, and election transparency for Kenya.</p>
+            </div>
+            <p>© {new Date().getFullYear()} IEBC Voting System. All rights reserved.</p>
           </div>
-          <p>© {new Date().getFullYear()} IEBC Voting System. All rights reserved.</p>
-        </div>
-      </footer>
+        </footer>
+      </div>
     </div>
   );
 }
