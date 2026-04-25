@@ -78,7 +78,7 @@ export function Sidebar({ sidebarOpen, setSidebarOpen }: SidebarProps) {
           <div className="rounded-3xl border border-slate-200 bg-slate-50 p-5 text-sm leading-6 text-slate-600">
             <p className="font-semibold text-slate-900">Fast, secure voting</p>
             <p className="mt-3">
-              Secure voter onboarding with biometric verification and audit-ready workflows for Kenyan election administration.
+              Cast your vote and exercise your rights.
             </p>
           </div>
         </div>
