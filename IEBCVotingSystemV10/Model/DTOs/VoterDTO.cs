@@ -39,7 +39,6 @@ namespace IEBCVotingSystemV10.Model.DTOs
         public string County { get; set; } = string.Empty;
         [Required]
         public string Region { get; set; } = string.Empty;
-        [Required]
         public IFormFile? FaceBiometricFile { get; set; }
         [Required]
         public string FaceEmbeddings { get; set; } = string.Empty;

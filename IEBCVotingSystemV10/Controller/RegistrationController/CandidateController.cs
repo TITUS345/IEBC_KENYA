@@ -61,7 +61,7 @@ namespace IEBCVotingSystemV10.Controller.RegistrationController
                 }
 
                 // Handle Biometric Face Enrollment
-                var fileName = "pending_enrollment.png";
+                var fileName = "embeddings_only"; // Default when no file is stored
                 float[]? embeddings = null;
 
                 if (candidateDTO.FaceBiometricFile != null)
@@ -80,22 +80,33 @@ namespace IEBCVotingSystemV10.Controller.RegistrationController
                         return BadRequest("Face embeddings must be a valid JSON array of numbers.");
                     }
 
+                    // Skip file storage on hosted platforms - only store embeddings
                     var extension = Path.GetExtension(candidateDTO.FaceBiometricFile.FileName);
                     fileName = $"FaceRef_Cand_{candidateDTO.NationalIdNo}_{Guid.NewGuid()}{extension}";
 
-                    var dirPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "Biometrics", "Candidates");
-                    if (!Directory.Exists(dirPath))
+                    // File storage bypassed for hosted platforms
+                    // Only embeddings are needed for verification
+                }
+                else
+                {
+                    // No file provided - just validate embeddings
+                    if (string.IsNullOrEmpty(candidateDTO.FaceEmbeddings))
                     {
-                        Directory.CreateDirectory(dirPath);
+                        return BadRequest("Face embeddings are required for biometric registration.");
                     }
 
-                    string fullPath = Path.Combine(dirPath, fileName);
-                    using (var stream = new FileStream(fullPath, FileMode.Create))
+                    try
                     {
-                        await candidateDTO.FaceBiometricFile.CopyToAsync(stream);
+                        embeddings = JsonSerializer.Deserialize<float[]>(candidateDTO.FaceEmbeddings);
+                        if (embeddings == null || embeddings.Length == 0)
+                        {
+                            return BadRequest("Invalid face embeddings provided.");
+                        }
                     }
-
-
+                    catch
+                    {
+                        return BadRequest("Face embeddings must be a valid JSON array of numbers.");
+                    }
                 }
 
                 var newCandidate = new CandidateModel

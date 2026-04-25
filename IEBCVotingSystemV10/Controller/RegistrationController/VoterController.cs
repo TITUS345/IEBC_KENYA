@@ -97,7 +97,7 @@ namespace IEBCVotingSystemV10.Controller.RegistrationController
                 }
 
                 // Handle Biometric Face Enrollment
-                string fileName = "pending_enrollment.png";
+                string fileName = "embeddings_only"; // Default when no file is stored
                 float[]? embeddings = null;
 
                 if (voterDTO.FaceBiometricFile != null && voterDTO.FaceBiometricFile.Length > 0)
@@ -126,7 +126,7 @@ namespace IEBCVotingSystemV10.Controller.RegistrationController
                         return BadRequest("Face embeddings must be a valid JSON array of numbers.");
                     }
 
-                    // 2. Save the biometric file
+                    // 2. Save the biometric file (optional on hosted platforms)
                     try
                     {
                         string extension = Path.GetExtension(voterDTO.FaceBiometricFile.FileName);
@@ -138,69 +138,39 @@ namespace IEBCVotingSystemV10.Controller.RegistrationController
                         // Use NationalIdNo in filename for easier lookups during verification
                         fileName = $"FaceRef_{voterDTO.NationalIdNo}_{Guid.NewGuid()}{extension}";
 
-                        // Prefer wwwroot if writable, but fall back to App Content Root if needed
-                        string primaryDir = string.IsNullOrWhiteSpace(_env.WebRootPath)
-                            ? Path.Combine(_env.ContentRootPath, "wwwroot", "Biometrics", "Voters")
-                            : Path.Combine(_env.WebRootPath, "Biometrics", "Voters");
+                        // For hosted platforms, skip file storage and only store embeddings
+                        // The image data is not needed for verification - only embeddings matter
+                        _logger.LogInformation("Skipping biometric file storage on hosted platform. Only storing embeddings for verification.");
 
-                        string fallbackDir = Path.Combine(_env.ContentRootPath, "Biometrics", "Voters");
-
-                        async Task<string> SaveFileAsync(string directory)
-                        {
-                            if (!Directory.Exists(directory))
-                            {
-                                Directory.CreateDirectory(directory);
-                                _logger.LogInformation("Directory created: {DirectoryPath}", directory);
-                            }
-
-                            string fullPath = Path.Combine(directory, fileName);
-                            _logger.LogInformation("Saving biometric file to: {FilePath}", fullPath);
-
-                            await using (var stream = new FileStream(fullPath, FileMode.Create, FileAccess.Write, FileShare.None))
-                            {
-                                await voterDTO.FaceBiometricFile.CopyToAsync(stream);
-                                await stream.FlushAsync();
-                            }
-
-                            return fullPath;
-                        }
-
-                        string savedPath;
-                        try
-                        {
-                            _logger.LogInformation("Attempting biometric save in primary path: {DirectoryPath}", primaryDir);
-                            savedPath = await SaveFileAsync(primaryDir);
-                        }
-                        catch (UnauthorizedAccessException primaryEx)
-                        {
-                            _logger.LogWarning(primaryEx, "Primary biometric path not writable, trying fallback path: {FallbackPath}", fallbackDir);
-                            savedPath = await SaveFileAsync(fallbackDir);
-                        }
-
-                        _logger.LogInformation("Biometric file saved successfully: {FileName} at {SavedPath}", fileName, savedPath);
+                        _logger.LogInformation("Biometric embeddings processed successfully for {NationalId}", voterDTO.NationalIdNo);
                     }
-                    catch (UnauthorizedAccessException ex)
+                    catch (Exception ex)
                     {
-                        _logger.LogError(ex, "Permission denied when saving biometric file");
-                        return StatusCode(500, "Server error: Unable to save biometric file due to permission issues.");
-                    }
-                    catch (DirectoryNotFoundException ex)
-                    {
-                        _logger.LogError(ex, "Directory not found when saving biometric file");
-                        return StatusCode(500, "Server error: Unable to create biometric storage directory.");
-                    }
-                    catch (IOException ex)
-                    {
-                        _logger.LogError(ex, "I/O error when saving biometric file");
-                        return StatusCode(500, "Server error: Unable to save biometric file.");
+                        // Log but don't fail - embeddings are more important than file storage
+                        _logger.LogWarning(ex, "File storage failed, but continuing with embeddings for {NationalId}", voterDTO.NationalIdNo);
                     }
                 }
                 else
                 {
-                    _logger.LogWarning("No biometric file provided for {Email}", voterDTO.Email);
+                    // No file provided - just validate embeddings
                     if (string.IsNullOrEmpty(voterDTO.FaceEmbeddings))
                     {
-                        return BadRequest("Face biometric reference is required. Please upload a file or use face capture.");
+                        return BadRequest("Face embeddings are required for biometric registration.");
+                    }
+
+                    try
+                    {
+                        embeddings = JsonSerializer.Deserialize<float[]>(voterDTO.FaceEmbeddings);
+                        if (embeddings == null || embeddings.Length == 0)
+                        {
+                            return BadRequest("Invalid face embeddings provided. Embeddings must be a non-empty array of numbers.");
+                        }
+                        _logger.LogInformation("Face embeddings parsed successfully. Embedding count: {Count}", embeddings.Length);
+                    }
+                    catch (JsonException ex)
+                    {
+                        _logger.LogError(ex, "Failed to deserialize face embeddings for {Email}", voterDTO.Email);
+                        return BadRequest("Face embeddings must be a valid JSON array of numbers.");
                     }
                 }
 
