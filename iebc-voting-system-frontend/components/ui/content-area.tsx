@@ -104,3 +104,4 @@ export function ContentArea({ sidebarOpen, setSidebarOpen, children }: ContentAr
     </div>
   );
 }
+
