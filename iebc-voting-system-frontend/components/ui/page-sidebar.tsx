@@ -36,7 +36,7 @@ export function Sidebar({ sidebarOpen, setSidebarOpen }: SidebarProps) {
 
             <div className="hidden lg:block">
               <Link href="/" className="flex items-center gap-3">
-                <div className="grid h-12 w-12 place-items-center rounded-3xl bg-blue-700 text-base font-bold text-white">IEBC</div>
+                <div className="grid h-12 w-12 place-items-center rounded-3xl bg-green-600 text-base font-bold text-white">IEBC</div>
                 <div className="hidden sm:block">
                   <p className="text-sm font-semibold text-slate-900">IEBC Kenya</p>
                   <p className="text-xs text-slate-500">Secure digital voting platform</p>

@@ -22,7 +22,7 @@ export function SiteHeader({ sidebarOpen, setSidebarOpen }: SiteHeaderProps) {
           </Button>
           {!sidebarOpen && (
             <Link href="/" className="flex items-center gap-3">
-              <div className="grid h-12 w-12 place-items-center rounded-3xl bg-blue-700 text-base font-bold text-white">IEBC</div>
+              <div className="grid h-12 w-12 place-items-center rounded-3xl bg-green-600 text-base font-bold text-white">IEBC</div>
               <div className="hidden sm:block">
                 <p className="text-sm font-semibold text-slate-900">IEBC Kenya</p>
                 <p className="text-xs text-slate-500">Secure digital voting platform</p>
@@ -34,11 +34,11 @@ export function SiteHeader({ sidebarOpen, setSidebarOpen }: SiteHeaderProps) {
         <div className="flex flex-wrap items-center gap-3">
           <Link
             href="/auth/signIn"
-            className="rounded-full border border-slate-200 bg-white px-4 py-2 text-sm font-medium text-slate-700 transition hover:border-slate-300 hover:bg-slate-50"
+            className="rounded-full border border-green-200 bg-white px-4 py-2 text-sm font-medium text-green-600 transition hover:border-green-300 hover:bg-green-50"
           >
             Sign In
           </Link>
-          <Button asChild size="sm" className="rounded-full px-4 py-2">
+          <Button asChild size="sm" className="rounded-full px-4 py-2 bg-green-600 hover:bg-green-700">
             <Link href="/auth/signUp">Create Account</Link>
           </Button>
         </div>
