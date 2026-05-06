@@ -67,7 +67,7 @@ export function Sidebar({ sidebarOpen, setSidebarOpen }: SidebarProps) {
                   <DialogTrigger asChild>
                     <Button
                       variant="ghost"
-                      className="block w-full justify-start rounded-2xl px-4 py-3 text-sm font-medium text-slate-700 transition hover:bg-slate-100"
+                      className="flex h-auto w-full items-center justify-start rounded-2xl px-4 py-3 text-sm font-medium text-slate-700 transition hover:bg-slate-100"
                     >
                       <LogIn className="mr-2 h-4 w-4" /> Sign In
                     </Button>
@@ -83,7 +83,7 @@ export function Sidebar({ sidebarOpen, setSidebarOpen }: SidebarProps) {
                   <DialogTrigger asChild>
                     <Button
                       variant="ghost"
-                      className="block w-full justify-start rounded-2xl px-4 py-3 text-sm font-medium text-slate-700 transition hover:bg-slate-100"
+                      className="flex h-auto w-full items-center justify-start rounded-2xl px-4 py-3 text-sm font-medium text-slate-700 transition hover:bg-slate-100"
                     >
                       <UserPlus className="mr-2 h-4 w-4" /> Create Account
                     </Button>
