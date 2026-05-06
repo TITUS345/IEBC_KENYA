@@ -14,23 +14,27 @@ using Microsoft.Extensions.Logging;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using System.IO;
+using Microsoft.AspNetCore.Identity;
 
 namespace IEBCVotingSystemV10.Controller.RegistrationController
 {
     [Route("api/candidate")]
+    [ApiController]
     public class CandidateController : ControllerBase
     {
         private readonly ApplicationDbContext _dbContext;
         private readonly IBiometricService _biometricService;
         private readonly ILogger<CandidateController> _logger;
         private readonly IWebHostEnvironment _env;
+        private readonly RoleManager<AppUserRoles> _roleManager;
 
-        public CandidateController(ApplicationDbContext dbContext, IBiometricService biometricService, ILogger<CandidateController> logger, IWebHostEnvironment env)
+        public CandidateController(ApplicationDbContext dbContext, IBiometricService biometricService, ILogger<CandidateController> logger, IWebHostEnvironment env, RoleManager<AppUserRoles> roleManager)
         {
             this._dbContext = dbContext;
             this._biometricService = biometricService;
             this._logger = logger;
             this._env = env;
+            this._roleManager = roleManager;
         }
 
         [HttpPost("registerCandidate")]
@@ -80,7 +84,7 @@ namespace IEBCVotingSystemV10.Controller.RegistrationController
 
                 candidateDTO.UserId = user.Id;
 
-                var role = await _dbContext.Roles.FirstOrDefaultAsync(r => r.Name == candidateDTO.Role);
+                var role = await _roleManager.FindByNameAsync(candidateDTO.Role);
                 if (role == null)
                 {
                     _logger.LogWarning("Role not found: {Role}", candidateDTO.Role);

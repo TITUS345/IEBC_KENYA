@@ -21,7 +21,7 @@ export default function CastVotePage() {
     useEffect(() => {
         const fetchElections = async () => {
             try {
-                const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/election`);
+                const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/elections`);
                 if (response.ok) {
                     const data = await response.json();
                     // Only show ongoing elections to the voter
@@ -39,7 +39,7 @@ export default function CastVotePage() {
         if (selectedElectionId) {
             const fetchCandidates = async () => {
                 try {
-                    const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/candidate/election/${selectedElectionId}`);
+                    const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/candidates/election/${selectedElectionId}`);
                     if (response.ok) {
                         const data = await response.json();
                         setCandidates(data);

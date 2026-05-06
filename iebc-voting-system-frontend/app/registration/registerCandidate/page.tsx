@@ -132,10 +132,6 @@ export default function RegisterCandidatePage() {
            if (manifestoFile) {
                formData.append("manifestoPdfFile", manifestoFile);
            }
-           //Append face embeddings
-           if (faceEmbeddings.length > 0) {
-               formData.append("faceEmbeddings", JSON.stringify(faceEmbeddings));
-           }
 
            const apiURL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5007";
            const response=await axios.post(`${apiURL}/api/candidate/registerCandidate` ,formData,{
