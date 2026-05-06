@@ -18,7 +18,7 @@ import FaceRecognition from "@/components/FaceRecognition"
 const CandidateRegistrationSchema= z.object({
     firstName:z.string().min(2,"First Name is required"),
     lastName:z.string().min(2,"Last Name is required"),
-    sirName:z.string().optional(),
+    surName:z.string().optional(),
     email:z.string().email("Invalid email"),
     nationalIdNo:z.string().min(5,"Invalid ID No"),
     phoneNumber:z.string().min(10,"Invalid Phone Number"),
@@ -61,7 +61,7 @@ export default function RegisterCandidatePage() {
             role:"Candidate",
             firstName:"",
             lastName:"",
-            sirName:"",
+            surName:"",
             email:"",
             nationalIdNo:"",
             phoneNumber:"",
@@ -187,6 +187,8 @@ export default function RegisterCandidatePage() {
                 action,
                 duration: 5000,
             });
+        } finally {
+            setLoading(false);
         }
     }
 
@@ -264,7 +266,7 @@ export default function RegisterCandidatePage() {
 
                             <div className="space-y-2">
                                 <Label>Surname</Label>
-                                <Input {...register("sirName")} placeholder="Anyango" />
+                                <Input {...register("surName")} placeholder="Anyango" />
                             </div>
 
                             {/* NEW FIELD: Selected Role */}

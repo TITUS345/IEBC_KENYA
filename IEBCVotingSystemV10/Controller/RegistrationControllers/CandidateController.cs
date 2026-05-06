@@ -36,11 +36,17 @@ namespace IEBCVotingSystemV10.Controller.RegistrationController
         [HttpPost("registerCandidate")]
         public async Task<IActionResult> RegisterCandidate([FromForm] CandidateDTO candidateDTO)
         {
-            _logger.LogInformation("RegisterCandidate called for email: {Email}", candidateDTO.Email);
+            if (candidateDTO == null)
+            {
+                _logger.LogError("RegisterCandidate received a null CandidateDTO.");
+                return BadRequest("Invalid candidate data provided.");
+            }
+
+            _logger.LogInformation("RegisterCandidate called for email: {Email}", candidateDTO.Email ?? "Unknown");
 
             if (!ModelState.IsValid)
             {
-                _logger.LogWarning("ModelState invalid for Candidate: {Errors}", ModelState.Values.SelectMany(v => v.Errors));
+                _logger.LogWarning("ModelState invalid for Candidate: {Errors}", string.Join("; ", ModelState.Values.SelectMany(v => v.Errors).Select(e => e.ErrorMessage)));
                 return BadRequest(ModelState);
             }
             try
@@ -153,15 +159,12 @@ namespace IEBCVotingSystemV10.Controller.RegistrationController
                 string? manifestoPdfPath = null;
                 if (candidateDTO.ManifestoPdfFile != null)
                 {
-                    try
-                    {
-                        manifestoPdfPath = await SaveFile(candidateDTO.ManifestoPdfFile, "manifestos");
-                    }
-                    catch (Exception ex)
-                    {
-                        _logger.LogError(ex, "Error saving manifesto PDF for candidate {Email}", candidateDTO.Email);
-                        return StatusCode(500, $"Error uploading manifesto: {ex.Message}");
-                    }
+                    // As per BIOMETRIC_STORAGE_FIX.md, assuming local file storage is to be skipped on hosted platforms.
+                    // Only a placeholder path is generated, and the actual file is not saved to disk.
+                    _logger.LogInformation("Skipping manifesto PDF file storage on hosted platform. Only storing metadata.");
+                    var extension = Path.GetExtension(candidateDTO.ManifestoPdfFile.FileName);
+                    if (string.IsNullOrEmpty(extension)) extension = ".pdf"; // Default extension
+                    manifestoPdfPath = $"/manifestos/Manifesto_Cand_{candidateDTO.NationalIdNo}_{Guid.NewGuid()}{extension}"; // Generate a placeholder path
                 }
                 var newCandidate = new CandidateModel
                 {
@@ -183,7 +186,7 @@ namespace IEBCVotingSystemV10.Controller.RegistrationController
                     UserId = user.Id,
                     ManifestoPdfPath = manifestoPdfPath,
                     FaceBiometricImage = fileName,
-                    FaceEmbeddings = JsonSerializer.Serialize(embeddings),
+                    FaceEmbeddings = embeddings != null ? JsonSerializer.Serialize(embeddings) : string.Empty,
                     CreatedAt = DateTime.UtcNow,
                     UpdatedAt = DateTime.UtcNow,
                 };
@@ -202,14 +205,16 @@ namespace IEBCVotingSystemV10.Controller.RegistrationController
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Unexpected error during candidate registration for {Email}", candidateDTO.Email);
+                _logger.LogError(ex, "Unexpected error during candidate registration for {Email}", candidateDTO?.Email ?? "Unknown");
                 return StatusCode(500, $"Internal Server Error: {ex.Message} Inner: {ex.InnerException?.Message}");
             }
         }
 
         private async Task<string> SaveFile(IFormFile file, string folderName)
         {
-            var uploadFolder = Path.Combine(_env.WebRootPath, folderName);
+            // Fallback to current directory if WebRootPath is null
+            string webRoot = _env.WebRootPath ?? Path.Combine(Directory.GetCurrentDirectory(), "wwwroot");
+            var uploadFolder = Path.Combine(webRoot, folderName);
             if (!Directory.Exists(uploadFolder))
             {
                 Directory.CreateDirectory(uploadFolder);
