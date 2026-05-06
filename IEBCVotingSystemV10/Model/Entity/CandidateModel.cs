@@ -13,7 +13,7 @@ namespace IEBCVotingSystemV10.Model.Entity
         public string FirstName { get; set; } = string.Empty;
         [Required]
         public string LastName { get; set; } = string.Empty;
-        public string SirName { get; set; } = string.Empty;
+        public string SurName { get; set; } = string.Empty;
 
         public string Fullname { get; set; } = string.Empty;
         [Required]
@@ -40,6 +40,7 @@ namespace IEBCVotingSystemV10.Model.Entity
         public string? FaceBiometricImage { get; set; }
         public string? FaceEmbeddings { get; set; }
         public string Role { get; set; } = "Candidate";
+        public string? ManifestoPdfPath { get; set; } // Path or URL to the candidate's manifesto PDF
         public string UserId { get; set; } = string.Empty;
         public ApplicationUser? User { get; set; }
 

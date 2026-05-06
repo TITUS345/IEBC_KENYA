@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
+using Microsoft.AspNetCore.Http; // Required for IFormFile
 using System.Threading.Tasks;
 
 namespace IEBCVotingSystemV10.Model.DTOs
@@ -13,7 +14,7 @@ namespace IEBCVotingSystemV10.Model.DTOs
         public string FirstName { get; set; } = string.Empty;
         [Required]
         public string LastName { get; set; } = string.Empty;
-        public string SirName { get; set; } = string.Empty;
+        public string SurName { get; set; } = string.Empty;
 
         public string Fullname { get; set; } = string.Empty;
         [Required]
@@ -39,6 +40,9 @@ namespace IEBCVotingSystemV10.Model.DTOs
         public IFormFile? FaceBiometricFile { get; set; }
         [Required]
         public string FaceEmbeddings { get; set; } = string.Empty;
+
+        // For manifesto PDF upload
+        public IFormFile? ManifestoPdfFile { get; set; }
         public string Role { get; set; } = "Candidate";
         public string UserId { get; set; } = string.Empty;
         public ApplicationUser? User { get; set; }

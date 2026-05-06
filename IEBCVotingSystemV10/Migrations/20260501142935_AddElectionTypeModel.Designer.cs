@@ -3,6 +3,7 @@ using System;
 using IEBCVotingSystemV10.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace IEBCVotingSystemV10.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260501142935_AddElectionTypeModel")]
+    partial class AddElectionTypeModel
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -193,9 +196,6 @@ namespace IEBCVotingSystemV10.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<string>("ManifestoPdfPath")
-                        .HasColumnType("text");
-
                     b.Property<string>("NationalIdNo")
                         .IsRequired()
                         .HasColumnType("text");
@@ -236,70 +236,6 @@ namespace IEBCVotingSystemV10.Migrations
                     b.HasIndex("UserId");
 
                     b.ToTable("Candidates");
-                });
-
-            modelBuilder.Entity("IEBCVotingSystemV10.Model.Entity.ElectionModel", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
-
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<string>("CreatedBy")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<string>("CreatedById")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<string>("Description")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<string>("ElectionName")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<string>("ElectionPosition")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<int>("ElectionPositionId")
-                        .HasColumnType("integer");
-
-                    b.Property<string>("ElectionType")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<int>("ElectionTypeId")
-                        .HasColumnType("integer");
-
-                    b.Property<DateTime>("EndDate")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<DateTime>("StartDate")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<int>("Status")
-                        .HasColumnType("integer");
-
-                    b.Property<DateTime>("UpdatedAt")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("CreatedById");
-
-                    b.HasIndex("ElectionPositionId");
-
-                    b.HasIndex("ElectionTypeId");
-
-                    b.ToTable("Elections");
                 });
 
             modelBuilder.Entity("IEBCVotingSystemV10.Model.Entity.ElectionPositionModel", b =>
@@ -354,58 +290,6 @@ namespace IEBCVotingSystemV10.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("ElectionTypes");
-                });
-
-            modelBuilder.Entity("IEBCVotingSystemV10.Model.Entity.VoteModel", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
-
-                    b.Property<double>("BiometricVerificationScore")
-                        .HasColumnType("double precision");
-
-                    b.Property<string>("Candidate")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<int>("CandidateId")
-                        .HasColumnType("integer");
-
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<string>("Election")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<int>("ElectionId")
-                        .HasColumnType("integer");
-
-                    b.Property<string>("IpAddress")
-                        .HasColumnType("text");
-
-                    b.Property<DateTime>("UpdatedAt")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<string>("Voter")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<int>("VoterId")
-                        .HasColumnType("integer");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("CandidateId");
-
-                    b.HasIndex("ElectionId");
-
-                    b.HasIndex("VoterId");
-
-                    b.ToTable("Votes");
                 });
 
             modelBuilder.Entity("IEBCVotingSystemV10.Model.Entity.VoterModel", b =>
@@ -615,60 +499,6 @@ namespace IEBCVotingSystemV10.Migrations
                         .IsRequired();
 
                     b.Navigation("User");
-                });
-
-            modelBuilder.Entity("IEBCVotingSystemV10.Model.Entity.ElectionModel", b =>
-                {
-                    b.HasOne("IEBCVotingSystemV10.Model.ApplicationUser", "Creator")
-                        .WithMany()
-                        .HasForeignKey("CreatedById")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("IEBCVotingSystemV10.Model.Entity.ElectionPositionModel", "PositionModel")
-                        .WithMany()
-                        .HasForeignKey("ElectionPositionId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("IEBCVotingSystemV10.Model.Entity.ElectionTypeModel", "TypeModel")
-                        .WithMany()
-                        .HasForeignKey("ElectionTypeId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Creator");
-
-                    b.Navigation("PositionModel");
-
-                    b.Navigation("TypeModel");
-                });
-
-            modelBuilder.Entity("IEBCVotingSystemV10.Model.Entity.VoteModel", b =>
-                {
-                    b.HasOne("IEBCVotingSystemV10.Model.Entity.CandidateModel", "CandidateModel")
-                        .WithMany()
-                        .HasForeignKey("CandidateId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("IEBCVotingSystemV10.Model.Entity.ElectionModel", "ElectionModel")
-                        .WithMany()
-                        .HasForeignKey("ElectionId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("IEBCVotingSystemV10.Model.Entity.VoterModel", "VoterModel")
-                        .WithMany()
-                        .HasForeignKey("VoterId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("CandidateModel");
-
-                    b.Navigation("ElectionModel");
-
-                    b.Navigation("VoterModel");
                 });
 
             modelBuilder.Entity("IEBCVotingSystemV10.Model.Entity.VoterModel", b =>

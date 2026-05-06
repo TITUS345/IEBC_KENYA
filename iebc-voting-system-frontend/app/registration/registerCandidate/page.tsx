@@ -7,7 +7,7 @@ import { Label } from "@/components/ui/label"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { zodResolver } from "@hookform/resolvers/zod"
 import axios from "axios"
-import { Loader2, UploadCloud } from "lucide-react"
+import { Loader2, UploadCloud, AlertCircle } from "lucide-react"
 import { useRouter } from "next/navigation"
 import React, { useState } from "react"
 import { Controller, useForm } from "react-hook-form"
@@ -24,7 +24,7 @@ const CandidateRegistrationSchema= z.object({
     phoneNumber:z.string().min(10,"Invalid Phone Number"),
     address:z.string().min(2,"Address is required"),
     location:z.string().min(2,"Location is required"),
-    sub_location:z.string().min(2,"Sub_Location is required"),
+    sub_Location:z.string().min(2,"Sub-Location is required"),
     ward:z.string().min(2,"Ward is required"),
     constituency:z.string().min(2,"Constituency is required"),
     county:z.string().min(2,"County is required"),
@@ -33,7 +33,8 @@ const CandidateRegistrationSchema= z.object({
         message:"Please select a valid role"
     }),
     faceBiometricFile: z.any().refine((file) => file instanceof File, "Biometric enrollment photo is required"),
-    faceEmbeddings: z.string().min(1, "Face embeddings are required")
+    faceEmbeddings: z.string().min(1, "Face embeddings are required. Please wait for face processing to complete."),
+    manifestoPdfFile: z.any().optional().refine((file) => !file || (file instanceof File && file.type === "application/pdf"), "Manifesto must be a PDF file")
 })
 type CandidateFormData= z.infer<typeof CandidateRegistrationSchema>
 
@@ -41,6 +42,10 @@ export default function RegisterCandidatePage() {
     const [loading, setLoading]=useState(false);
     const [preview, setPreview]=useState<string | null >(null);
     const [faceEmbeddings, setFaceEmbeddings] = useState<number[]>([]);
+    const [faceBiometricFile, setFaceBiometricFile] = useState<File | null>(null);
+    const [manifestoFile, setManifestoFile] = useState<File | null>(null);
+    const [isFaceCaptured, setIsFaceCaptured] = useState(false);
+    const [isProcessingImage, setIsProcessingImage] = useState(false);
     const router = useRouter();
 
     const{
@@ -62,7 +67,7 @@ export default function RegisterCandidatePage() {
             phoneNumber:"",
             address:"",
             location:"",
-            sub_location:"",
+            sub_Location:"",
             ward:"",
             constituency:"",
             county:"",
@@ -74,14 +79,34 @@ export default function RegisterCandidatePage() {
     const handleFileChange=(e:React.ChangeEvent<HTMLInputElement>)=>{
         const file= e.target.files?.[0];
         if(file){
+            setFaceBiometricFile(file);
            setValue("faceBiometricFile",file);
            setPreview(URL.createObjectURL(file));
+            // Clear face capture state when uploading file
+            setIsFaceCaptured(false);
+            setFaceEmbeddings([]);
+            setValue("faceEmbeddings", "");
+            setIsProcessingImage(true); // Start processing
         }
     };
 
-    const handleFaceDetected = (embeddings: number[]) => {
+    const handleManifestoChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const file = e.target.files?.[0];
+        if (file) {
+            setManifestoFile(file);
+            setValue("manifestoPdfFile", file);
+            toast.success("Manifesto selected successfully");
+        }
+    };
+
+    const handleFaceDetected = (embeddings: number[], capturedImage: File) => {
         setFaceEmbeddings(embeddings);
+        setFaceBiometricFile(capturedImage);
         setValue("faceEmbeddings", JSON.stringify(embeddings));
+        setValue("faceBiometricFile", capturedImage);
+        setPreview(URL.createObjectURL(capturedImage));
+        setIsFaceCaptured(true);
+        setIsProcessingImage(false); // Processing complete
         toast.success("Face captured successfully!");
     };
 
@@ -95,13 +120,17 @@ export default function RegisterCandidatePage() {
            const formData= new FormData();
             //Append text fields
            Object.entries(data).forEach(([key,value])=>{
-            if(key!=="faceBiometricFile" && value !==undefined ){
+            if(key!=="faceBiometricFile" && key!=="manifestoPdfFile" && value !==undefined ){
                 formData.append(key,value as string)
             }
            });
            //Append file
-           if(data.faceBiometricFile){
-                formData.append("faceBiometricFile",data.faceBiometricFile)
+           if(faceBiometricFile){
+                formData.append("faceBiometricFile",faceBiometricFile)
+           }
+           //Append manifesto
+           if (manifestoFile) {
+               formData.append("manifestoPdfFile", manifestoFile);
            }
            //Append face embeddings
            if (faceEmbeddings.length > 0) {
@@ -118,6 +147,9 @@ export default function RegisterCandidatePage() {
                reset();
                setPreview(null);
                setFaceEmbeddings([]);
+               setFaceBiometricFile(null);
+               setManifestoFile(null);
+               setIsFaceCaptured(false);
                //router.push("/dashboard")
            }
         } catch (error:unknown) {
@@ -166,26 +198,47 @@ export default function RegisterCandidatePage() {
                     <CardDescription className="text-lg">Register unique new Candidate to the system </CardDescription>
                 </CardHeader>
                 <CardContent>
+                {/* Validation Error Summary */}
+                {Object.keys(errors).length > 0 && (
+                    <div className="mb-6 p-4 bg-red-50 border-l-4 border-red-500 flex items-start gap-3 text-red-700">
+                        <AlertCircle className="w-5 h-5 mt-0.5" />
+                        <div>
+                            <p className="font-bold">Missing Information</p>
+                            <p className="text-sm">Please check the fields marked in red below.</p>
+                        </div>
+                    </div>
+                )}
+
                     <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
                         {/* profile picture*/}
                         <div className=" flex flex-col items-center justify-center p-4 border-2 border-dashed rounded-lg bg-slate-50 ">
                             {preview ? (<img src={preview} alt="Preview" className="w-32 h-32 rounded-full object-cover mb-2 border-4 border-gree-500 shadow-md"/> 
                             ):(<UploadCloud className="w-12 h-12 text-blue-400 mb-2"/>)}
-                            <Label 
-                            htmlFor="picture" 
-                            className="font-bold text-green-700 cursor-pointer hover:underline" >
-                                Upload Reference Photo
-                            </Label>
+                        
+                        {!preview && (
+                            <>
+                                <Label 
+                                htmlFor="picture" 
+                                className="font-bold text-green-700 cursor-pointer hover:underline" >
+                                    Upload Reference Photo (Optional)
+                                </Label>
+                                <Input id="picture" type="file" accept="image/*" className="hidden" onChange={handleFileChange} />
+                                <p className="text-sm text-gray-600 mt-1">or use face capture below</p>
+                            </>
+                        )}
 
-                            <Input id="picture" type="file" accept="image/*" className="hidden" onChange={handleFileChange} />
                             {errors.faceBiometricFile && <span className="text-red-500 text-xs">{String(errors.faceBiometricFile.message)}</span>}
 
                             {/* Face Recognition Section */}
                             <div className="mt-4 w-full">
-                                <Label className="text-center block mb-2">Live Face Capture</Label>
+                            <Label className="text-center block mb-2 font-semibold">
+                                {faceEmbeddings.length > 0 ? 'Face Captured Successfully' : 'Live Face Capture (Required)'}
+                            </Label>
                                 <FaceRecognition 
                                     onFaceDetected={handleFaceDetected} 
-                                    onError={handleFaceError} 
+                                onError={handleFaceError}
+                                uploadedImage={faceBiometricFile && !isFaceCaptured ? faceBiometricFile : null}
+                                onProcessing={setIsProcessingImage}
                                 />
                                 {faceEmbeddings.length > 0 && (
                                     <p className="text-green-600 text-sm mt-2">✓ Face captured successfully</p>
@@ -289,8 +342,8 @@ export default function RegisterCandidatePage() {
 
                             <div className="space-y-2">
                                 <Label>Sub-Location</Label>
-                                <Input {...register("sub_location")} />
-                                {errors.sub_location && <span className="text-red-500 text-xs">{String(errors.sub_location.message)}</span>}
+                            <Input {...register("sub_Location")} />
+                            {errors.sub_Location && <span className="text-red-500 text-xs">{String(errors.sub_Location.message)}</span>}
                             </div>
 
                             <div className="space-y-2">
@@ -298,10 +351,26 @@ export default function RegisterCandidatePage() {
                                 <Input {...register("address")} placeholder="123 Uhuru Highway" />
                                 {errors.address && <span className="text-red-500 text-xs">{String(errors.address.message)}</span>}
                             </div>
+
+                        {/* Manifesto Upload */}
+                        <div className="space-y-2">
+                            <Label>Manifesto (PDF)</Label>
+                            <Input 
+                                type="file" 
+                                accept="application/pdf" 
+                                onChange={handleManifestoChange}
+                            />
+                            {manifestoFile && <p className="text-green-600 text-xs font-semibold">✓ {manifestoFile.name}</p>}
+                            {errors.manifestoPdfFile && <span className="text-red-500 text-xs">{String(errors.manifestoPdfFile.message)}</span>}
+                        </div>
                         </div>
 
-                        <Button type="submit" disabled={loading} className="w-full bg-green-700 hover:bg-green-800 text-white h-14 text-xl font-bold shadow-lg">
-                            {loading ? <Loader2 className="animate-spin mr-2" /> : "COMPLETE ENROLLMENT"}
+                    <Button 
+                        type="submit" 
+                        disabled={loading || !isFaceCaptured || isProcessingImage} 
+                        className="w-full bg-green-700 hover:bg-green-800 disabled:bg-gray-400 text-white h-14 text-xl font-bold shadow-lg transition-colors"
+                    >
+                        {loading ? <Loader2 className="animate-spin mr-2" /> : isProcessingImage ? "PROCESSING IMAGE..." : isFaceCaptured ? "COMPLETE ENROLLMENT" : "CAPTURE FACE TO PROCEED"}
                         </Button>
                     </form>
                 </CardContent>

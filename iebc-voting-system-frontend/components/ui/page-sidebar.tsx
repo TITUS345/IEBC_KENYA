@@ -71,6 +71,30 @@ export function Sidebar({ sidebarOpen, setSidebarOpen }: SidebarProps) {
                 >
                   Register to Vote
                 </Link>
+                <Link
+                  href="/election/voteCasting"
+                  className="block rounded-2xl px-4 py-3 text-sm font-medium text-slate-700 transition hover:bg-slate-100"
+                >
+                  Cast Your Vote
+                </Link>
+                <Link 
+                  href="/election/electionPosition"
+                  className="block rounded-2xl px-4 py-3 text-sm font-medium text-slate-700 transition hover:bg-slate-100"
+                >
+                  Election Positions
+                </Link>
+                <Link
+                  href="/election/electionType"
+                  className="block rounded-2xl px-4 py-3 text-sm font-medium text-slate-700 transition hover:bg-slate-100"
+                >
+                  Election Types
+                </Link>
+                <Link
+                  href="/election/elections"
+                  className="block rounded-2xl px-4 py-3 text-sm font-medium text-slate-700 transition hover:bg-slate-100"
+                >
+                  Elections
+                </Link>
               </nav>
             </div>
           </div>
