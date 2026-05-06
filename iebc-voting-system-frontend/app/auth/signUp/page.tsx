@@ -27,7 +27,7 @@ const SignUpSchema = z.object({
 
 type SignUpFormData = z.infer<typeof SignUpSchema>;
 
-export default function SignUpPage() {
+export function SignUpForm() {
     const [loading, setLoading] = useState(false);
     const router = useRouter();
 
@@ -60,8 +60,7 @@ export default function SignUpPage() {
     };
  
   return (
-    <div className="flex w-full min-h-screen bg-slate-50 items-center justify-center p-6">
-      <Card className="w-full max-w-2xl shadow-xl border-t-4 border-t-green-600">
+      <Card className="w-full max-w-2xl shadow-xl border-t-4 border-t-green-600 mx-auto">
         <CardHeader className="space-y-1">
           <div className="flex items-center justify-between">
             <CardTitle className="text-3xl font-bold text-slate-800">Registration</CardTitle>
@@ -156,6 +155,15 @@ export default function SignUpPage() {
             </p>
         </CardFooter>
       </Card>
+  );
+}
+
+export default function SignUpPage() {
+  return (
+    <div className="flex w-full min-h-screen bg-slate-50 items-center justify-center p-6">
+      <div className="w-full max-w-2xl">
+        <SignUpForm />
+      </div>
     </div>
   );
 }

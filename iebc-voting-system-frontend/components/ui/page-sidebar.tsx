@@ -1,7 +1,17 @@
 'use client';
 
 import Link from 'next/link';
-import { X } from 'lucide-react';
+import { X, LogIn, UserPlus } from 'lucide-react';
+import { SignUpForm } from '@/app/auth/signUp/page';
+import { Button } from "@/components/ui/button";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
 
 interface SidebarProps {
   sidebarOpen: boolean;
@@ -53,18 +63,37 @@ export function Sidebar({ sidebarOpen, setSidebarOpen }: SidebarProps) {
                 >
                   Home
                 </Link>
-                <Link
-                  href="/auth/signIn"
-                  className="block rounded-2xl px-4 py-3 text-sm font-medium text-slate-700 transition hover:bg-slate-100"
-                >
-                  Sign In
-                </Link>
-                <Link
-                  href="/auth/signUp"
-                  className="block rounded-2xl px-4 py-3 text-sm font-medium text-slate-700 transition hover:bg-slate-100"
-                >
-                  Create Account
-                </Link>
+                <Dialog>
+                  <DialogTrigger asChild>
+                    <Button
+                      variant="ghost"
+                      className="block w-full justify-start rounded-2xl px-4 py-3 text-sm font-medium text-slate-700 transition hover:bg-slate-100"
+                    >
+                      <LogIn className="mr-2 h-4 w-4" /> Sign In
+                    </Button>
+                  </DialogTrigger>
+                  <DialogContent className="sm:max-w-[700px] p-0 border-none bg-transparent overflow-y-auto max-h-[90vh]">
+                    <div className="p-1">
+                      {/* Using SignUpForm as the current implementation for the account portal */}
+                      <SignUpForm />
+                    </div>
+                  </DialogContent>
+                </Dialog>
+                <Dialog>
+                  <DialogTrigger asChild>
+                    <Button
+                      variant="ghost"
+                      className="block w-full justify-start rounded-2xl px-4 py-3 text-sm font-medium text-slate-700 transition hover:bg-slate-100"
+                    >
+                      <UserPlus className="mr-2 h-4 w-4" /> Create Account
+                    </Button>
+                  </DialogTrigger>
+                  <DialogContent className="sm:max-w-[700px] p-0 border-none bg-transparent overflow-y-auto max-h-[90vh]">
+                    <div className="p-1">
+                      <SignUpForm />
+                    </div>
+                  </DialogContent>
+                </Dialog>
                 <Link
                   href="/registration/registerVoter"
                   className="block rounded-2xl px-4 py-3 text-sm font-medium text-slate-700 transition hover:bg-slate-100"
