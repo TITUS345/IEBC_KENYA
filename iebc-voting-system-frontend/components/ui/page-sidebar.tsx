@@ -101,6 +101,12 @@ export function Sidebar({ sidebarOpen, setSidebarOpen }: SidebarProps) {
                   Register to Vote
                 </Link>
                 <Link
+                  href="/registration/registerCandidate"
+                  className="block rounded-2xl px-4 py-3 text-sm font-medium text-slate-700 transition hover:bg-slate-100"
+                >
+                  Register as Candidate
+                </Link>
+                <Link
                   href="/election/voteCasting"
                   className="block rounded-2xl px-4 py-3 text-sm font-medium text-slate-700 transition hover:bg-slate-100"
                 >
