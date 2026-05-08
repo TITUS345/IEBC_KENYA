@@ -18,6 +18,8 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser, AppUserRo
     public DbSet<ElectionTypeModel> ElectionTypes { get; set; }
     public DbSet<ElectionModel> Elections { get; set; }
     public DbSet<VoteModel> Votes { get; set; }
+    public DbSet<PartyModel> Parties { get; set; }
+
 
     protected override void OnModelCreating(ModelBuilder builder)
     {

@@ -12,7 +12,7 @@ public class ApplicationUser : Microsoft.AspNetCore.Identity.IdentityUser, IAudi
     [Required]
     public string LastName { get; set; } = string.Empty;
     [Required]
-    public string SirName { get; set; } = string.Empty;
+    public string SurName { get; set; } = string.Empty;
     [Required]
     public string NationalIdNo { get; set; } = string.Empty;
 

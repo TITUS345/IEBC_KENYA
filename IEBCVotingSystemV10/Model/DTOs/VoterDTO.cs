@@ -16,7 +16,7 @@ namespace IEBCVotingSystemV10.Model.DTOs
         public string FirstName { get; set; } = string.Empty;
         [Required]
         public string LastName { get; set; } = string.Empty;
-        public string SirName { get; set; } = string.Empty;
+        public string SurName { get; set; } = string.Empty;
 
         public string Fullname { get; set; } = string.Empty;
         [Required]

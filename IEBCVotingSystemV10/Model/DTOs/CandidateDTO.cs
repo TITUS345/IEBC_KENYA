@@ -18,6 +18,12 @@ namespace IEBCVotingSystemV10.Model.DTOs
 
         public string Fullname { get; set; } = string.Empty;
         [Required]
+        public int PartyId { get; set; }
+        [Required]
+        public int ElectionId { get; set; }
+        [Required]
+        public int ElectionPositionId { get; set; }
+        [Required]
         public string Email { get; set; } = string.Empty;
         [Required]
         public string PhoneNumber { get; set; } = string.Empty;

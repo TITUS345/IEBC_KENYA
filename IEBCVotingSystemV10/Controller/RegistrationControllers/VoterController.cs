@@ -179,8 +179,8 @@ namespace IEBCVotingSystemV10.Controller.RegistrationController
                 {
                     FirstName = voterDTO.FirstName,
                     LastName = voterDTO.LastName,
-                    SirName = voterDTO.SirName ?? string.Empty,
-                    Fullname = $"{voterDTO.FirstName} {voterDTO.LastName} {voterDTO.SirName}".Trim(),
+                    SurName = voterDTO.SurName ?? string.Empty,
+                    Fullname = $"{voterDTO.FirstName} {voterDTO.LastName} {voterDTO.SurName}".Trim(),
                     Email = voterDTO.Email,
                     PhoneNumber = voterDTO.PhoneNumber,
                     NationalIdNo = voterDTO.NationalIdNo,

@@ -82,7 +82,7 @@ namespace IEBCVotingSystemV10.Migrations
                     b.Property<string>("SecurityStamp")
                         .HasColumnType("text");
 
-                    b.Property<string>("SirName")
+                    b.Property<string>("SurName")
                         .IsRequired()
                         .HasColumnType("text");
 
@@ -166,6 +166,20 @@ namespace IEBCVotingSystemV10.Migrations
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("timestamp with time zone");
 
+                    b.Property<string>("Election")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<int>("ElectionId")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("ElectionPosition")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<int>("ElectionPositionId")
+                        .HasColumnType("integer");
+
                     b.Property<string>("Email")
                         .IsRequired()
                         .HasColumnType("text");
@@ -200,6 +214,13 @@ namespace IEBCVotingSystemV10.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
+                    b.Property<string>("Party")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<int>("PartyId")
+                        .HasColumnType("integer");
+
                     b.Property<string>("PhoneNumber")
                         .IsRequired()
                         .HasColumnType("text");
@@ -232,6 +253,8 @@ namespace IEBCVotingSystemV10.Migrations
                         .HasColumnType("text");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("PartyId");
 
                     b.HasIndex("UserId");
 
@@ -356,6 +379,39 @@ namespace IEBCVotingSystemV10.Migrations
                     b.ToTable("ElectionTypes");
                 });
 
+            modelBuilder.Entity("IEBCVotingSystemV10.Model.Entity.PartyModel", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("ManifestoPdfPath")
+                        .HasColumnType("text");
+
+                    b.Property<string>("PartyLeader")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("PartyLogoPath")
+                        .HasColumnType("text");
+
+                    b.Property<string>("PartyName")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<DateTime>("UpdatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Parties");
+                });
+
             modelBuilder.Entity("IEBCVotingSystemV10.Model.Entity.VoteModel", b =>
                 {
                     b.Property<int>("Id")
@@ -474,11 +530,11 @@ namespace IEBCVotingSystemV10.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<string>("SirName")
+                    b.Property<string>("Sub_Location")
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<string>("Sub_Location")
+                    b.Property<string>("SurName")
                         .IsRequired()
                         .HasColumnType("text");
 
@@ -608,11 +664,19 @@ namespace IEBCVotingSystemV10.Migrations
 
             modelBuilder.Entity("IEBCVotingSystemV10.Model.Entity.CandidateModel", b =>
                 {
+                    b.HasOne("IEBCVotingSystemV10.Model.Entity.PartyModel", "PartyModel")
+                        .WithMany("Candidates")
+                        .HasForeignKey("PartyId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("IEBCVotingSystemV10.Model.ApplicationUser", "User")
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("PartyModel");
 
                     b.Navigation("User");
                 });
@@ -731,6 +795,11 @@ namespace IEBCVotingSystemV10.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("IEBCVotingSystemV10.Model.Entity.PartyModel", b =>
+                {
+                    b.Navigation("Candidates");
                 });
 #pragma warning restore 612, 618
         }

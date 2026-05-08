@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -16,6 +17,14 @@ namespace IEBCVotingSystemV10.Model.Entity
         public string SurName { get; set; } = string.Empty;
 
         public string Fullname { get; set; } = string.Empty;
+        public int PartyId { get; set; }
+        [Required]
+        public string Party { get; set; } = string.Empty;
+
+        public int ElectionId { get; set; }
+        public string Election { get; set; } = string.Empty;
+        public int ElectionPositionId { get; set; }
+        public string ElectionPosition { get; set; } = string.Empty;
         [Required]
         public string Email { get; set; } = string.Empty;
         [Required]
@@ -40,9 +49,12 @@ namespace IEBCVotingSystemV10.Model.Entity
         public string? FaceBiometricImage { get; set; }
         public string? FaceEmbeddings { get; set; }
         public string Role { get; set; } = "Candidate";
-        public string? ManifestoPdfPath { get; set; } // Path or URL to the candidate's manifesto PDF
+        public string? ManifestoPdfPath { get; set; }
         public string UserId { get; set; } = string.Empty;
         public ApplicationUser? User { get; set; }
+
+        [ForeignKey("PartyId")]
+        public PartyModel? PartyModel { get; set; }
 
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
 

@@ -15,8 +15,9 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using System.IO;
 using Microsoft.AspNetCore.Identity;
+using IEBCVotingSystemV10.Model.Enums;
 
-namespace IEBCVotingSystemV10.Controller.RegistrationController
+namespace IEBCVotingSystemV10.Controller.RegistrationControllers
 {
     [Route("api/candidate")]
     [ApiController]
@@ -46,7 +47,7 @@ namespace IEBCVotingSystemV10.Controller.RegistrationController
                 return BadRequest("Invalid candidate data provided.");
             }
 
-            _logger.LogInformation("RegisterCandidate called for email: {Email}", candidateDTO.Email ?? "Unknown");
+            _logger.LogInformation("RegisterCandidate called for email: {Email}", candidateDTO.Email);
 
             if (!ModelState.IsValid)
             {
@@ -91,6 +92,27 @@ namespace IEBCVotingSystemV10.Controller.RegistrationController
                     return BadRequest("Role name doesn't exist");
                 }
                 candidateDTO.Role = role.Name ?? "Candidate";
+
+                var electionPosition = await _dbContext.ElectionPositions.FirstOrDefaultAsync(ep => ep.Id == candidateDTO.ElectionPositionId);
+                if (electionPosition == null)
+                {
+                    _logger.LogWarning("Election position not found for ID: {ElectionPositionId}", candidateDTO.ElectionPositionId);
+                    return BadRequest("Selected election position does not exist.");
+                }
+
+                var election = await _dbContext.Elections.FirstOrDefaultAsync(e => e.Id == candidateDTO.ElectionId);
+                if (election == null)
+                {
+                    _logger.LogWarning("Election not found for ID: {ElectionId}", candidateDTO.ElectionId);
+                    return BadRequest("Selected election does not exist.");
+                }
+
+                var partyEntity = await _dbContext.Parties.FirstOrDefaultAsync(p => p.Id == candidateDTO.PartyId);
+                if (partyEntity == null)
+                {
+                    _logger.LogWarning("Party not found for ID: {PartyId}", candidateDTO.PartyId);
+                    return BadRequest("Selected political party does not exist.");
+                }
 
                 // Handle Biometric Face Enrollment
                 var fileName = "embeddings_only"; // Default when no file is stored
@@ -179,6 +201,10 @@ namespace IEBCVotingSystemV10.Controller.RegistrationController
                     Email = candidateDTO.Email,
                     PhoneNumber = candidateDTO.PhoneNumber,
                     NationalIdNo = candidateDTO.NationalIdNo,
+                    PartyId = candidateDTO.PartyId,
+                    Party = partyEntity.PartyName,
+                    ElectionId = candidateDTO.ElectionId,
+                    Election = election.ElectionName,
                     Address = candidateDTO.Address,
                     Location = candidateDTO.Location,
                     Sub_Location = candidateDTO.Sub_Location,
@@ -193,6 +219,8 @@ namespace IEBCVotingSystemV10.Controller.RegistrationController
                     FaceEmbeddings = embeddings != null ? JsonSerializer.Serialize(embeddings) : string.Empty,
                     CreatedAt = DateTime.UtcNow,
                     UpdatedAt = DateTime.UtcNow,
+                    ElectionPositionId = candidateDTO.ElectionPositionId,
+                    ElectionPosition = electionPosition.Position,
                 };
 
                 _logger.LogInformation("Saving candidate record to database: {Email}", newCandidate.Email);
@@ -209,7 +237,7 @@ namespace IEBCVotingSystemV10.Controller.RegistrationController
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Unexpected error during candidate registration for {Email}", candidateDTO?.Email ?? "Unknown");
+                _logger.LogError(ex, "Unexpected error during candidate registration for {Email}", candidateDTO.Email);
                 return StatusCode(500, $"Internal Server Error: {ex.Message} Inner: {ex.InnerException?.Message}");
             }
         }
@@ -232,6 +260,32 @@ namespace IEBCVotingSystemV10.Controller.RegistrationController
                 await file.CopyToAsync(fileStream);
             }
             return $"/{folderName}/{uniqueFileName}";
+        }
+
+        [HttpGet("election/{electionId}")]
+        public async Task<IActionResult> GetCandidatesByElection(int electionId)
+        {
+            try
+            {
+                var candidates = await _dbContext.Candidates
+                    .Where(c => c.ElectionId == electionId)
+                    .Select(c => new
+                    {
+                        c.Id,
+                        c.Fullname,
+                        c.Party,
+                        c.ElectionPosition,
+                        c.FaceBiometricImage // Using FaceBiometricImage for display
+                    })
+                    .ToListAsync();
+
+                return Ok(candidates);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error fetching candidates for election ID: {ElectionId}", electionId);
+                return StatusCode(500, "Internal Server Error while fetching candidates.");
+            }
         }
     }
 }
