@@ -9,7 +9,7 @@ import { zodResolver } from "@hookform/resolvers/zod"
 import axios from "axios"
 import { Loader2, UploadCloud, AlertCircle } from "lucide-react"
 import { useRouter } from "next/navigation"
-import React, { useState } from "react"
+import React, { useEffect, useState } from "react"
 import { Controller, useForm } from "react-hook-form"
 import { toast } from "sonner"
 import z from "zod"
@@ -29,6 +29,9 @@ const CandidateRegistrationSchema= z.object({
     constituency:z.string().min(2,"Constituency is required"),
     county:z.string().min(2,"County is required"),
     region:z.string().min(2,"Region is required"),
+    partyId:z.string().min(1, "Political Party is required"), // Changed to PartyId
+    electionId: z.string().min(1, "Election is required"),
+    electionPositionId: z.string().min(1, "Position is required"),
     role:z.enum(["User","Voter","Candidate","Admin","IEBCOfficial"],{
         message:"Please select a valid role"
     }),
@@ -36,7 +39,8 @@ const CandidateRegistrationSchema= z.object({
     faceEmbeddings: z.string().min(1, "Face embeddings are required. Please wait for face processing to complete."),
     manifestoPdfFile: z.any().optional().refine((file) => !file || (file instanceof File && file.type === "application/pdf"), "Manifesto must be a PDF file")
 })
-type CandidateFormData= z.infer<typeof CandidateRegistrationSchema>
+
+type CandidateFormData = z.infer<typeof CandidateRegistrationSchema>
 
 export default function RegisterCandidatePage() {
     const [loading, setLoading]=useState(false);
@@ -46,6 +50,9 @@ export default function RegisterCandidatePage() {
     const [manifestoFile, setManifestoFile] = useState<File | null>(null);
     const [isFaceCaptured, setIsFaceCaptured] = useState(false);
     const [isProcessingImage, setIsProcessingImage] = useState(false);
+    const [elections, setElections] = useState<any[]>([]);
+    const [electionPositions, setElectionPositions] = useState<any[]>([]); // State for election positions
+    const [parties, setParties] = useState<any[]>([]); // State for political parties
     const router = useRouter();
 
     const{
@@ -62,6 +69,8 @@ export default function RegisterCandidatePage() {
             firstName:"",
             lastName:"",
             surName:"",
+            electionId: "",
+            partyId:"", // Added partyId to default values
             email:"",
             nationalIdNo:"",
             phoneNumber:"",
@@ -72,9 +81,56 @@ export default function RegisterCandidatePage() {
             constituency:"",
             county:"",
             region:"",
-            faceEmbeddings: ""
+            electionPositionId: "", // Added electionPositionId
+            faceEmbeddings: "",
         }
     });
+
+    const apiUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5007";
+
+    useEffect(() => {
+        const fetchElections = async () => {
+            try {
+                const response = await axios.get(`${apiUrl}/api/elections/getAllElections`);
+                if (response.status === 200) {
+                    setElections(response.data.filter((e: any) => e.status !== 'Completed'));
+                }
+            } catch (error) {
+                console.error("Error fetching elections:", error);
+            }
+        };
+        fetchElections();
+    }, []);
+
+    useEffect(() => {
+        const fetchParties = async () => {
+            try {
+                const response = await axios.get(`${apiUrl}/api/party/getAllParties`);
+                if (response.status === 200) {
+                    setParties(response.data);
+                }
+            } catch (error) {
+                toast.error("Failed to load political parties.");
+                console.error("Error fetching parties:", error);
+            }
+        };
+        fetchParties();
+    }, []);
+
+    useEffect(() => {
+        const fetchElectionPositions = async () => {
+            try {
+                const response = await axios.get(`${apiUrl}/api/election-position/getAllPositions`);
+                if (response.status === 200) {
+                    setElectionPositions(response.data);
+                }
+            } catch (error) {
+                toast.error("Failed to load election positions.");
+                console.error("Error fetching election positions:", error);
+            }
+        };
+        fetchElectionPositions();
+    }, []);
 
     const handleFileChange=(e:React.ChangeEvent<HTMLInputElement>)=>{
         const file= e.target.files?.[0];
@@ -265,7 +321,59 @@ export default function RegisterCandidatePage() {
                                 <Input {...register("surName")} placeholder="Anyango" />
                             </div>
 
-                            {/* NEW FIELD: Selected Role */}
+                            <div className="space-y-2">
+                                <Label>Active Election</Label>
+                                <Controller
+                                    name="electionId"
+                                    control={control}
+                                    render={({ field }) => (
+                                        <Select onValueChange={field.onChange} defaultValue={field.value}>
+                                            <SelectTrigger><SelectValue placeholder="Select Election" /></SelectTrigger>
+                                            <SelectContent>
+                                                {elections.map(e => <SelectItem key={e.id} value={e.id.toString()}>{e.electionName}</SelectItem>)}
+                                            </SelectContent>
+                                        </Select>
+                                    )}
+                                />
+                                {errors.electionId && <span className="text-red-500 text-xs">{String(errors.electionId.message)}</span>}
+                            </div>
+
+                            <div className="space-y-2">
+                                <Label>Political Party</Label>
+                                <Controller
+                                    name="partyId"
+                                    control={control}
+                                    render={({ field }) => (
+                                        <Select onValueChange={field.onChange} defaultValue={field.value}>
+                                            <SelectTrigger><SelectValue placeholder="Select Party" /></SelectTrigger>
+                                            <SelectContent>
+                                                {parties.map(p => <SelectItem key={p.id} value={p.id.toString()}>{p.partyName}</SelectItem>)}
+                                            </SelectContent>
+                                        </Select>
+                                    )}
+                                />
+                                {errors.partyId && <span className="text-red-500 text-xs">{String(errors.partyId.message)}</span>}
+                            </div>
+
+                            {/* Election Position */}
+                            <div className="space-y-2">
+                                <Label>Election Position</Label>
+                                <Controller
+                                    name="electionPositionId"
+                                    control={control}
+                                    render={({ field }) => (
+                                        <Select onValueChange={field.onChange} defaultValue={field.value}>
+                                            <SelectTrigger><SelectValue placeholder="Select Position" /></SelectTrigger>
+                                            <SelectContent>
+                                                {electionPositions.map(pos => <SelectItem key={pos.id} value={pos.id.toString()}>{pos.position}</SelectItem>)}
+                                            </SelectContent>
+                                        </Select>
+                                    )}
+                                />
+                                {errors.electionPositionId && <span className="text-red-500 text-xs">{String(errors.electionPositionId.message)}</span>}
+                            </div>
+
+                            {/* System Role */}
                             <div className="space-y-2">
                                 <Label>System Role</Label>
                                 <Controller

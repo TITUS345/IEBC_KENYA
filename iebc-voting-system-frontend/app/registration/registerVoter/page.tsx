@@ -18,7 +18,7 @@ import FaceRecognition from "@/components/FaceRecognition"
 const VoterSchema = z.object({
     firstName: z.string().min(2, "First Name is required"),
     lastName: z.string().min(2, "Last Name is required"),
-    sirName: z.string().optional(),
+    surName: z.string().optional(),
     email: z.string().email("Invalid email address"),
     nationalIdNo: z.string().min(5, "ID No is too short"),
     phoneNumber: z.string().min(10, "Invalid phone number"),
@@ -62,7 +62,7 @@ export default function RegisterVoter() {
             selectedRole: "Voter",
             firstName: "",
             lastName: "",
-            sirName: "",
+            surName: "",
             email: "",
             nationalIdNo: "",
             phoneNumber: "",
@@ -263,7 +263,7 @@ export default function RegisterVoter() {
 
                             <div className="space-y-2">
                                 <Label>Surname</Label>
-                                <Input {...register("sirName")} placeholder="Anyango" />
+                                <Input {...register("surName")} placeholder="Anyango" />
                             </div>
 
                             {/* NEW FIELD: Selected Role */}

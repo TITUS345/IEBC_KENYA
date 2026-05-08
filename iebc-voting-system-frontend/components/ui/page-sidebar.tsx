@@ -95,10 +95,22 @@ export function Sidebar({ sidebarOpen, setSidebarOpen }: SidebarProps) {
                   </DialogContent>
                 </Dialog>
                 <Link
+                  href="/registration/registerCandidate"
+                  className="block rounded-2xl px-4 py-3 text-sm font-medium text-slate-700 transition hover:bg-slate-100"
+                >
+                  Register as Candidate
+                </Link>
+                <Link
                   href="/registration/registerVoter"
                   className="block rounded-2xl px-4 py-3 text-sm font-medium text-slate-700 transition hover:bg-slate-100"
                 >
                   Register to Vote
+                </Link>
+                <Link
+                  href="/election/electionParty"
+                  className="block rounded-2xl px-4 py-3 text-sm font-medium text-slate-700 transition hover:bg-slate-100"
+                >
+                  Political Parties
                 </Link>
                 <Link
                   href="/registration/registerCandidate"
