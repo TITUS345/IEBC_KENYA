@@ -149,6 +149,26 @@ builder.Services.AddAuthentication(options =>
 
 var app = builder.Build();
 
+// --- DATABASE AUTO-MIGRATION ---
+// Recreates tables if the DB was dropped or migrations are pending
+using (var scope = app.Services.CreateScope())
+{
+    var services = scope.ServiceProvider;
+    try
+    {
+        var context = services.GetRequiredService<ApplicationDbContext>();
+        if (context.Database.GetPendingMigrations().Any() || !context.Database.CanConnect())
+        {
+            Console.WriteLine("[DB]: Applying pending migrations...");
+            await context.Database.MigrateAsync();
+        }
+    }
+    catch (Exception ex)
+    {
+        Console.WriteLine($"[DB-ERROR]: Migration failed: {ex.Message}");
+    }
+}
+
 // --- 5. MIDDLEWARE PIPELINE ---
 
 if (app.Environment.IsDevelopment())
