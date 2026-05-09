@@ -52,8 +52,12 @@ export function SignUpForm() {
             toast.success("Voter account created successfully!");
             router.push("/auth/signIn");
         } catch (error: any) {
-            const errorMessage = error.response?.data?.message || "Registration failed";
-            toast.error(errorMessage);
+            console.error("Signup network/CORS error:", error);
+            const errorMessage = error.response?.data?.message || 
+                                (error.message === "Network Error" ? "Server unreachable or CORS blocked" : "Registration failed");
+            toast.error(errorMessage, {
+                description: error.message === "Network Error" ? "Please check your internet or contact admin regarding CORS." : ""
+            });
         } finally {
             setLoading(false);
         }

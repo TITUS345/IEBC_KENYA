@@ -45,10 +45,22 @@ builder.Services.AddCors(options =>
 
         Console.WriteLine($"[CORS]: Allowing origins: {string.Join(", ", frontendUrls)}");
 
-        policy.WithOrigins(frontendUrls.ToArray())
+        policy.SetIsOriginAllowed(origin =>
+              {
+                  if (string.IsNullOrWhiteSpace(origin)) return false;
+
+                  // Allow all Vercel deployments (production and preview)
+                  var host = new Uri(origin).Host;
+                  if (host == "localhost" || host == "127.0.0.1" || host.EndsWith(".vercel.app", StringComparison.OrdinalIgnoreCase))
+                      return true;
+
+                  // Fallback to explicit config list (checking both with and without trailing slashes)
+                  return frontendUrls.Any(u => origin.TrimEnd('/').Equals(u.TrimEnd('/'), StringComparison.OrdinalIgnoreCase));
+              })
               .AllowAnyMethod()
               .AllowAnyHeader()
-              .AllowCredentials();
+              .AllowCredentials()
+              .SetPreflightMaxAge(TimeSpan.FromMinutes(10)); // Cache preflight result for 10 mins
     });
 });
 
