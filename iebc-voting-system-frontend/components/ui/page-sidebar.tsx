@@ -73,10 +73,17 @@ export function Sidebar({ sidebarOpen, setSidebarOpen }: SidebarProps) {
                     </Button>
                   </DialogTrigger>
                   <DialogContent className="sm:max-w-[700px] p-0 border-none bg-transparent overflow-y-auto max-h-[90vh]">
-                    <div className="p-1">
-                      {/* Using SignUpForm as the current implementation for the account portal */}
-                      <SignUpForm />
+                    <DialogHeader className="p-4 bg-white rounded-t-xl border-b">
+                      <DialogTitle>Sign In to Your Account</DialogTitle>
+                      <DialogDescription>
+                        Enter your credentials to access the voting system.
+                      </DialogDescription>
+                    </DialogHeader>
+                    <div className="p-1"> {/* This div wraps the SignUpForm, which acts as the content */}
+                      {/* TODO: Replace with actual SignInForm component */}
+                      <SignUpForm /> {/* Currently using SignUpForm as a placeholder for the account portal */}
                     </div>
+
                   </DialogContent>
                 </Dialog>
                 <Dialog>
@@ -89,7 +96,13 @@ export function Sidebar({ sidebarOpen, setSidebarOpen }: SidebarProps) {
                     </Button>
                   </DialogTrigger>
                   <DialogContent className="sm:max-w-[700px] p-0 border-none bg-transparent overflow-y-auto max-h-[90vh]">
-                    <div className="p-1">
+                    <DialogHeader className="p-4 bg-white rounded-t-xl border-b">
+                      <DialogTitle>Create Your Account</DialogTitle>
+                      <DialogDescription>
+                        Register your details for the IEBC Voting System.
+                      </DialogDescription>
+                    </DialogHeader>
+                    <div className="p-1"> {/* This div wraps the SignUpForm */}
                       <SignUpForm />
                     </div>
                   </DialogContent>
@@ -141,6 +154,12 @@ export function Sidebar({ sidebarOpen, setSidebarOpen }: SidebarProps) {
                   className="block rounded-2xl px-4 py-3 text-sm font-medium text-slate-700 transition hover:bg-slate-100"
                 >
                   Elections
+                </Link>
+                <Link
+                  href="/roles"
+                  className="block rounded-2xl px-4 py-3 text-sm font-medium text-slate-700 transition hover:bg-slate-100"
+                >
+                  Roles
                 </Link>
               </nav>
             </div>

@@ -15,7 +15,7 @@ namespace IEBCVotingSystemV10.Model
         [Required]
         public string LastName { get; set; } = string.Empty;
         [Required]
-        public string SirName { get; set; } = string.Empty;
+        public string SurName { get; set; } = string.Empty;
         public string UserName { get; set; } = string.Empty;
         [Required]
         public string NationalIdNo { get; set; } = string.Empty;

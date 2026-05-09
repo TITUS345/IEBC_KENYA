@@ -18,7 +18,7 @@ import Link from "next/link";
 const SignUpSchema = z.object({
   firstName: z.string().min(2, "First name is too short"),
   lastName: z.string().min(2, "Last name is too short"),
-  sirname: z.string().min(2, "sirname is required"),
+  surName: z.string().min(2, "SurName is required"),
   nationalIdNo: z.string().min(5, "Enter a valid National ID"),
   email: z.string().email("Enter a valid email address"),
   phoneNumber: z.string().min(10, "Enter a valid phone number"),
@@ -64,7 +64,7 @@ export function SignUpForm() {
         <CardHeader className="space-y-1">
           <div className="flex items-center justify-between">
             <CardTitle className="text-3xl font-bold text-slate-800">Registration</CardTitle>
-            <Link href="/auth/login">
+            <Link href="/auth/signIn">
                 <Button variant="outline" size="sm" className="text-green-600 border-green-200 hover:bg-green-50">
                     Sign In <ArrowRight className="ml-2 h-4 w-4" />
                 </Button>
@@ -93,10 +93,10 @@ export function SignUpForm() {
                 </div>
 
                 <div className="space-y-2">
-                    <Label htmlFor="sirname">Surname</Label>
-                    <Input id="sirname" {...register("sirname")} placeholder="Smith"
-                        className={errors.sirname ? 'border-red-500' : ''}/>
-                    {errors.sirname && <p className="text-red-500 text-xs mt-1">{errors.sirname.message}</p>}
+                    <Label htmlFor="surName">SurName</Label>
+                    <Input id="surName" {...register("surName")} placeholder="Smith"
+                        className={errors.surName ? 'border-red-500' : ''}/>
+                    {errors.surName && <p className="text-red-500 text-xs mt-1">{errors.surName.message}</p>}
                 </div>
             </div>
 

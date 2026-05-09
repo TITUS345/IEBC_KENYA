@@ -58,7 +58,7 @@ namespace IEBCVotingSystemV10.Controller.Auth
                 {
                     FirstName = userDTO.FirstName,
                     LastName = userDTO.LastName,
-                    SurName = userDTO.SirName,
+                    SurName = userDTO.SurName,
                     UserName = userDTO.Email,
                     Email = userDTO.Email,
                     NationalIdNo = userDTO.NationalIdNo,
