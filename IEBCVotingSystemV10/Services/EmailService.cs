@@ -1,8 +1,9 @@
-
 using MailKit;
 using MailKit.Net.Smtp;
 using MailKit.Security;
 using MimeKit;
+using System.Net;
+using System.Net.Sockets;
 
 namespace IEBCVotingSystemV10.Services
 {
@@ -30,7 +31,6 @@ namespace IEBCVotingSystemV10.Services
 
             email.From.Add(MailboxAddress.Parse(senderEmail));
             email.To.Add(MailboxAddress.Parse(toEmail));
-
             email.Subject = subject;
 
             email.Body = new BodyBuilder
@@ -38,7 +38,6 @@ namespace IEBCVotingSystemV10.Services
                 HtmlBody = body
             }.ToMessageBody();
 
-            // IMPORTANT: protocol logger
             using var smtp = new SmtpClient(
                 new ProtocolLogger(Console.OpenStandardOutput())
             );
@@ -47,17 +46,22 @@ namespace IEBCVotingSystemV10.Services
             {
                 smtp.Timeout = 60000;
 
-                // TEMPORARY for TLS diagnostics only
                 smtp.ServerCertificateValidationCallback =
                     (s, c, h, e) => true;
 
-                // Helps some environments
                 smtp.LocalDomain = "localhost";
+
+                Console.WriteLine("[EMAIL-SERVICE]: Resolving IPv4...");
+
+                var ipv4 = Dns.GetHostAddresses("smtp.gmail.com")
+                    .First(ip => ip.AddressFamily == AddressFamily.InterNetwork);
+
+                Console.WriteLine($"[EMAIL-SERVICE]: Using IPv4 {ipv4}");
 
                 Console.WriteLine("[EMAIL-SERVICE]: Connecting...");
 
                 await smtp.ConnectAsync(
-                    "smtp.gmail.com",
+                    ipv4.ToString(),
                     587,
                     SecureSocketOptions.StartTls
                 );
@@ -81,10 +85,7 @@ namespace IEBCVotingSystemV10.Services
             }
             catch (Exception ex)
             {
-                Console.WriteLine(
-                    $"[EMAIL-SERVICE-ERROR]: {ex}"
-                );
-
+                Console.WriteLine($"[EMAIL-SERVICE-ERROR]: {ex}");
                 throw;
             }
             finally
