@@ -23,44 +23,64 @@ namespace IEBCVotingSystemV10.Services
         {
             var email = new MimeMessage();
 
-            // Use the injected IConfiguration service
             var senderEmail = _config["EMAIL"]?.Trim('"').Trim()
-            ?? throw new InvalidOperationException("The sender Email is invalid or missing");
+                ?? throw new InvalidOperationException("EMAIL missing");
+
             var senderPass = _config["EMAIL_PASSWORD"]?.Trim('"').Trim()
-            ?? throw new InvalidOperationException("The sender Password is invalid or missing");
+                ?? throw new InvalidOperationException("EMAIL_PASSWORD missing");
+
             var smtpHost = _config["HOST"]?.Trim('"').Trim()
-            ?? throw new InvalidOperationException("The smtp Host is invalid or missing");
+                ?? throw new InvalidOperationException("HOST missing");
 
             email.From.Add(MailboxAddress.Parse(senderEmail));
             email.To.Add(MailboxAddress.Parse(toEmail));
             email.Subject = subject;
 
-            var builder = new BodyBuilder { HtmlBody = body };
-
-            email.Body = builder.ToMessageBody();
+            email.Body = new BodyBuilder
+            {
+                HtmlBody = body
+            }.ToMessageBody();
 
             using var smtp = new SmtpClient();
+
             try
             {
-                smtp.Timeout = 10000; // 10 second timeout for SMTP
-                await smtp.ConnectAsync(smtpHost, 587, SecureSocketOptions.StartTls);
+                // IMPORTANT
+                smtp.Timeout = 60000;
+
+                // Optional but helps diagnose
+                smtp.ServerCertificateValidationCallback = (s, c, h, e) => true;
+
+                Console.WriteLine("[EMAIL-SERVICE]: Connecting to SMTP...");
+
+                await smtp.ConnectAsync(
+                    smtpHost,
+                    587,
+                    SecureSocketOptions.StartTls
+                );
+
+                Console.WriteLine("[EMAIL-SERVICE]: Connected.");
+
+                Console.WriteLine("[EMAIL-SERVICE]: Authenticating...");
+
                 await smtp.AuthenticateAsync(senderEmail, senderPass);
+
+                Console.WriteLine("[EMAIL-SERVICE]: Authenticated.");
+
                 await smtp.SendAsync(email);
+
+                Console.WriteLine("[EMAIL-SERVICE]: Email sent.");
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"[EMAIL-SERVICE-ERROR]: Failed to connect to {smtpHost} on port 587. Error: {ex.Message}");
+                Console.WriteLine($"[EMAIL-SERVICE-ERROR]: {ex}");
                 throw;
             }
             finally
             {
                 if (smtp.IsConnected)
-                {
                     await smtp.DisconnectAsync(true);
-                }
             }
-
-
         }
     }
 }
