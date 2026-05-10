@@ -171,6 +171,9 @@ using (var scope = app.Services.CreateScope())
 
 // --- 5. MIDDLEWARE PIPELINE ---
 
+// MOVE THIS TO THE TOP to ensure error responses still have CORS headers
+app.UseCors("ProductionPolicy");
+
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
@@ -178,7 +181,6 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseRouting();
-app.UseCors("ProductionPolicy");
 
 // CRITICAL: Enable static files serving (for biometric images, etc.)
 // Configure static files to serve from wwwroot directory

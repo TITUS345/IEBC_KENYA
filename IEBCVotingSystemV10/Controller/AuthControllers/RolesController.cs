@@ -16,10 +16,12 @@ namespace IEBCVotingSystemV10.Controller.Auth
     public class RolesController : ControllerBase
     {
         private readonly RoleManager<AppUserRoles> _rolemanager;
+        private readonly ILogger<RolesController> _logger;
 
-        public RolesController(RoleManager<AppUserRoles> rolemanager)
+        public RolesController(RoleManager<AppUserRoles> rolemanager, ILogger<RolesController> logger)
         {
             this._rolemanager = rolemanager;
+            this._logger = logger;
         }
 
         [HttpPost]
@@ -52,9 +54,10 @@ namespace IEBCVotingSystemV10.Controller.Auth
 
 
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                return StatusCode(500, "Internal erver error");
+                _logger.LogError(ex, "An error occurred while creating role {RoleName}", roleDTO.Name);
+                return StatusCode(500, $"Internal server error: {ex.Message}");
             }
         }
     }
