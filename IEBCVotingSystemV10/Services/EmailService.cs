@@ -29,8 +29,9 @@ namespace IEBCVotingSystemV10.Services
             var senderPass = _config["EMAIL_PASSWORD"]?.Trim('"').Trim()
                 ?? throw new InvalidOperationException("EMAIL_PASSWORD missing");
 
-            var smtpHost = _config["HOST"]?.Trim('"').Trim()
-                ?? throw new InvalidOperationException("HOST missing");
+            // var smtpHost = _config["HOST"]?.Trim('"').Trim()
+            //     ?? throw new InvalidOperationException("HOST missing");
+            var smtpHost = "smtp.gmail.com";
 
             email.From.Add(MailboxAddress.Parse(senderEmail));
             email.To.Add(MailboxAddress.Parse(toEmail));
