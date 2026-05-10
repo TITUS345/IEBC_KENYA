@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Humanizer;
+using MailKit.Security;
 using MailKit.Net.Smtp;
 using MimeKit;
 
@@ -23,11 +24,11 @@ namespace IEBCVotingSystemV10.Services
             var email = new MimeMessage();
 
             // Use the injected IConfiguration service
-            var senderEmail = _config["EMAIL"]
+            var senderEmail = _config["EMAIL"]?.Trim('"').Trim()
             ?? throw new InvalidOperationException("The sender Email is invalid or missing");
-            var senderPass = _config["EMAIL_PASSWORD"]
+            var senderPass = _config["EMAIL_PASSWORD"]?.Trim('"').Trim()
             ?? throw new InvalidOperationException("The sender Password is invalid or missing");
-            var smtpHost = _config["HOST"]
+            var smtpHost = _config["HOST"]?.Trim('"').Trim()
             ?? throw new InvalidOperationException("The smtp Host is invalid or missing");
 
             email.From.Add(MailboxAddress.Parse(senderEmail));
@@ -42,18 +43,21 @@ namespace IEBCVotingSystemV10.Services
             try
             {
                 smtp.Timeout = 10000; // 10 second timeout for SMTP
-                await smtp.ConnectAsync(smtpHost, 587, MailKit.Security.SecureSocketOptions.StartTls);
+                await smtp.ConnectAsync(smtpHost, 587, SecureSocketOptions.StartTls);
                 await smtp.AuthenticateAsync(senderEmail, senderPass);
                 await smtp.SendAsync(email);
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"[EMAIL-SERVICE-ERROR]: Failed to send email to {toEmail}. Error: {ex.Message}");
+                Console.WriteLine($"[EMAIL-SERVICE-ERROR]: Failed to connect to {smtpHost} on port 587. Error: {ex.Message}");
                 throw;
             }
             finally
             {
-                await smtp.DisconnectAsync(true);
+                if (smtp.IsConnected)
+                {
+                    await smtp.DisconnectAsync(true);
+                }
             }
 
 

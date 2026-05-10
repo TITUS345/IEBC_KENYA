@@ -85,7 +85,16 @@ namespace IEBCVotingSystemV10.Controller.Auth
                     <a href='{verifyURL}'>Verify My Email</a>
                     <p>If you didn't register, ignore this email.</p>";
 
-                    await _emailService.SendEmailAsync(newUser.Email, "Confirm Your Email - IEBC", messageBody);
+                    bool emailSent = true;
+                    try
+                    {
+                        await _emailService.SendEmailAsync(newUser.Email, "Confirm Your Email - IEBC", messageBody);
+                    }
+                    catch (Exception ex)
+                    {
+                        emailSent = false;
+                        Console.WriteLine($"[AUTH-REGISTER-EMAIL-WARNING]: Account created for {newUser.Email}, but verification email failed: {ex.Message}");
+                    }
 
                     var roles = new List<string> { AppRoles.User };
                     var token = _tokenService.GenerateJwtToken(newUser, roles);
@@ -93,7 +102,7 @@ namespace IEBCVotingSystemV10.Controller.Auth
                     return Ok(new
                     {
                         Result = "Success",
-                        Message = "Please verify your email before logging in.",
+                        Message = emailSent ? "Please verify your email before logging in." : "Account created successfully, but we encountered an error sending the verification email. Please contact support to verify your account.",
                         Token = token,
                         User = newUser.Email
                     });
