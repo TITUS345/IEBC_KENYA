@@ -20,18 +20,18 @@ namespace IEBCVotingSystemV10.Services
             string body)
         {
             // Retrieve Mailtrap configuration from IConfiguration
-            var smtpHost = _config["HOST"]?.Trim('"').Trim()
+            var smtpHost = _config["MAILTRAP_HOST"]?.Trim('"').Trim()
                 ?? throw new InvalidOperationException("MAILTRAP_HOST missing");
-            var smtpPort = int.Parse(_config["PORT"]?.Trim('"').Trim()
+            var smtpPort = int.Parse(_config["MAILTRAP_PORT"]?.Trim('"').Trim()
                 ?? throw new InvalidOperationException("MAILTRAP_PORT missing"));
-            var mailtrapUsername = _config["EMAIL"]?.Trim('"').Trim()
+            var mailtrapUsername = _config["MAILTRAP_USERNAME"]?.Trim('"').Trim()
                 ?? throw new InvalidOperationException("MAILTRAP_USERNAME missing");
-            var mailtrapPassword = _config["EMAIL_PASSWORD"]?.Trim('"').Trim()
+            var mailtrapPassword = _config["MAILTRAP_PASSWORD"]?.Trim('"').Trim()
                 ?? throw new InvalidOperationException("MAILTRAP_PASSWORD missing");
 
             var email = new MimeMessage();
 
-            email.From.Add(MailboxAddress.Parse(mailtrapUsername)); // Use Mailtrap username as sender for Mailtrap
+            email.From.Add(new MailboxAddress("IEBC System", "no-reply@iebc-kenya.org"));
             email.To.Add(MailboxAddress.Parse(toEmail));
             email.Subject = subject;
 
