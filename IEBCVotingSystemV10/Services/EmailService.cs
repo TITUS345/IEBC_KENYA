@@ -1,4 +1,3 @@
-using MailKit;
 using MailKit.Net.Smtp;
 using MailKit.Security;
 using MimeKit;
@@ -38,62 +37,69 @@ namespace IEBCVotingSystemV10.Services
                 HtmlBody = body
             }.ToMessageBody();
 
-            using var smtp = new SmtpClient(
-                new ProtocolLogger(Console.OpenStandardOutput())
-            );
+            using var smtp = new SmtpClient();
 
             try
             {
                 smtp.Timeout = 60000;
 
-                smtp.ServerCertificateValidationCallback =
-                    (s, c, h, e) => true;
-
-                smtp.LocalDomain = "localhost";
-
                 Console.WriteLine("[EMAIL-SERVICE]: Resolving IPv4...");
 
                 var ipv4 = Dns.GetHostAddresses("smtp.gmail.com")
-                    .First(ip => ip.AddressFamily == AddressFamily.InterNetwork);
+                    .First(ip =>
+                        ip.AddressFamily ==
+                        AddressFamily.InterNetwork);
 
-                Console.WriteLine($"[EMAIL-SERVICE]: Using IPv4 {ipv4}");
+                Console.WriteLine(
+                    $"[EMAIL-SERVICE]: Using IPv4 {ipv4}"
+                );
 
-                Console.WriteLine("[EMAIL-SERVICE]: Connecting...");
+                Console.WriteLine(
+                    "[EMAIL-SERVICE]: Connecting..."
+                );
 
                 await smtp.ConnectAsync(
                     ipv4.ToString(),
-                    587,
-                    SecureSocketOptions.StartTls
+                    465,
+                    SecureSocketOptions.SslOnConnect
                 );
 
-                Console.WriteLine("[EMAIL-SERVICE]: Connected.");
+                Console.WriteLine(
+                    "[EMAIL-SERVICE]: Connected."
+                );
 
-                Console.WriteLine("[EMAIL-SERVICE]: Authenticating...");
+                Console.WriteLine(
+                    "[EMAIL-SERVICE]: Authenticating..."
+                );
 
                 await smtp.AuthenticateAsync(
                     senderEmail,
                     senderPass
                 );
 
-                Console.WriteLine("[EMAIL-SERVICE]: Authenticated.");
+                Console.WriteLine(
+                    "[EMAIL-SERVICE]: Authenticated."
+                );
 
-                Console.WriteLine("[EMAIL-SERVICE]: Sending email...");
+                Console.WriteLine(
+                    "[EMAIL-SERVICE]: Sending email..."
+                );
 
                 await smtp.SendAsync(email);
 
-                Console.WriteLine("[EMAIL-SERVICE]: Email sent.");
+                Console.WriteLine(
+                    "[EMAIL-SERVICE]: Email sent."
+                );
+
+                await smtp.DisconnectAsync(true);
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"[EMAIL-SERVICE-ERROR]: {ex}");
+                Console.WriteLine(
+                    $"[EMAIL-SERVICE-ERROR]: {ex}"
+                );
+
                 throw;
-            }
-            finally
-            {
-                if (smtp.IsConnected)
-                {
-                    await smtp.DisconnectAsync(true);
-                }
             }
         }
     }
