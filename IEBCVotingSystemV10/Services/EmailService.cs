@@ -2,7 +2,6 @@ using MailKit.Net.Smtp;
 using MailKit.Security;
 using MimeKit;
 using System.Net;
-using System.Net.Sockets;
 
 namespace IEBCVotingSystemV10.Services
 {
@@ -26,6 +25,9 @@ namespace IEBCVotingSystemV10.Services
             var senderPass = _config["EMAIL_PASSWORD"]?.Trim('"').Trim()
                 ?? throw new InvalidOperationException("EMAIL_PASSWORD missing");
 
+            var smtpHost = _config["HOST"]?.Trim('"').Trim()
+                ?? throw new InvalidOperationException("SMTP HOST missing");
+
             var email = new MimeMessage();
 
             email.From.Add(MailboxAddress.Parse(senderEmail));
@@ -41,25 +43,12 @@ namespace IEBCVotingSystemV10.Services
 
             try
             {
-                smtp.Timeout = 60000;
+                smtp.Timeout = 60000; // Keep existing timeout
 
-                Console.WriteLine("[EMAIL-SERVICE]: Resolving IPv4...");
-
-                var ipv4 = Dns.GetHostAddresses("smtp.gmail.com")
-                    .First(ip =>
-                        ip.AddressFamily ==
-                        AddressFamily.InterNetwork);
-
-                Console.WriteLine(
-                    $"[EMAIL-SERVICE]: Using IPv4 {ipv4}"
-                );
-
-                Console.WriteLine(
-                    "[EMAIL-SERVICE]: Connecting..."
-                );
+                Console.WriteLine($"[EMAIL-SERVICE]: Connecting to SMTP server: {smtpHost} on port 465...");
 
                 await smtp.ConnectAsync(
-                    ipv4.ToString(),
+                    smtpHost, // Use the configured host directly
                     465,
                     SecureSocketOptions.SslOnConnect
                 );
@@ -96,7 +85,7 @@ namespace IEBCVotingSystemV10.Services
             catch (Exception ex)
             {
                 Console.WriteLine(
-                    $"[EMAIL-SERVICE-ERROR]: {ex}"
+                    $"[EMAIL-SERVICE-ERROR]: Failed to send email to {toEmail}. Error: {ex.ToString()}"
                 );
 
                 throw;
