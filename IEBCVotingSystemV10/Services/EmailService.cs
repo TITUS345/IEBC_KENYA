@@ -19,76 +19,54 @@ namespace IEBCVotingSystemV10.Services
             string subject,
             string body)
         {
-            var senderEmail = _config["EMAIL"]?.Trim('"').Trim()
-                ?? throw new InvalidOperationException("EMAIL missing");
-
-            var senderPass = _config["EMAIL_PASSWORD"]?.Trim('"').Trim()
-                ?? throw new InvalidOperationException("EMAIL_PASSWORD missing");
-
+            // Retrieve Mailtrap configuration from IConfiguration
             var smtpHost = _config["HOST"]?.Trim('"').Trim()
-                ?? throw new InvalidOperationException("SMTP HOST missing");
+                ?? throw new InvalidOperationException("MAILTRAP_HOST missing");
+            var smtpPort = int.Parse(_config["PORT"]?.Trim('"').Trim()
+                ?? throw new InvalidOperationException("MAILTRAP_PORT missing"));
+            var mailtrapUsername = _config["EMAIL"]?.Trim('"').Trim()
+                ?? throw new InvalidOperationException("MAILTRAP_USERNAME missing");
+            var mailtrapPassword = _config["EMAIL_PASSWORD"]?.Trim('"').Trim()
+                ?? throw new InvalidOperationException("MAILTRAP_PASSWORD missing");
 
             var email = new MimeMessage();
 
-            email.From.Add(MailboxAddress.Parse(senderEmail));
+            email.From.Add(MailboxAddress.Parse(mailtrapUsername)); // Use Mailtrap username as sender for Mailtrap
             email.To.Add(MailboxAddress.Parse(toEmail));
             email.Subject = subject;
 
-            email.Body = new BodyBuilder
+            email.Body = new BodyBuilder { HtmlBody = body }.ToMessageBody();
+
+            using (var smtp = new SmtpClient())
             {
-                HtmlBody = body
-            }.ToMessageBody();
+                try
+                {
+                    smtp.Timeout = 60000; // 60-second timeout
 
-            using var smtp = new SmtpClient();
+                    Console.WriteLine($"[EMAIL-SERVICE]: Connecting to Mailtrap SMTP server: {smtpHost}:{smtpPort}...");
+                    await smtp.ConnectAsync(smtpHost, smtpPort, SecureSocketOptions.StartTls);
+                    Console.WriteLine("[EMAIL-SERVICE]: Connected to Mailtrap.");
 
-            try
-            {
-                smtp.Timeout = 60000; // Keep existing timeout
+                    Console.WriteLine("[EMAIL-SERVICE]: Authenticating with Mailtrap...");
+                    await smtp.AuthenticateAsync(mailtrapUsername, mailtrapPassword);
+                    Console.WriteLine("[EMAIL-SERVICE]: Authenticated with Mailtrap.");
 
-                Console.WriteLine($"[EMAIL-SERVICE]: Connecting to SMTP server: {smtpHost} on port 465...");
-
-                await smtp.ConnectAsync(
-                    smtpHost, // Use the configured host directly
-                    465,
-                    SecureSocketOptions.SslOnConnect
-                );
-
-                Console.WriteLine(
-                    "[EMAIL-SERVICE]: Connected."
-                );
-
-                Console.WriteLine(
-                    "[EMAIL-SERVICE]: Authenticating..."
-                );
-
-                await smtp.AuthenticateAsync(
-                    senderEmail,
-                    senderPass
-                );
-
-                Console.WriteLine(
-                    "[EMAIL-SERVICE]: Authenticated."
-                );
-
-                Console.WriteLine(
-                    "[EMAIL-SERVICE]: Sending email..."
-                );
-
-                await smtp.SendAsync(email);
-
-                Console.WriteLine(
-                    "[EMAIL-SERVICE]: Email sent."
-                );
-
-                await smtp.DisconnectAsync(true);
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine(
-                    $"[EMAIL-SERVICE-ERROR]: Failed to send email to {toEmail}. Error: {ex.ToString()}"
-                );
-
-                throw;
+                    Console.WriteLine("[EMAIL-SERVICE]: Sending email via Mailtrap...");
+                    await smtp.SendAsync(email);
+                    Console.WriteLine("[EMAIL-SERVICE]: Email sent via Mailtrap.");
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine($"[EMAIL-SERVICE-ERROR]: Failed to send email to {toEmail} via Mailtrap. Error: {ex.ToString()}");
+                    throw; // Re-throw the exception so AuthController can catch it
+                }
+                finally
+                {
+                    if (smtp.IsConnected)
+                    {
+                        await smtp.DisconnectAsync(true);
+                    }
+                }
             }
         }
     }
