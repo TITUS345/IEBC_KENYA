@@ -17,6 +17,7 @@ import {
 import { SignUpForm } from '@/app/auth/signUp/page';
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetDescription, SheetTrigger } from "@/components/ui/sheet";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogTrigger } from "@/components/ui/dialog";
 
 import RegisterCandidatePage from '@/app/registration/registerCandidate/page';
 import RegisterVoter from '@/app/registration/registerVoter/page';
@@ -25,7 +26,7 @@ import CastVotePage from '@/app/election/voteCasting/page';
 import ElectionPositions from '@/app/election/electionPosition/page';
 import ElectionTypes from '@/app/election/electionType/page';
 import ManageElections from '@/app/election/elections/page';
-import RolePage from '@/app/roles/page';
+import { RoleForm } from '@/app/roles/page';
 
 interface SidebarProps {
   sidebarOpen: boolean;
@@ -77,42 +78,42 @@ export function Sidebar({ sidebarOpen, setSidebarOpen }: SidebarProps) {
                 >
                   Home
                 </Link>
-                <Sheet>
-                  <SheetTrigger asChild>
+                <Dialog>
+                  <DialogTrigger asChild>
                     <Button variant="ghost" className="flex h-auto w-full items-center justify-start rounded-2xl px-4 py-3 text-sm font-medium text-slate-700 transition hover:bg-slate-100">
                       <LogIn className="mr-2 h-4 w-4" /> Sign In
                     </Button>
-                  </SheetTrigger>
-                  <SheetContent side="right" className="p-0 border-none overflow-y-auto">
-                    <SheetHeader className="p-4 bg-white rounded-t-xl border-b">
-                      <SheetTitle>Sign In to Your Account</SheetTitle>
-                      <SheetDescription>
+                  </DialogTrigger>
+                  <DialogContent className="p-0 border-none max-w-2xl">
+                    <DialogHeader className="p-4 bg-white rounded-t-xl border-b">
+                      <DialogTitle>Sign In to Your Account</DialogTitle>
+                      <DialogDescription>
                         Enter your credentials to access the voting system.
-                      </SheetDescription>
-                    </SheetHeader>
-                    <div className="p-1">
+                      </DialogDescription>
+                    </DialogHeader>
+                    <div className="p-1 overflow-y-auto max-h-[80vh]">
                       <SignUpForm />
                     </div>
-                  </SheetContent>
-                </Sheet>
-                <Sheet>
-                  <SheetTrigger asChild>
+                  </DialogContent>
+                </Dialog>
+                <Dialog>
+                  <DialogTrigger asChild>
                     <Button variant="ghost" className="flex h-auto w-full items-center justify-start rounded-2xl px-4 py-3 text-sm font-medium text-slate-700 transition hover:bg-slate-100">
                       <UserPlus className="mr-2 h-4 w-4" /> Create Account
                     </Button>
-                  </SheetTrigger>
-                  <SheetContent side="right" className="p-0 border-none overflow-y-auto">
-                    <SheetHeader className="p-4 bg-white rounded-t-xl border-b">
-                      <SheetTitle>Create Your Account</SheetTitle>
-                      <SheetDescription>
+                  </DialogTrigger>
+                  <DialogContent className="p-0 border-none max-w-2xl">
+                    <DialogHeader className="p-4 bg-white rounded-t-xl border-b">
+                      <DialogTitle>Create Your Account</DialogTitle>
+                      <DialogDescription>
                         Register your details for the IEBC Voting System.
-                      </SheetDescription>
-                    </SheetHeader>
-                    <div className="p-1">
+                      </DialogDescription>
+                    </DialogHeader>
+                    <div className="p-1 overflow-y-auto max-h-[80vh]">
                       <SignUpForm />
                     </div>
-                  </SheetContent>
-                </Sheet>
+                  </DialogContent>
+                </Dialog>
                 <Sheet>
                   <SheetTrigger asChild>
                     <Button variant="ghost" className="flex h-auto w-full items-center justify-start rounded-2xl px-4 py-3 text-sm font-medium text-slate-700 transition hover:bg-slate-100">
@@ -246,24 +247,24 @@ export function Sidebar({ sidebarOpen, setSidebarOpen }: SidebarProps) {
                   </SheetContent>
                 </Sheet>
 
-                <Sheet>
-                  <SheetTrigger asChild>
+                <Dialog>
+                  <DialogTrigger asChild>
                     <Button variant="ghost" className="flex h-auto w-full items-center justify-start rounded-2xl px-4 py-3 text-sm font-medium text-slate-700 transition hover:bg-slate-100">
                       <ShieldCheck className="mr-2 h-4 w-4" /> Roles
                     </Button>
-                  </SheetTrigger>
-                  <SheetContent side="right" className="p-0 border-none overflow-y-auto">
-                    <SheetHeader className="p-4 bg-white rounded-t-xl border-b">
-                      <SheetTitle>Roles</SheetTitle>
-                      <SheetDescription>
+                  </DialogTrigger>
+                  <DialogContent className="p-0 border-none max-w-md">
+                    <DialogHeader className="p-4 bg-white rounded-t-xl border-b">
+                      <DialogTitle>Roles</DialogTitle>
+                      <DialogDescription>
                         Manage system user roles and access permissions.
-                      </SheetDescription>
-                    </SheetHeader>
-                    <div className="p-1">
-                      <RolePage />
+                      </DialogDescription>
+                    </DialogHeader>
+                    <div className="p-1 overflow-y-auto max-h-[80vh]">
+                      <RoleForm />
                     </div>
-                  </SheetContent>
-                </Sheet>
+                  </DialogContent>
+                </Dialog>
               </nav>
             </div>
           </div>

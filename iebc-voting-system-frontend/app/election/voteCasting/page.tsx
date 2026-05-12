@@ -17,11 +17,14 @@ export default function CastVotePage() {
 
     const router = useRouter();
 
+    const apiUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5007";
+
     // Load active elections on mount
     useEffect(() => {
         const fetchElections = async () => {
             try {
-                const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/elections/getAllElections`);
+                console.log(`Attempting to fetch elections from: ${apiUrl}/api/elections/getAllElections`);
+                const response = await fetch(`${apiUrl}/api/elections/getAllElections`);
                 if (response.ok) {
                     const data = await response.json();
                     // Only show ongoing elections to the voter
@@ -32,14 +35,14 @@ export default function CastVotePage() {
             }
         };
         fetchElections();
-    }, []);
+    }, [apiUrl]);
 
     // Fetch candidates when election changes
     useEffect(() => {
         if (selectedElectionId) {
             const fetchCandidates = async () => {
                 try {
-                    const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/candidate/election/${selectedElectionId}`);
+                    const response = await fetch(`${apiUrl}/api/candidate/election/${selectedElectionId}`);
                     if (response.ok) {
                         const data = await response.json();
                         setCandidates(data);
@@ -52,7 +55,7 @@ export default function CastVotePage() {
         } else {
             setCandidates([]);
         }
-    }, [selectedElectionId]);
+    }, [selectedElectionId, apiUrl]);
 
     const handleFaceCaptured = (embeddings: number[], capturedImage: File) => {
         setLiveEmbeddings(embeddings);
@@ -78,7 +81,7 @@ export default function CastVotePage() {
                 liveFaceEmbeddings: JSON.stringify(liveEmbeddings)
             };
 
-            const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/vote-casting/castVote`, {
+            const response = await fetch(`${apiUrl}/api/vote-casting/castVote`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
