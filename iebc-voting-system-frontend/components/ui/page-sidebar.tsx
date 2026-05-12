@@ -1,17 +1,31 @@
 'use client';
 
 import Link from 'next/link';
-import { X, LogIn, UserPlus } from 'lucide-react';
+import { 
+  X, 
+  LogIn, 
+  UserPlus, 
+  UserCheck, 
+  Users, 
+  Landmark, 
+  Vote, 
+  Briefcase, 
+  Layers, 
+  Calendar, 
+  ShieldCheck 
+} from 'lucide-react';
 import { SignUpForm } from '@/app/auth/signUp/page';
 import { Button } from "@/components/ui/button";
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog";
+import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetDescription, SheetTrigger } from "@/components/ui/sheet";
+
+import RegisterCandidatePage from '@/app/registration/registerCandidate/page';
+import RegisterVoter from '@/app/registration/registerVoter/page';
+import PartyManagementPage from '@/app/election/electionParty/page';
+import CastVotePage from '@/app/election/voteCasting/page';
+import ElectionPositions from '@/app/election/electionPosition/page';
+import ElectionTypes from '@/app/election/electionType/page';
+import ManageElections from '@/app/election/elections/page';
+import RolePage from '@/app/roles/page';
 
 interface SidebarProps {
   sidebarOpen: boolean;
@@ -26,8 +40,8 @@ export function Sidebar({ sidebarOpen, setSidebarOpen }: SidebarProps) {
           sidebarOpen ? 'translate-x-0' : '-translate-x-full'
         }`}
       >
-        <div className="flex h-full flex-col justify-between overflow-hidden px-6 py-8 lg:px-8 lg:py-10">
-          <div className="space-y-8">
+        <div className="flex h-full flex-col justify-between px-6 py-8 lg:px-8 lg:py-10">
+          <div className="flex flex-1 flex-col min-h-0 space-y-8">
             <div className="flex items-center justify-between lg:hidden">
               <Link href="/" className="flex items-center gap-3">
                 <div className="grid h-12 w-12 place-items-center rounded-3xl bg-blue-700 text-base font-bold text-white">IEBC</div>
@@ -54,7 +68,7 @@ export function Sidebar({ sidebarOpen, setSidebarOpen }: SidebarProps) {
               </Link>
             </div>
 
-            <div>
+            <div className="flex-1 overflow-y-auto pr-2 -mr-2 no-scrollbar">
               <p className="text-xs font-semibold uppercase tracking-[0.35em] text-slate-500">Navigation</p>
               <nav className="mt-4 space-y-2">
                 <Link
@@ -63,109 +77,198 @@ export function Sidebar({ sidebarOpen, setSidebarOpen }: SidebarProps) {
                 >
                   Home
                 </Link>
-                <Dialog>
-                  <DialogTrigger asChild>
-                    <Button
-                      variant="ghost"
-                      className="flex h-auto w-full items-center justify-start rounded-2xl px-4 py-3 text-sm font-medium text-slate-700 transition hover:bg-slate-100"
-                    >
+                <Sheet>
+                  <SheetTrigger asChild>
+                    <Button variant="ghost" className="flex h-auto w-full items-center justify-start rounded-2xl px-4 py-3 text-sm font-medium text-slate-700 transition hover:bg-slate-100">
                       <LogIn className="mr-2 h-4 w-4" /> Sign In
                     </Button>
-                  </DialogTrigger>
-                  <DialogContent className="sm:max-w-[700px] p-0 border-none bg-transparent overflow-y-auto max-h-[90vh]">
-                    <DialogHeader className="p-4 bg-white rounded-t-xl border-b">
-                      <DialogTitle>Sign In to Your Account</DialogTitle>
-                      <DialogDescription>
+                  </SheetTrigger>
+                  <SheetContent side="right" className="p-0 border-none overflow-y-auto">
+                    <SheetHeader className="p-4 bg-white rounded-t-xl border-b">
+                      <SheetTitle>Sign In to Your Account</SheetTitle>
+                      <SheetDescription>
                         Enter your credentials to access the voting system.
-                      </DialogDescription>
-                    </DialogHeader>
-                    <div className="p-1"> {/* This div wraps the SignUpForm, which acts as the content */}
-                      {/* TODO: Replace with actual SignInForm component */}
-                      <SignUpForm /> {/* Currently using SignUpForm as a placeholder for the account portal */}
-                    </div>
-
-                  </DialogContent>
-                </Dialog>
-                <Dialog>
-                  <DialogTrigger asChild>
-                    <Button
-                      variant="ghost"
-                      className="flex h-auto w-full items-center justify-start rounded-2xl px-4 py-3 text-sm font-medium text-slate-700 transition hover:bg-slate-100"
-                    >
-                      <UserPlus className="mr-2 h-4 w-4" /> Create Account
-                    </Button>
-                  </DialogTrigger>
-                  <DialogContent className="sm:max-w-[700px] p-0 border-none bg-transparent overflow-y-auto max-h-[90vh]">
-                    <DialogHeader className="p-4 bg-white rounded-t-xl border-b">
-                      <DialogTitle>Create Your Account</DialogTitle>
-                      <DialogDescription>
-                        Register your details for the IEBC Voting System.
-                      </DialogDescription>
-                    </DialogHeader>
-                    <div className="p-1"> {/* This div wraps the SignUpForm */}
+                      </SheetDescription>
+                    </SheetHeader>
+                    <div className="p-1">
                       <SignUpForm />
                     </div>
-                  </DialogContent>
-                </Dialog>
-                <Link
-                  href="/registration/registerCandidate"
-                  className="block rounded-2xl px-4 py-3 text-sm font-medium text-slate-700 transition hover:bg-slate-100"
-                >
-                  Register as Candidate
-                </Link>
-                <Link
-                  href="/registration/registerVoter"
-                  className="block rounded-2xl px-4 py-3 text-sm font-medium text-slate-700 transition hover:bg-slate-100"
-                >
-                  Register to Vote
-                </Link>
-                <Link
-                  href="/election/electionParty"
-                  className="block rounded-2xl px-4 py-3 text-sm font-medium text-slate-700 transition hover:bg-slate-100"
-                >
-                  Political Parties
-                </Link>
-                <Link
-                  href="/registration/registerCandidate"
-                  className="block rounded-2xl px-4 py-3 text-sm font-medium text-slate-700 transition hover:bg-slate-100"
-                >
-                  Register as Candidate
-                </Link>
-                <Link
-                  href="/election/voteCasting"
-                  className="block rounded-2xl px-4 py-3 text-sm font-medium text-slate-700 transition hover:bg-slate-100"
-                >
-                  Cast Your Vote
-                </Link>
-                <Link 
-                  href="/election/electionPosition"
-                  className="block rounded-2xl px-4 py-3 text-sm font-medium text-slate-700 transition hover:bg-slate-100"
-                >
-                  Election Positions
-                </Link>
-                <Link
-                  href="/election/electionType"
-                  className="block rounded-2xl px-4 py-3 text-sm font-medium text-slate-700 transition hover:bg-slate-100"
-                >
-                  Election Types
-                </Link>
-                <Link
-                  href="/election/elections"
-                  className="block rounded-2xl px-4 py-3 text-sm font-medium text-slate-700 transition hover:bg-slate-100"
-                >
-                  Elections
-                </Link>
-                <Link
-                  href="/roles"
-                  className="block rounded-2xl px-4 py-3 text-sm font-medium text-slate-700 transition hover:bg-slate-100"
-                >
-                  Roles
-                </Link>
+                  </SheetContent>
+                </Sheet>
+                <Sheet>
+                  <SheetTrigger asChild>
+                    <Button variant="ghost" className="flex h-auto w-full items-center justify-start rounded-2xl px-4 py-3 text-sm font-medium text-slate-700 transition hover:bg-slate-100">
+                      <UserPlus className="mr-2 h-4 w-4" /> Create Account
+                    </Button>
+                  </SheetTrigger>
+                  <SheetContent side="right" className="p-0 border-none overflow-y-auto">
+                    <SheetHeader className="p-4 bg-white rounded-t-xl border-b">
+                      <SheetTitle>Create Your Account</SheetTitle>
+                      <SheetDescription>
+                        Register your details for the IEBC Voting System.
+                      </SheetDescription>
+                    </SheetHeader>
+                    <div className="p-1">
+                      <SignUpForm />
+                    </div>
+                  </SheetContent>
+                </Sheet>
+                <Sheet>
+                  <SheetTrigger asChild>
+                    <Button variant="ghost" className="flex h-auto w-full items-center justify-start rounded-2xl px-4 py-3 text-sm font-medium text-slate-700 transition hover:bg-slate-100">
+                      <UserCheck className="mr-2 h-4 w-4" /> Register as Candidate
+                    </Button>
+                  </SheetTrigger>
+                  <SheetContent side="right" className="p-0 border-none overflow-y-auto">
+                    <SheetHeader className="p-4 bg-white rounded-t-xl border-b">
+                      <SheetTitle>Register as Candidate</SheetTitle>
+                      <SheetDescription>
+                        Provide your details to register as a candidate for elective positions.
+                      </SheetDescription>
+                    </SheetHeader>
+                    <div className="p-1">
+                      <RegisterCandidatePage />
+                    </div>
+                  </SheetContent>
+                </Sheet>
+
+                <Sheet>
+                  <SheetTrigger asChild>
+                    <Button variant="ghost" className="flex h-auto w-full items-center justify-start rounded-2xl px-4 py-3 text-sm font-medium text-slate-700 transition hover:bg-slate-100">
+                      <Users className="mr-2 h-4 w-4" /> Register to Vote
+                    </Button>
+                  </SheetTrigger>
+                  <SheetContent side="right" className="p-0 border-none overflow-y-auto">
+                    <SheetHeader className="p-4 bg-white rounded-t-xl border-b">
+                      <SheetTitle>Register to Vote</SheetTitle>
+                      <SheetDescription>
+                        Complete your biometric registration to participate in upcoming elections.
+                      </SheetDescription>
+                    </SheetHeader>
+                    <div className="p-1">
+                      <RegisterVoter />
+                    </div>
+                  </SheetContent>
+                </Sheet>
+
+                <Sheet>
+                  <SheetTrigger asChild>
+                    <Button variant="ghost" className="flex h-auto w-full items-center justify-start rounded-2xl px-4 py-3 text-sm font-medium text-slate-700 transition hover:bg-slate-100">
+                      <Landmark className="mr-2 h-4 w-4" /> Political Parties
+                    </Button>
+                  </SheetTrigger>
+                  <SheetContent side="right" className="p-0 border-none overflow-y-auto">
+                    <SheetHeader className="p-4 bg-white rounded-t-xl border-b">
+                      <SheetTitle>Political Parties</SheetTitle>
+                      <SheetDescription>
+                        View and manage information regarding registered political parties.
+                      </SheetDescription>
+                    </SheetHeader>
+                    <div className="p-1">
+                      <PartyManagementPage />
+                    </div>
+                  </SheetContent>
+                </Sheet>
+
+                <Sheet>
+                  <SheetTrigger asChild>
+                    <Button variant="ghost" className="flex h-auto w-full items-center justify-start rounded-2xl px-4 py-3 text-sm font-medium text-slate-700 transition hover:bg-slate-100">
+                      <Vote className="mr-2 h-4 w-4" /> Cast Your Vote
+                    </Button>
+                  </SheetTrigger>
+                  <SheetContent side="right" className="p-0 border-none overflow-y-auto">
+                    <SheetHeader className="p-4 bg-white rounded-t-xl border-b">
+                      <SheetTitle>Cast Your Vote</SheetTitle>
+                      <SheetDescription>
+                        Securely cast your vote for the active elections.
+                      </SheetDescription>
+                    </SheetHeader>
+                    <div className="p-1">
+                      <CastVotePage />
+                    </div>
+                  </SheetContent>
+                </Sheet>
+
+                <Sheet>
+                  <SheetTrigger asChild>
+                    <Button variant="ghost" className="flex h-auto w-full items-center justify-start rounded-2xl px-4 py-3 text-sm font-medium text-slate-700 transition hover:bg-slate-100">
+                      <Briefcase className="mr-2 h-4 w-4" /> Election Positions
+                    </Button>
+                  </SheetTrigger>
+                  <SheetContent side="right" className="p-0 border-none overflow-y-auto">
+                    <SheetHeader className="p-4 bg-white rounded-t-xl border-b">
+                      <SheetTitle>Election Positions</SheetTitle>
+                      <SheetDescription>
+                        View available elective positions.
+                      </SheetDescription>
+                    </SheetHeader>
+                    <div className="p-1">
+                      <ElectionPositions />
+                    </div>
+                  </SheetContent>
+                </Sheet>
+
+                <Sheet>
+                  <SheetTrigger asChild>
+                    <Button variant="ghost" className="flex h-auto w-full items-center justify-start rounded-2xl px-4 py-3 text-sm font-medium text-slate-700 transition hover:bg-slate-100">
+                      <Layers className="mr-2 h-4 w-4" /> Election Types
+                    </Button>
+                  </SheetTrigger>
+                  <SheetContent side="right" className="p-0 border-none overflow-y-auto">
+                    <SheetHeader className="p-4 bg-white rounded-t-xl border-b">
+                      <SheetTitle>Election Types</SheetTitle>
+                      <SheetDescription>
+                        Manage and view different categories of elections.
+                      </SheetDescription>
+                    </SheetHeader>
+                    <div className="p-1">
+                      <ElectionTypes />
+                    </div>
+                  </SheetContent>
+                </Sheet>
+
+                <Sheet>
+                  <SheetTrigger asChild>
+                    <Button variant="ghost" className="flex h-auto w-full items-center justify-start rounded-2xl px-4 py-3 text-sm font-medium text-slate-700 transition hover:bg-slate-100">
+                      <Calendar className="mr-2 h-4 w-4" /> Elections
+                    </Button>
+                  </SheetTrigger>
+                  <SheetContent side="right" className="p-0 border-none overflow-y-auto">
+                    <SheetHeader className="p-4 bg-white rounded-t-xl border-b">
+                      <SheetTitle>Elections</SheetTitle>
+                      <SheetDescription>
+                        Overview of active and scheduled elections.
+                      </SheetDescription>
+                    </SheetHeader>
+                    <div className="p-1">
+                      <ManageElections />
+                    </div>
+                  </SheetContent>
+                </Sheet>
+
+                <Sheet>
+                  <SheetTrigger asChild>
+                    <Button variant="ghost" className="flex h-auto w-full items-center justify-start rounded-2xl px-4 py-3 text-sm font-medium text-slate-700 transition hover:bg-slate-100">
+                      <ShieldCheck className="mr-2 h-4 w-4" /> Roles
+                    </Button>
+                  </SheetTrigger>
+                  <SheetContent side="right" className="p-0 border-none overflow-y-auto">
+                    <SheetHeader className="p-4 bg-white rounded-t-xl border-b">
+                      <SheetTitle>Roles</SheetTitle>
+                      <SheetDescription>
+                        Manage system user roles and access permissions.
+                      </SheetDescription>
+                    </SheetHeader>
+                    <div className="p-1">
+                      <RolePage />
+                    </div>
+                  </SheetContent>
+                </Sheet>
               </nav>
             </div>
           </div>
 
-          <div className="rounded-3xl border border-slate-200 bg-slate-50 p-5 text-sm leading-6 text-slate-600">
+          <div className="mt-8 shrink-0 rounded-3xl border border-slate-200 bg-slate-50 p-5 text-sm leading-6 text-slate-600">
             <p className="font-semibold text-slate-900">Fast, secure voting</p>
             <p className="mt-3">
               Cast your vote and exercise your rights.
