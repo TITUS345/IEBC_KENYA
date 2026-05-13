@@ -94,10 +94,13 @@ export default function ManageElections() {
         try {
             const selectedPos = positions.find(p => p.id.toString() === formData.electionPositionId);
 
+            // Ensure dates are sent as proper UTC ISO strings
             const payload = {
                 ...formData,
                 electionTypeId: parseInt(formData.electionTypeId),
                 electionType: selectedType?.type || "",
+                startDate: new Date(formData.startDate).toISOString(),
+                endDate: new Date(formData.endDate).toISOString(),
                 electionPositionId: isGeneral ? 0 : parseInt(formData.electionPositionId), // Set to 0 for General Election
                 electionPosition: isGeneral ? "All Positions" : (selectedPos?.position || ""),
                 id: editingId || 0 
@@ -294,8 +297,8 @@ export default function ManageElections() {
                                                     </span>
                                                 </div>
                                                 <div className="flex flex-wrap gap-x-6 gap-y-2 text-sm text-slate-500">
-                                                    <div className="flex items-center gap-1.5"><Calendar className="w-4 h-4 text-green-600" /> <b>Start:</b> {new Date(e.startDate).toLocaleString()}</div>
-                                                    <div className="flex items-center gap-1.5"><Clock className="w-4 h-4 text-red-600" /> <b>End:</b> {new Date(e.endDate).toLocaleString()}</div>
+                                                    <div className="flex items-center gap-1.5"><Calendar className="w-4 h-4 text-green-600" /> <b>Start:</b> {new Date(e.startDate).toLocaleString('en-KE', { timeZone: 'Africa/Nairobi' })}</div>
+                                                    <div className="flex items-center gap-1.5"><Clock className="w-4 h-4 text-red-600" /> <b>End:</b> {new Date(e.endDate).toLocaleString('en-KE', { timeZone: 'Africa/Nairobi' })}</div>
                                                     <div className="flex items-center gap-1.5 text-slate-700 font-medium"><Globe className="w-4 h-4" /> {e.electionType || "Standard Poll"}</div>
                                                     <div className="flex items-center gap-1.5 text-slate-700 font-medium"><Award className="w-4 h-4 text-amber-600" /> {e.electionPosition}</div>
                                                 </div>

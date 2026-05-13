@@ -75,7 +75,15 @@ namespace IEBCVotingSystemV10.Controller
                 if (currentTime < election.StartDate || currentTime > election.EndDate)
                 {
                     _logger.LogWarning("Vote attempt failed for {VoterEmail}: Election {ElectionName} is outside its active period (Start: {StartDate}, End: {EndDate}, Current: {CurrentTime}).", voteRequestDTO.VoterEmail, election.ElectionName, election.StartDate, election.EndDate, currentTime);
-                    return BadRequest($"Voting for '{election.ElectionName}' is only allowed between {election.StartDate.ToLocalTime()} and {election.EndDate.ToLocalTime()}.");
+
+                    // Convert to Kenya Time (UTC+3) for a more user-friendly error message
+                    var kenyaOffset = TimeSpan.FromHours(3);
+                    var startKenya = election.StartDate.Add(kenyaOffset);
+                    var endKenya = election.EndDate.Add(kenyaOffset);
+                    var currentKenya = currentTime.Add(kenyaOffset);
+
+                    return BadRequest($"Voting for '{election.ElectionName}' is only allowed between {startKenya:MMM dd, HH:mm} EAT and {endKenya:MMM dd, HH:mm} EAT. " +
+                                     $"The current time in Kenya is {currentKenya:HH:mm} EAT.");
                 }
                 // 5. Prevent Double Voting
                 var existingVote = await _dbContext.Votes.AnyAsync(v => v.VoterId == voter.Id && v.ElectionId == election.Id);
