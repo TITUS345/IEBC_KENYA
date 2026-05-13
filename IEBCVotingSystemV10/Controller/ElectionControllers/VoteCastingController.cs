@@ -40,7 +40,8 @@ namespace IEBCVotingSystemV10.Controller
             }
             try
             {
-                var voter = await _dbContext.Voters.FirstOrDefaultAsync(v => v.Email == voteRequestDTO.VoterEmail);
+                var normalizedEmail = voteRequestDTO.VoterEmail.Trim().ToLower();
+                var voter = await _dbContext.Voters.FirstOrDefaultAsync(v => v.Email.ToLower() == normalizedEmail);
                 if (voter == null)
                 {
                     return BadRequest("Voter does not exist");

@@ -93,8 +93,21 @@ export default function CastVotePage() {
                 setMessage({ text: 'Vote cast successfully! Your voice has been heard.', type: 'success' });
                 setTimeout(() => router.push('/dashboard'), 3000);
             } else {
-                const result = await response.json();
-                setMessage({ text: result.message || 'Verification failed or you have already voted.', type: 'error' });
+                const errorData = await response.text();
+                let errorMessage = 'Verification failed or you have already voted.';
+                
+                try {
+                    // Attempt to parse as JSON to catch structured ASP.NET error objects
+                    const result = JSON.parse(errorData);
+                    errorMessage = result.message || result.detail || result.title || errorMessage;
+                } catch {
+                    // If response is just a plain string message
+                    if (errorData && errorData.length < 255) {
+                        errorMessage = errorData;
+                    }
+                }
+
+                setMessage({ text: errorMessage, type: 'error' });
             }
         } catch (error) {
             console.error('Error casting vote:', error);
