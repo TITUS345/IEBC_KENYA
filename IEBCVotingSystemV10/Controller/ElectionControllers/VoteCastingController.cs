@@ -34,6 +34,9 @@ namespace IEBCVotingSystemV10.Controller
         [HttpPost("castVote")]
         public async Task<IActionResult> CastVote(VoteRequestDTO voteRequestDTO)
         {
+            _logger.LogInformation("[VOTE-ATTEMPT]: Received request for Voter: {VoterEmail}, Election: {ElectionId}, Candidate: {CandidateId}",
+                voteRequestDTO.VoterEmail, voteRequestDTO.ElectionId, voteRequestDTO.CandidateId);
+
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
@@ -41,9 +44,10 @@ namespace IEBCVotingSystemV10.Controller
             try
             {
                 var normalizedEmail = voteRequestDTO.VoterEmail.Trim().ToLower();
-                var voter = await _dbContext.Voters.FirstOrDefaultAsync(v => v.Email.ToLower() == normalizedEmail);
+                var voter = await _dbContext.Voters.FirstOrDefaultAsync(v => v.Email.Trim().ToLower() == normalizedEmail);
                 if (voter == null)
                 {
+                    _logger.LogWarning("[VOTE-FAILED]: Voter not found for email: {Email}", normalizedEmail);
                     return BadRequest("Voter does not exist");
                 }
                 var candidate = await _dbContext.Candidates.FirstOrDefaultAsync(c => c.Id == voteRequestDTO.CandidateId);
