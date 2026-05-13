@@ -32,8 +32,14 @@ namespace IEBCVotingSystemV10.Controller
             this._biometricService = biometricService;
         }
         [HttpPost("castVote")]
-        public async Task<IActionResult> CastVote(VoteRequestDTO voteRequestDTO)
+        public async Task<IActionResult> CastVote([FromBody] VoteRequestDTO voteRequestDTO)
         {
+            if (voteRequestDTO == null || string.IsNullOrEmpty(voteRequestDTO.VoterEmail))
+            {
+                _logger.LogWarning("[VOTE-ATTEMPT]: Received empty or malformed request body.");
+                return BadRequest("Invalid request data. Please ensure all fields are filled.");
+            }
+
             _logger.LogInformation("[VOTE-ATTEMPT]: Received request for Voter: {VoterEmail}, Election: {ElectionId}, Candidate: {CandidateId}",
                 voteRequestDTO.VoterEmail, voteRequestDTO.ElectionId, voteRequestDTO.CandidateId);
 
@@ -43,7 +49,7 @@ namespace IEBCVotingSystemV10.Controller
             }
             try
             {
-                var normalizedEmail = voteRequestDTO.VoterEmail.Trim().ToLower();
+                var normalizedEmail = voteRequestDTO.VoterEmail?.Trim().ToLower() ?? "";
                 var voter = await _dbContext.Voters.FirstOrDefaultAsync(v => v.Email.Trim().ToLower() == normalizedEmail);
                 if (voter == null)
                 {
