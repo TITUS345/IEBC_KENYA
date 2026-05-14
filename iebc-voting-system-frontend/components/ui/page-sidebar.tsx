@@ -5,7 +5,8 @@ import {
   X, 
   LogIn, 
   UserPlus, 
-  UserCheck, 
+  LayoutDashboard, // Added for Admin Dashboard link
+  UserCheck,
   Users, 
   Landmark, 
   Vote, 
@@ -27,6 +28,10 @@ import ElectionPositions from '@/app/election/electionPosition/page';
 import ElectionTypes from '@/app/election/electionType/page';
 import ManageElections from '@/app/election/elections/page';
 import { RoleForm } from '@/app/roles/page';
+import PartiesDirectoryPage from '@/app/election/electionParty/parties/page';
+import ElectionPositionsDirectoryPage from '@/app/election/electionPosition/positions/page';
+import ExistingElectionsPage from '@/app/election/elections/existingElections/page';
+import ExistingElectionTypesPage from '@/app/election/electionType/existingElectionTypes/page';
 
 interface SidebarProps {
   sidebarOpen: boolean;
@@ -78,6 +83,13 @@ export function Sidebar({ sidebarOpen, setSidebarOpen }: SidebarProps) {
                 >
                   Home
                 </Link>
+                <Link
+                  href="/adminDashboard"
+                  className="block rounded-2xl px-4 py-3 text-sm font-medium text-slate-700 transition hover:bg-slate-100"
+                >
+                  <LayoutDashboard className="mr-2 h-4 w-4" /> Admin Dashboard
+                </Link>
+
                 <Dialog>
                   <DialogTrigger asChild>
                     <Button variant="ghost" className="flex h-auto w-full items-center justify-start rounded-2xl px-4 py-3 text-sm font-medium text-slate-700 transition hover:bg-slate-100">
@@ -162,11 +174,11 @@ export function Sidebar({ sidebarOpen, setSidebarOpen }: SidebarProps) {
                     <SheetHeader className="p-4 bg-white rounded-t-xl border-b">
                       <SheetTitle>Political Parties</SheetTitle>
                       <SheetDescription>
-                        View and manage information regarding registered political parties.
+                        View information regarding registered political parties.
                       </SheetDescription>
                     </SheetHeader>
                     <div className="p-1">
-                      <PartyManagementPage />
+                      <PartiesDirectoryPage />
                     </div>
                   </SheetContent>
                 </Sheet>
@@ -204,7 +216,7 @@ export function Sidebar({ sidebarOpen, setSidebarOpen }: SidebarProps) {
                       </SheetDescription>
                     </SheetHeader>
                     <div className="p-1">
-                      <ElectionPositions />
+                      <ElectionPositionsDirectoryPage/>
                     </div>
                   </SheetContent>
                 </Sheet>
@@ -223,7 +235,7 @@ export function Sidebar({ sidebarOpen, setSidebarOpen }: SidebarProps) {
                       </SheetDescription>
                     </SheetHeader>
                     <div className="p-1">
-                      <ElectionTypes />
+                      <ExistingElectionTypesPage/>
                     </div>
                   </SheetContent>
                 </Sheet>
@@ -242,7 +254,7 @@ export function Sidebar({ sidebarOpen, setSidebarOpen }: SidebarProps) {
                       </SheetDescription>
                     </SheetHeader>
                     <div className="p-1">
-                      <ManageElections />
+                      <ExistingElectionsPage />
                     </div>
                   </SheetContent>
                 </Sheet>
