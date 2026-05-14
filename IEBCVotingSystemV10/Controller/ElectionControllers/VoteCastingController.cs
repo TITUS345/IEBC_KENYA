@@ -74,7 +74,7 @@ namespace IEBCVotingSystemV10.Controller
                 var currentTime = DateTime.UtcNow;
                 if (currentTime < election.StartDate || currentTime > election.EndDate)
                 {
-                    _logger.LogWarning("Vote attempt failed for {VoterEmail}: Election {ElectionName} is outside its active period (Start: {StartDate}, End: {EndDate}, Current: {CurrentTime}).", voteRequestDTO.VoterEmail, election.ElectionName, election.StartDate, election.EndDate, currentTime);
+                    _logger.LogWarning("[VOTE-PERIOD-ERROR]: {VoterEmail} tried voting for {ElectionName}. Start: {StartDate} UTC, End: {EndDate} UTC, Now: {CurrentTime} UTC.", voteRequestDTO.VoterEmail, election.ElectionName, election.StartDate, election.EndDate, currentTime);
 
                     // Convert to Kenya Time (UTC+3) for a more user-friendly error message
                     var kenyaOffset = TimeSpan.FromHours(3);

@@ -76,6 +76,20 @@ export default function ManageElections() {
         }
     };
 
+    // Helper to convert datetime-local string (Nairobi time) to UTC ISO string
+    const convertToUTC = (localStr: string) => {
+        if (!localStr) return "";
+        const [datePart, timePart] = localStr.split('T');
+        const [y, m, d] = datePart.split('-').map(Number);
+        const [hh, mm] = timePart.split(':').map(Number);
+        // Create a date object treating the input as UTC initially
+        const date = new Date(Date.UTC(y, m - 1, d, hh, mm));
+        // Subtract 3 hours because Nairobi is UTC+3
+        // (e.g., 02:22 Nairobi - 3 hours = 23:22 UTC previous day)
+        date.setUTCHours(date.getUTCHours() - 3);
+        return date.toISOString();
+    };
+
     useEffect(() => {
         fetchData();
     }, []);
@@ -94,13 +108,12 @@ export default function ManageElections() {
         try {
             const selectedPos = positions.find(p => p.id.toString() === formData.electionPositionId);
 
-            // Ensure dates are sent as proper UTC ISO strings
             const payload = {
                 ...formData,
                 electionTypeId: parseInt(formData.electionTypeId),
                 electionType: selectedType?.type || "",
-                startDate: new Date(formData.startDate).toISOString(),
-                endDate: new Date(formData.endDate).toISOString(),
+                startDate: convertToUTC(formData.startDate),
+                endDate: convertToUTC(formData.endDate),
                 electionPositionId: isGeneral ? 0 : parseInt(formData.electionPositionId), // Set to 0 for General Election
                 electionPosition: isGeneral ? "All Positions" : (selectedPos?.position || ""),
                 id: editingId || 0 
@@ -124,14 +137,19 @@ export default function ManageElections() {
 
     const handleEdit = (item: Election) => {
         setEditingId(item.id);
-        // Format ISO date string to YYYY-MM-DDTHH:mm for the datetime-local input
-        const formatDate = (dateStr: string) => new Date(dateStr).toISOString().slice(0, 16);
+        
+        // Convert UTC from DB to Nairobi time for the datetime-local input
+        const toLocalInput = (dateStr: string) => {
+            const date = new Date(dateStr);
+            date.setUTCHours(date.getUTCHours() + 3); // Add 3 hours for Nairobi
+            return date.toISOString().slice(0, 16);
+        };
         
         setFormData({
             electionName: item.electionName,
             description: item.description,
-            startDate: formatDate(item.startDate),
-            endDate: formatDate(item.endDate),
+            startDate: toLocalInput(item.startDate),
+            endDate: toLocalInput(item.endDate),
             status: item.status,
             electionTypeId: item.electionTypeId.toString(),
             electionPositionId: item.electionPositionId.toString(),
