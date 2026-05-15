@@ -131,9 +131,6 @@ export default function AdminDashboardPage() {
                 <span className="text-sm font-semibold text-slate-900 leading-none">IEBC Admin</span>
                 <span className="text-[10px] text-slate-500 mt-1 uppercase tracking-tight font-medium">Management Portal</span>
               </div>
-            </Link>
-            <div className="lg:hidden">
-              <SidebarTrigger />
             </div>
           </SidebarHeader>
           <SidebarContent>
