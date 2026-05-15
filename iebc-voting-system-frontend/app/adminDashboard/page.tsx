@@ -124,11 +124,11 @@ export default function AdminDashboardPage() {
       <div className="flex min-h-screen w-full bg-slate-50/50 text-foreground">
         {/* Sidebar */}
         <Sidebar className="border-r shadow-none" showCloseButton={false}>
-          <SidebarHeader className="h-16 flex items-center gap-2 px-3 border-b shrink-0 overflow-hidden">
-            {/* Sidebar toggle now placed first, inline with the logo */}
-            <SidebarTrigger className="text-slate-600 hover:bg-slate-100 h-9 w-9 shrink-0" />
-            <SidebarSeparator orientation="vertical" className="h-4 mr-0 group-data-[state=collapsed]:hidden" />
-            <Link href="/" className="flex items-center gap-2.5 group overflow-hidden">
+          <SidebarHeader className="h-16 flex items-center gap-2 px-2 border-b shrink-0 overflow-hidden group-data-[state=collapsed]:justify-center">
+            {/* Sidebar toggle visible only on mobile inside the sidebar drawer */}
+            <SidebarTrigger className="text-slate-600 hover:bg-slate-100 h-9 w-9 shrink-0 md:hidden" />
+            <SidebarSeparator orientation="vertical" className="h-4 mr-0 md:hidden" />
+            <Link href="/" className="flex items-center gap-2 group overflow-hidden shrink-0">
               <div className="grid h-8 w-8 place-items-center rounded-xl bg-green-600 text-[10px] font-bold text-white transition-transform group-hover:scale-105 shrink-0">IEBC</div>
               <div className="flex flex-col group-data-[state=collapsed]:hidden min-w-0">
                 <span className="text-xs font-bold text-slate-900 leading-none truncate">Admin Portal</span>
