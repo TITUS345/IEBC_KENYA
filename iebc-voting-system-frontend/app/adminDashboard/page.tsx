@@ -124,16 +124,17 @@ export default function AdminDashboardPage() {
       <div className="flex min-h-screen w-full bg-slate-50/50 text-foreground">
         {/* Sidebar */}
         <Sidebar className="border-r shadow-none" showCloseButton={false}>
-          <SidebarHeader className="h-16 flex items-center justify-between px-4 border-b shrink-0">
-            <Link href="/" className="flex items-center gap-3 group">
-              <div className="grid h-9 w-9 place-items-center rounded-2xl bg-green-600 text-xs font-bold text-white transition-transform group-hover:scale-105 shrink-0">IEBC</div>
-              <div className="flex flex-col">
-                <span className="text-xs font-semibold text-slate-900 leading-none">IEBC Admin</span>
-                <span className="text-[9px] text-slate-500 mt-1 uppercase tracking-tight font-medium">Portal</span>
+          <SidebarHeader className="h-16 flex items-center gap-2 px-3 border-b shrink-0 overflow-hidden">
+            {/* Sidebar toggle now placed first, inline with the logo */}
+            <SidebarTrigger className="text-slate-600 hover:bg-slate-100 h-9 w-9 shrink-0" />
+            <SidebarSeparator orientation="vertical" className="h-4 mr-0 group-data-[state=collapsed]:hidden" />
+            <Link href="/" className="flex items-center gap-2.5 group overflow-hidden">
+              <div className="grid h-8 w-8 place-items-center rounded-xl bg-green-600 text-[10px] font-bold text-white transition-transform group-hover:scale-105 shrink-0">IEBC</div>
+              <div className="flex flex-col group-data-[state=collapsed]:hidden min-w-0">
+                <span className="text-xs font-bold text-slate-900 leading-none truncate">Admin Portal</span>
+                <span className="text-[8px] text-slate-400 mt-0.5 uppercase tracking-tighter truncate font-medium">Management</span>
               </div>
             </Link>
-            {/* Sidebar toggle visible inside the open sidebar */}
-            <SidebarTrigger className="text-slate-500 hover:bg-slate-100" />
           </SidebarHeader>
           <SidebarContent>
             <SidebarMenu>
