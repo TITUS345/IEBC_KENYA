@@ -155,11 +155,13 @@ function Sidebar({
   className,
   children,
   dir,
+  showCloseButton = true,
   ...props
 }: React.ComponentProps<"div"> & {
   side?: "left" | "right"
   variant?: "sidebar" | "floating" | "inset"
   collapsible?: "offcanvas" | "icon" | "none"
+  showCloseButton?: boolean
 }) {
   const { isMobile, state, openMobile, setOpenMobile } = useSidebar()
 
@@ -193,6 +195,7 @@ function Sidebar({
             } as React.CSSProperties
           }
           side={side}
+          showCloseButton={showCloseButton}
         >
           <SheetHeader className="sr-only">
             <SheetTitle>Sidebar</SheetTitle>
