@@ -79,12 +79,14 @@ export function Sidebar({ sidebarOpen, setSidebarOpen }: SidebarProps) {
               <nav className="mt-4 space-y-2">
                 <Link
                   href="/"
+                  onClick={() => setSidebarOpen(false)}
                   className="block rounded-2xl px-4 py-3 text-sm font-medium text-slate-700 transition hover:bg-slate-100"
                 >
                   Home
                 </Link>
                 <Link
                   href="/adminDashboard"
+                  onClick={() => setSidebarOpen(false)}
                   className="block rounded-2xl px-4 py-3 text-sm font-medium text-slate-700 transition hover:bg-slate-100"
                 >
                   <LayoutDashboard className="mr-2 h-4 w-4" /> Admin Dashboard
@@ -92,7 +94,7 @@ export function Sidebar({ sidebarOpen, setSidebarOpen }: SidebarProps) {
 
                 <Dialog>
                   <DialogTrigger asChild>
-                    <Button variant="ghost" className="flex h-auto w-full items-center justify-start rounded-2xl px-4 py-3 text-sm font-medium text-slate-700 transition hover:bg-slate-100">
+                    <Button onClick={() => setSidebarOpen(false)} variant="ghost" className="flex h-auto w-full items-center justify-start rounded-2xl px-4 py-3 text-sm font-medium text-slate-700 transition hover:bg-slate-100">
                       <LogIn className="mr-2 h-4 w-4" /> Sign In
                     </Button>
                   </DialogTrigger>
@@ -110,7 +112,7 @@ export function Sidebar({ sidebarOpen, setSidebarOpen }: SidebarProps) {
                 </Dialog>
                 <Dialog>
                   <DialogTrigger asChild>
-                    <Button variant="ghost" className="flex h-auto w-full items-center justify-start rounded-2xl px-4 py-3 text-sm font-medium text-slate-700 transition hover:bg-slate-100">
+                    <Button onClick={() => setSidebarOpen(false)} variant="ghost" className="flex h-auto w-full items-center justify-start rounded-2xl px-4 py-3 text-sm font-medium text-slate-700 transition hover:bg-slate-100">
                       <UserPlus className="mr-2 h-4 w-4" /> Create Account
                     </Button>
                   </DialogTrigger>
@@ -128,7 +130,7 @@ export function Sidebar({ sidebarOpen, setSidebarOpen }: SidebarProps) {
                 </Dialog>
                 <Sheet>
                   <SheetTrigger asChild>
-                    <Button variant="ghost" className="flex h-auto w-full items-center justify-start rounded-2xl px-4 py-3 text-sm font-medium text-slate-700 transition hover:bg-slate-100">
+                    <Button onClick={() => setSidebarOpen(false)} variant="ghost" className="flex h-auto w-full items-center justify-start rounded-2xl px-4 py-3 text-sm font-medium text-slate-700 transition hover:bg-slate-100">
                       <UserCheck className="mr-2 h-4 w-4" /> Register as Candidate
                     </Button>
                   </SheetTrigger>
@@ -147,7 +149,7 @@ export function Sidebar({ sidebarOpen, setSidebarOpen }: SidebarProps) {
 
                 <Sheet>
                   <SheetTrigger asChild>
-                    <Button variant="ghost" className="flex h-auto w-full items-center justify-start rounded-2xl px-4 py-3 text-sm font-medium text-slate-700 transition hover:bg-slate-100">
+                    <Button onClick={() => setSidebarOpen(false)} variant="ghost" className="flex h-auto w-full items-center justify-start rounded-2xl px-4 py-3 text-sm font-medium text-slate-700 transition hover:bg-slate-100">
                       <Users className="mr-2 h-4 w-4" /> Register to Vote
                     </Button>
                   </SheetTrigger>
@@ -166,7 +168,7 @@ export function Sidebar({ sidebarOpen, setSidebarOpen }: SidebarProps) {
 
                 <Sheet>
                   <SheetTrigger asChild>
-                    <Button variant="ghost" className="flex h-auto w-full items-center justify-start rounded-2xl px-4 py-3 text-sm font-medium text-slate-700 transition hover:bg-slate-100">
+                    <Button onClick={() => setSidebarOpen(false)} variant="ghost" className="flex h-auto w-full items-center justify-start rounded-2xl px-4 py-3 text-sm font-medium text-slate-700 transition hover:bg-slate-100">
                       <Landmark className="mr-2 h-4 w-4" /> Political Parties
                     </Button>
                   </SheetTrigger>
@@ -185,7 +187,7 @@ export function Sidebar({ sidebarOpen, setSidebarOpen }: SidebarProps) {
 
                 <Sheet>
                   <SheetTrigger asChild>
-                    <Button variant="ghost" className="flex h-auto w-full items-center justify-start rounded-2xl px-4 py-3 text-sm font-medium text-slate-700 transition hover:bg-slate-100">
+                    <Button onClick={() => setSidebarOpen(false)} variant="ghost" className="flex h-auto w-full items-center justify-start rounded-2xl px-4 py-3 text-sm font-medium text-slate-700 transition hover:bg-slate-100">
                       <Vote className="mr-2 h-4 w-4" /> Cast Your Vote
                     </Button>
                   </SheetTrigger>
@@ -204,7 +206,7 @@ export function Sidebar({ sidebarOpen, setSidebarOpen }: SidebarProps) {
 
                 <Sheet>
                   <SheetTrigger asChild>
-                    <Button variant="ghost" className="flex h-auto w-full items-center justify-start rounded-2xl px-4 py-3 text-sm font-medium text-slate-700 transition hover:bg-slate-100">
+                    <Button onClick={() => setSidebarOpen(false)} variant="ghost" className="flex h-auto w-full items-center justify-start rounded-2xl px-4 py-3 text-sm font-medium text-slate-700 transition hover:bg-slate-100">
                       <Briefcase className="mr-2 h-4 w-4" /> Election Positions
                     </Button>
                   </SheetTrigger>
@@ -223,7 +225,7 @@ export function Sidebar({ sidebarOpen, setSidebarOpen }: SidebarProps) {
 
                 <Sheet>
                   <SheetTrigger asChild>
-                    <Button variant="ghost" className="flex h-auto w-full items-center justify-start rounded-2xl px-4 py-3 text-sm font-medium text-slate-700 transition hover:bg-slate-100">
+                    <Button onClick={() => setSidebarOpen(false)} variant="ghost" className="flex h-auto w-full items-center justify-start rounded-2xl px-4 py-3 text-sm font-medium text-slate-700 transition hover:bg-slate-100">
                       <Layers className="mr-2 h-4 w-4" /> Election Types
                     </Button>
                   </SheetTrigger>
@@ -242,7 +244,7 @@ export function Sidebar({ sidebarOpen, setSidebarOpen }: SidebarProps) {
 
                 <Sheet>
                   <SheetTrigger asChild>
-                    <Button variant="ghost" className="flex h-auto w-full items-center justify-start rounded-2xl px-4 py-3 text-sm font-medium text-slate-700 transition hover:bg-slate-100">
+                    <Button onClick={() => setSidebarOpen(false)} variant="ghost" className="flex h-auto w-full items-center justify-start rounded-2xl px-4 py-3 text-sm font-medium text-slate-700 transition hover:bg-slate-100">
                       <Calendar className="mr-2 h-4 w-4" /> Elections
                     </Button>
                   </SheetTrigger>
@@ -261,7 +263,7 @@ export function Sidebar({ sidebarOpen, setSidebarOpen }: SidebarProps) {
 
                 <Dialog>
                   <DialogTrigger asChild>
-                    <Button variant="ghost" className="flex h-auto w-full items-center justify-start rounded-2xl px-4 py-3 text-sm font-medium text-slate-700 transition hover:bg-slate-100">
+                    <Button onClick={() => setSidebarOpen(false)} variant="ghost" className="flex h-auto w-full items-center justify-start rounded-2xl px-4 py-3 text-sm font-medium text-slate-700 transition hover:bg-slate-100">
                       <ShieldCheck className="mr-2 h-4 w-4" /> Roles
                     </Button>
                   </DialogTrigger>

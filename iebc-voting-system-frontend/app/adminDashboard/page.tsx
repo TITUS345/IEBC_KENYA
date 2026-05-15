@@ -131,7 +131,8 @@ export default function AdminDashboardPage() {
                 <span className="text-sm font-semibold text-slate-900 leading-none">IEBC Admin</span>
                 <span className="text-[10px] text-slate-500 mt-1 uppercase tracking-tight font-medium">Management Portal</span>
               </div>
-            </div>
+            </Link>
+            <SidebarTrigger className="lg:hidden" />
           </SidebarHeader>
           <SidebarContent>
             <SidebarMenu>
@@ -220,7 +221,7 @@ export default function AdminDashboardPage() {
 
         {/* Main Content Area */}
         <div className="flex-1 flex flex-col min-w-0 overflow-hidden">
-          <header className="h-16 flex items-center justify-between px-8 bg-background border-b shrink-0 z-10">
+          <header className="h-16 flex items-center justify-between px-8 bg-background border-b shrink-0 z-20">
             <div className="flex items-center gap-4">
               <SidebarTrigger />
               <SidebarSeparator orientation="vertical" className="h-6" />
