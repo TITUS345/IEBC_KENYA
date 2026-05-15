@@ -124,7 +124,7 @@ export default function AdminDashboardPage() {
       <div className="flex min-h-screen w-full bg-slate-50/50 text-foreground">
         {/* Sidebar */}
         <Sidebar className="border-r shadow-none">
-          <SidebarHeader className="h-16 flex items-center px-6 border-b">
+          <SidebarHeader className="h-16 flex items-center justify-between px-6 border-b">
             <Link href="/" className="flex items-center gap-3 group">
               <div className="grid h-10 w-10 place-items-center rounded-3xl bg-green-600 text-sm font-bold text-white transition-transform group-hover:scale-105">IEBC</div>
               <div className="flex flex-col">
@@ -132,6 +132,9 @@ export default function AdminDashboardPage() {
                 <span className="text-[10px] text-slate-500 mt-1 uppercase tracking-tight font-medium">Management Portal</span>
               </div>
             </Link>
+            <div className="lg:hidden">
+              <SidebarTrigger />
+            </div>
           </SidebarHeader>
           <SidebarContent>
             <SidebarMenu>
