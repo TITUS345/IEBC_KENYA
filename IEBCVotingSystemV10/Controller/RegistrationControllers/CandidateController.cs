@@ -115,7 +115,7 @@ namespace IEBCVotingSystemV10.Controller.RegistrationControllers
                 }
 
                 // Handle Biometric Face Enrollment
-                var fileName = "embeddings_only"; // Default when no file is stored
+                string faceBiometricPath = "embeddings_only"; // Default when no file is stored
                 float[]? embeddings = null;
 
                 if (candidateDTO.FaceBiometricFile != null && candidateDTO.FaceBiometricFile.Length > 0)
@@ -137,24 +137,18 @@ namespace IEBCVotingSystemV10.Controller.RegistrationControllers
                             return BadRequest("Invalid face embeddings provided.");
                         }
                         _logger.LogInformation("Face embeddings parsed successfully for candidate.");
+                        faceBiometricPath = await SaveFile(candidateDTO.FaceBiometricFile, "Biometrics/Candidates", candidateDTO.NationalIdNo);
+                        _logger.LogInformation("Biometric file saved to: {Path}", faceBiometricPath);
                     }
                     catch (JsonException ex)
                     {
                         _logger.LogError(ex, "Failed to deserialize candidate embeddings for {Email}", candidateDTO.Email);
                         return BadRequest("Face embeddings must be a valid JSON array of numbers.");
                     }
-
-                    // Skip file storage on hosted platforms - only store embeddings for candidate verification
-                    try
-                    {
-                        var extension = Path.GetExtension(candidateDTO.FaceBiometricFile.FileName);
-                        if (string.IsNullOrEmpty(extension)) extension = ".jpg";
-                        fileName = $"FaceRef_Cand_{candidateDTO.NationalIdNo}_{Guid.NewGuid()}{extension}";
-                        _logger.LogInformation("Skipping biometric file storage for candidate on hosted platform.");
-                    }
                     catch (Exception ex)
                     {
-                        _logger.LogWarning(ex, "Biometric file metadata generation failed, continuing with embeddings.");
+                        _logger.LogError(ex, "Error saving biometric file for candidate {NationalId}", candidateDTO.NationalIdNo);
+                        return StatusCode(500, $"Error saving biometric file: {ex.Message}");
                     }
                 }
                 else
@@ -172,25 +166,29 @@ namespace IEBCVotingSystemV10.Controller.RegistrationControllers
                         {
                             return BadRequest("Invalid face embeddings provided.");
                         }
-                        _logger.LogInformation("Face embeddings parsed successfully for candidate.");
+                        _logger.LogInformation("Face embeddings parsed successfully. Embedding count: {Count}", embeddings.Length);
                     }
                     catch (JsonException ex)
                     {
-                        _logger.LogError(ex, "Failed to deserialize candidate embeddings for {Email}", candidateDTO.Email);
+                        _logger.LogError(ex, "Failed to deserialize face embeddings for {Email}", candidateDTO.Email);
                         return BadRequest("Face embeddings must be a valid JSON array of numbers.");
                     }
                 }
 
                 // Handle Manifesto PDF Upload
                 string? manifestoPdfPath = null;
-                if (candidateDTO.ManifestoPdfFile != null)
+                if (candidateDTO.ManifestoPdfFile != null && candidateDTO.ManifestoPdfFile.Length > 0)
                 {
-                    // As per BIOMETRIC_STORAGE_FIX.md, assuming local file storage is to be skipped on hosted platforms.
-                    // Only a placeholder path is generated, and the actual file is not saved to disk.
-                    _logger.LogInformation("Skipping manifesto PDF file storage on hosted platform. Only storing metadata.");
-                    var extension = Path.GetExtension(candidateDTO.ManifestoPdfFile.FileName);
-                    if (string.IsNullOrEmpty(extension)) extension = ".pdf"; // Default extension
-                    manifestoPdfPath = $"/manifestos/Manifesto_Cand_{candidateDTO.NationalIdNo}_{Guid.NewGuid()}{extension}"; // Generate a placeholder path
+                    try
+                    {
+                        manifestoPdfPath = await SaveFile(candidateDTO.ManifestoPdfFile, "Manifestos/Candidates", candidateDTO.NationalIdNo);
+                        _logger.LogInformation("Manifesto PDF saved to: {Path}", manifestoPdfPath);
+                    }
+                    catch (Exception ex)
+                    {
+                        _logger.LogError(ex, "Error saving manifesto PDF for candidate {NationalId}", candidateDTO.NationalIdNo);
+                        return StatusCode(500, $"Error saving manifesto PDF: {ex.Message}");
+                    }
                 }
                 var newCandidate = new CandidateModel
                 {
@@ -214,8 +212,8 @@ namespace IEBCVotingSystemV10.Controller.RegistrationControllers
                     Region = candidateDTO.Region,
                     Role = candidateDTO.Role,
                     UserId = user.Id,
-                    ManifestoPdfPath = manifestoPdfPath,
-                    FaceBiometricImage = fileName,
+                    ManifestoPdfPath = manifestoPdfPath ?? string.Empty,
+                    FaceBiometricImage = faceBiometricPath,
                     FaceEmbeddings = embeddings != null ? JsonSerializer.Serialize(embeddings) : string.Empty,
                     CreatedAt = DateTime.UtcNow,
                     UpdatedAt = DateTime.UtcNow,
@@ -242,11 +240,11 @@ namespace IEBCVotingSystemV10.Controller.RegistrationControllers
             }
         }
 
-        private async Task<string> SaveFile(IFormFile file, string folderName)
+        // Helper method to save files to wwwroot
+        private async Task<string> SaveFile(IFormFile file, string folderName, string identifier)
         {
-            // Fallback to current directory if WebRootPath is null
-            string webRoot = _env.WebRootPath ?? Path.Combine(Directory.GetCurrentDirectory(), "wwwroot");
-            var uploadFolder = Path.Combine(webRoot, folderName);
+            string webRootPath = _env.WebRootPath;
+            var uploadFolder = Path.Combine(webRootPath, "uploads", folderName);
             if (!Directory.Exists(uploadFolder))
             {
                 Directory.CreateDirectory(uploadFolder);
@@ -259,7 +257,7 @@ namespace IEBCVotingSystemV10.Controller.RegistrationControllers
             {
                 await file.CopyToAsync(fileStream);
             }
-            return $"/{folderName}/{uniqueFileName}";
+            return Path.Combine("/uploads", folderName, uniqueFileName).Replace("\\", "/");
         }
 
         [HttpGet("election/{electionId}")]
@@ -285,6 +283,142 @@ namespace IEBCVotingSystemV10.Controller.RegistrationControllers
             {
                 _logger.LogError(ex, "Error fetching candidates for election ID: {ElectionId}", electionId);
                 return StatusCode(500, "Internal Server Error while fetching candidates.");
+            }
+        }
+
+        [HttpGet("getAllCandidates")]
+        public async Task<IActionResult> GetAllCandidates()
+        {
+            try
+            {
+                var candidates = await _dbContext.Candidates.ToListAsync();
+                return Ok(candidates);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error fetching all candidates");
+                return StatusCode(500, "Internal Server Error");
+            }
+        }
+
+        [HttpGet("getCandidate/{id}")]
+        public async Task<IActionResult> GetCandidate(int id)
+        {
+            try
+            {
+                var candidate = await _dbContext.Candidates.FindAsync(id);
+                if (candidate == null) return NotFound("Candidate not found");
+                return Ok(candidate);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error fetching candidate ID: {Id}", id);
+                return StatusCode(500, "Internal Server Error");
+            }
+        }
+
+        [HttpPut("updateCandidate/{id}")]
+        public async Task<IActionResult> UpdateCandidate(int id, [FromBody] CandidateUpdateDTO candidateUpdate)
+        {
+            if (!ModelState.IsValid) return BadRequest(ModelState);
+
+            try
+            {
+                var existingCandidate = await _dbContext.Candidates.FindAsync(id);
+                if (existingCandidate == null) return NotFound("Candidate not found");
+
+                existingCandidate.FirstName = candidateUpdate.FirstName;
+                existingCandidate.LastName = candidateUpdate.LastName;
+                existingCandidate.SurName = candidateUpdate.SurName ?? string.Empty;
+                existingCandidate.Fullname = $"{candidateUpdate.FirstName} {candidateUpdate.LastName} {candidateUpdate.SurName}".Trim();
+                existingCandidate.PhoneNumber = candidateUpdate.PhoneNumber;
+                existingCandidate.Address = candidateUpdate.Address;
+                existingCandidate.Location = candidateUpdate.Location;
+                existingCandidate.Sub_Location = candidateUpdate.Sub_Location;
+                existingCandidate.Ward = candidateUpdate.Ward;
+                existingCandidate.Constituency = candidateUpdate.Constituency;
+                existingCandidate.County = candidateUpdate.County;
+                existingCandidate.Region = candidateUpdate.Region;
+                existingCandidate.Role = candidateUpdate.Role;
+
+                // Sync denormalized relational names if IDs have changed
+                var party = await _dbContext.Parties.FindAsync(candidateUpdate.PartyId);
+                if (party == null) return BadRequest("Selected party does not exist");
+                existingCandidate.PartyId = party.Id;
+                existingCandidate.Party = party.PartyName;
+
+                var election = await _dbContext.Elections.FindAsync(candidateUpdate.ElectionId);
+                if (election == null) return BadRequest("Selected election does not exist");
+                existingCandidate.ElectionId = election.Id;
+                existingCandidate.Election = election.ElectionName;
+
+                var position = await _dbContext.ElectionPositions.FindAsync(candidateUpdate.ElectionPositionId);
+                if (position == null) return BadRequest("Selected position does not exist");
+                existingCandidate.ElectionPositionId = position.Id;
+                existingCandidate.ElectionPosition = position.Position;
+
+                existingCandidate.UpdatedAt = DateTime.UtcNow;
+
+                _dbContext.Candidates.Update(existingCandidate);
+                await _dbContext.SaveChangesAsync();
+
+                return Ok(new { message = "Candidate updated successfully" });
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error updating candidate ID: {Id}", id);
+                return StatusCode(500, "Internal Server Error");
+            }
+        }
+
+        [HttpDelete("deleteCandidate/{id}")]
+        public async Task<IActionResult> DeleteCandidate(int id)
+        {
+            try
+            {
+                var candidate = await _dbContext.Candidates.FindAsync(id);
+                if (candidate == null) return NotFound("Candidate does not exist");
+
+                // Referential integrity: Clean up associated votes
+                var associatedVotes = await _dbContext.Votes.Where(v => v.CandidateId == id).ToListAsync();
+                _dbContext.Votes.RemoveRange(associatedVotes);
+
+                _dbContext.Candidates.Remove(candidate);
+                await _dbContext.SaveChangesAsync();
+
+                return Ok(new { message = "Candidate and associated votes deleted successfully" });
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error deleting candidate ID: {Id}", id);
+                return StatusCode(500, "Internal Server Error");
+            }
+        }
+
+        [HttpGet("getCandidateVotes/{id}")]
+        public async Task<IActionResult> GetCandidateVotes(int id)
+        {
+            try
+            {
+                var candidate = await _dbContext.Candidates.FindAsync(id);
+                if (candidate == null) return NotFound("Candidate not found");
+
+                var votes = await _dbContext.Votes
+                    .Where(v => v.CandidateId == id)
+                    .ToListAsync();
+
+                return Ok(new
+                {
+                    candidateId = id,
+                    candidateName = candidate.Fullname,
+                    voteCount = votes.Count,
+                    votes
+                });
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error fetching votes for candidate ID: {Id}", id);
+                return StatusCode(500, "Internal Server Error");
             }
         }
     }

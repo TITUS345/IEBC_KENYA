@@ -157,5 +157,91 @@ namespace IEBCVotingSystemV10.Controller
                 return StatusCode(500, "Internal Server Error");
             }
         }
+
+        [HttpGet("getAllVotes")]
+        public async Task<IActionResult> GetAllVotes()
+        {
+            try
+            {
+                var votes = await _dbContext.Votes.ToListAsync();
+                return Ok(votes);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error fetching all votes");
+                return StatusCode(500, "Internal Server Error");
+            }
+        }
+
+        [HttpGet("getVotesByCandidate/{candidateId}")]
+        public async Task<IActionResult> GetVotesByCandidate(int candidateId)
+        {
+            try
+            {
+                var votes = await _dbContext.Votes
+                    .Where(v => v.CandidateId == candidateId)
+                    .ToListAsync();
+
+                return Ok(votes);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error fetching votes for candidate ID: {CandidateId}", candidateId);
+                return StatusCode(500, "Internal Server Error");
+            }
+        }
+
+        [HttpDelete("deleteVote/{id}")]
+        public async Task<IActionResult> DeleteVote(int id)
+        {
+            try
+            {
+                var vote = await _dbContext.Votes.FindAsync(id);
+                if (vote == null)
+                {
+                    return NotFound("Vote does not exist");
+                }
+
+                _dbContext.Votes.Remove(vote);
+                await _dbContext.SaveChangesAsync();
+                _logger.LogInformation("Vote ID {Id} deleted successfully", id);
+                return Ok(new { message = "Vote deleted successfully" });
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error deleting vote ID: {Id}", id);
+                return StatusCode(500, "Internal Server Error");
+            }
+        }
+
+        [HttpPut("updateVote/{id}")]
+        public async Task<IActionResult> UpdateVote(int id, [FromBody] VoteModel voteUpdate)
+        {
+            try
+            {
+                var existingVote = await _dbContext.Votes.FindAsync(id);
+                if (existingVote == null)
+                {
+                    return NotFound("Vote does not exist");
+                }
+
+                existingVote.CandidateId = voteUpdate.CandidateId;
+                existingVote.Candidate = voteUpdate.Candidate;
+                existingVote.ElectionId = voteUpdate.ElectionId;
+                existingVote.Election = voteUpdate.Election;
+                existingVote.UpdatedAt = DateTime.UtcNow;
+
+                _dbContext.Votes.Update(existingVote);
+                await _dbContext.SaveChangesAsync();
+
+                _logger.LogInformation("Vote ID {Id} updated successfully", id);
+                return Ok(new { message = "Vote updated successfully" });
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error updating vote ID: {Id}", id);
+                return StatusCode(500, "Internal Server Error");
+            }
+        }
     }
 }

@@ -97,7 +97,7 @@ namespace IEBCVotingSystemV10.Controller.RegistrationController
                 }
 
                 // Handle Biometric Face Enrollment
-                string fileName = "embeddings_only"; // Default when no file is stored
+                string faceBiometricPath = "embeddings_only"; // Default when no file is stored
                 float[]? embeddings = null;
 
                 if (voterDTO.FaceBiometricFile != null && voterDTO.FaceBiometricFile.Length > 0)
@@ -129,25 +129,18 @@ namespace IEBCVotingSystemV10.Controller.RegistrationController
                     // 2. Save the biometric file (optional on hosted platforms)
                     try
                     {
-                        string extension = Path.GetExtension(voterDTO.FaceBiometricFile.FileName);
-                        if (string.IsNullOrEmpty(extension))
-                        {
-                            extension = ".jpg"; // Default extension
-                        }
-
-                        // Use NationalIdNo in filename for easier lookups during verification
-                        fileName = $"FaceRef_{voterDTO.NationalIdNo}_{Guid.NewGuid()}{extension}";
-
-                        // For hosted platforms, skip file storage and only store embeddings
-                        // The image data is not needed for verification - only embeddings matter
-                        _logger.LogInformation("Skipping biometric file storage on hosted platform. Only storing embeddings for verification.");
-
-                        _logger.LogInformation("Biometric embeddings processed successfully for {NationalId}", voterDTO.NationalIdNo);
+                        faceBiometricPath = await SaveFile(voterDTO.FaceBiometricFile, "Biometrics/Voters", voterDTO.NationalIdNo);
+                        _logger.LogInformation("Biometric file saved to: {Path}", faceBiometricPath);
+                    }
+                    catch (UnauthorizedAccessException ex)
+                    {
+                        _logger.LogError(ex, "Permission denied when saving biometric file for {NationalId}", voterDTO.NationalIdNo);
+                        return StatusCode(500, "Server error: Unable to save biometric file due to permission issues.");
                     }
                     catch (Exception ex)
                     {
-                        // Log but don't fail - embeddings are more important than file storage
-                        _logger.LogWarning(ex, "File storage failed, but continuing with embeddings for {NationalId}", voterDTO.NationalIdNo);
+                        _logger.LogError(ex, "Error saving biometric file for voter {NationalId}", voterDTO.NationalIdNo);
+                        return StatusCode(500, $"Error saving biometric file: {ex.Message}");
                     }
                 }
                 else
@@ -193,7 +186,7 @@ namespace IEBCVotingSystemV10.Controller.RegistrationController
                     Region = voterDTO.Region,
                     SelectedRole = role.Name ?? "Voter",
                     UserId = user.Id,
-                    FaceBiometricImage = fileName,
+                    FaceBiometricImage = faceBiometricPath,
                     FaceEmbeddings = embeddings != null ? JsonSerializer.Serialize(embeddings) : string.Empty,
                     CreatedAt = DateTime.UtcNow,
                     UpdatedAt = DateTime.UtcNow,
@@ -216,6 +209,26 @@ namespace IEBCVotingSystemV10.Controller.RegistrationController
                 _logger.LogError(ex, "Unexpected error during voter registration for {Email}", voterDTO.Email);
                 return StatusCode(500, $"Internal Server Error: {ex.Message}");
             }
+        }
+
+        // Helper method to save files to wwwroot
+        private async Task<string> SaveFile(IFormFile file, string folderName, string identifier)
+        {
+            string webRootPath = _env.WebRootPath;
+            var uploadFolder = Path.Combine(webRootPath, "uploads", folderName);
+            if (!Directory.Exists(uploadFolder))
+            {
+                Directory.CreateDirectory(uploadFolder);
+            }
+
+            var uniqueFileName = Guid.NewGuid().ToString() + "_" + Path.GetFileName(file.FileName);
+            var filePath = Path.Combine(uploadFolder, uniqueFileName);
+
+            using (var fileStream = new FileStream(filePath, FileMode.Create))
+            {
+                await file.CopyToAsync(fileStream);
+            }
+            return Path.Combine("/uploads", folderName, uniqueFileName).Replace("\\", "/");
         }
 
         [HttpPost("verifyVoterFace")]
@@ -250,6 +263,128 @@ namespace IEBCVotingSystemV10.Controller.RegistrationController
             catch (Exception ex)
             {
                 return StatusCode(500, $"Internal Server Error: {ex.Message}");
+            }
+        }
+
+        [HttpGet("getAllVoters")]
+        public async Task<IActionResult> GetAllVoters()
+        {
+            try
+            {
+                var voters = await _dbContext.Voters.ToListAsync();
+                return Ok(voters);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error fetching all voters");
+                return StatusCode(500, "Internal Server Error");
+            }
+        }
+
+        [HttpGet("getVotersWithCastedVote")]
+        public async Task<IActionResult> GetVotersWithCastedVote()
+        {
+            try
+            {
+                var votersWithVotes = await _dbContext.Voters
+                    .Where(voter => _dbContext.Votes.Any(vote => vote.VoterId == voter.Id))
+                    .ToListAsync();
+                return Ok(votersWithVotes);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error fetching voters who have casted a vote");
+                return StatusCode(500, "Internal Server Error");
+            }
+        }
+
+        [HttpGet("getVotersWithoutCastedVote")]
+        public async Task<IActionResult> GetVotersWithoutCastedVote()
+        {
+            try
+            {
+                var votersWithoutVotes = await _dbContext.Voters
+                    .Where(voter => !_dbContext.Votes.Any(vote => vote.VoterId == voter.Id))
+                    .ToListAsync();
+                return Ok(votersWithoutVotes);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error fetching voters who have not casted a vote");
+                return StatusCode(500, "Internal Server Error");
+            }
+        }
+
+        [HttpPut("updateVoter/{id}")]
+        public async Task<IActionResult> UpdateVoter(int id, [FromBody] VoterUpdateDTO voterUpdate)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            try
+            {
+                var existingVoter = await _dbContext.Voters.FindAsync(id);
+                if (existingVoter == null)
+                {
+                    return NotFound("Voter not found.");
+                }
+
+                // Update fields from DTO
+                existingVoter.FirstName = voterUpdate.FirstName;
+                existingVoter.LastName = voterUpdate.LastName;
+                existingVoter.SurName = voterUpdate.SurName ?? string.Empty;
+                existingVoter.Fullname = $"{voterUpdate.FirstName} {voterUpdate.LastName} {voterUpdate.SurName}".Trim();
+                existingVoter.PhoneNumber = voterUpdate.PhoneNumber;
+                existingVoter.Address = voterUpdate.Address;
+                existingVoter.Location = voterUpdate.Location;
+                existingVoter.Sub_Location = voterUpdate.Sub_Location;
+                existingVoter.Ward = voterUpdate.Ward;
+                existingVoter.Constituency = voterUpdate.Constituency;
+                existingVoter.County = voterUpdate.County;
+                existingVoter.Region = voterUpdate.Region;
+                existingVoter.UpdatedAt = DateTime.UtcNow;
+
+                _dbContext.Voters.Update(existingVoter);
+                await _dbContext.SaveChangesAsync();
+
+                _logger.LogInformation("Voter ID {Id} updated successfully", id);
+                return Ok(new { message = "Voter updated successfully" });
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error updating voter ID: {Id}", id);
+                return StatusCode(500, "Internal Server Error");
+            }
+        }
+
+        [HttpDelete("deleteVoter/{id}")]
+        public async Task<IActionResult> DeleteVoter(int id)
+        {
+            try
+            {
+                var voter = await _dbContext.Voters.FindAsync(id);
+                if (voter == null)
+                {
+                    return NotFound("Voter does not exist");
+                }
+
+                // Before deleting the voter, consider deleting associated votes to maintain referential integrity
+                // Or, configure cascade delete in your EF Core model.
+                var associatedVotes = await _dbContext.Votes.Where(v => v.VoterId == id).ToListAsync();
+                _dbContext.Votes.RemoveRange(associatedVotes);
+
+                _dbContext.Voters.Remove(voter);
+                await _dbContext.SaveChangesAsync();
+
+                _logger.LogInformation("Voter ID {Id} and associated votes deleted successfully", id);
+                return Ok(new { message = "Voter and associated votes deleted successfully" });
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error deleting voter ID: {Id}", id);
+                return StatusCode(500, "Internal Server Error");
             }
         }
     }
