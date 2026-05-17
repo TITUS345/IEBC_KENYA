@@ -13,6 +13,8 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { Button } from "@/components/ui/button";
 import { UserPlus, ArrowRight, Loader2 } from "lucide-react";
 import Link from "next/link";
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import { SignInForm } from "../signIn/page";
 
 // Updated Schema with stronger validation
 const SignUpSchema = z.object({
@@ -68,11 +70,20 @@ export function SignUpForm() {
         <CardHeader className="space-y-1">
           <div className="flex items-center justify-between">
             <CardTitle className="text-3xl font-bold text-slate-800">Registration</CardTitle>
-            <Link href="/auth/signIn">
-                <Button variant="outline" size="sm" className="text-green-600 border-green-200 hover:bg-green-50">
-                    Sign In <ArrowRight className="ml-2 h-4 w-4" />
-                </Button>
-            </Link>
+            <Dialog>
+                <DialogTrigger asChild>
+                    <Button variant="outline" size="sm" className="text-green-600 border-green-200 hover:bg-green-50">
+                        Sign In <ArrowRight className="ml-2 h-4 w-4" />
+                    </Button>
+                </DialogTrigger>
+                <DialogContent className="p-0 border-none sm:max-w-lg lg:max-w-xl">
+                    <DialogHeader className="p-4 bg-white rounded-t-xl border-b">
+                        <DialogTitle>Sign In to Your Account</DialogTitle>
+                        <DialogDescription>Enter your credentials to access the voting system.</DialogDescription>
+                    </DialogHeader>
+                    <SignInForm />
+                </DialogContent>
+            </Dialog>
           </div>
           <p className="text-slate-500 text-sm">Register your details for the IEBC Voting System</p>
         </CardHeader>

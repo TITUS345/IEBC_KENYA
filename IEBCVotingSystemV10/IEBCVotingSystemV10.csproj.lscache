@@ -87,6 +87,7 @@ Model/
   ElectionPositionDTO.cs
   ElectionTypeDTO.cs
   PartyDTO.cs
+  PasswordManagementDTOs.cs
   VoterDTO.cs
   VoteRequestDTO.cs
   VoterUpdateDTO.cs

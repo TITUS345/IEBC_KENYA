@@ -19,19 +19,15 @@ import { SignUpForm } from '@/app/auth/signUp/page';
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetDescription, SheetTrigger } from "@/components/ui/sheet";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogTrigger } from "@/components/ui/dialog";
-
 import RegisterCandidatePage from '@/app/registration/registerCandidate/page';
 import RegisterVoter from '@/app/registration/registerVoter/page';
-import PartyManagementPage from '@/app/election/electionParty/page';
 import CastVotePage from '@/app/election/voteCasting/page';
-import ElectionPositions from '@/app/election/electionPosition/page';
-import ElectionTypes from '@/app/election/electionType/page';
-import ManageElections from '@/app/election/elections/page';
 import { RoleForm } from '@/app/roles/page';
 import PartiesDirectoryPage from '@/app/election/electionParty/parties/page';
 import ElectionPositionsDirectoryPage from '@/app/election/electionPosition/positions/page';
 import ExistingElectionsPage from '@/app/election/elections/existingElections/page';
 import ExistingElectionTypesPage from '@/app/election/electionType/existingElectionTypes/page';
+import { SignInForm } from '@/app/auth/signIn/page';
 
 interface SidebarProps {
   sidebarOpen: boolean;
@@ -98,7 +94,7 @@ export function Sidebar({ sidebarOpen, setSidebarOpen }: SidebarProps) {
                       <LogIn className="mr-2 h-4 w-4" /> Sign In
                     </Button>
                   </DialogTrigger>
-                  <DialogContent className="p-0 border-none max-w-2xl">
+                  <DialogContent className="p-0 border-none sm:max-w-lg lg:max-w-xl">
                     <DialogHeader className="p-4 bg-white rounded-t-xl border-b">
                       <DialogTitle>Sign In to Your Account</DialogTitle>
                       <DialogDescription>
@@ -106,7 +102,7 @@ export function Sidebar({ sidebarOpen, setSidebarOpen }: SidebarProps) {
                       </DialogDescription>
                     </DialogHeader>
                     <div className="p-1 overflow-y-auto max-h-[80vh]">
-                      <SignUpForm />
+                      <SignInForm />
                     </div>
                   </DialogContent>
                 </Dialog>
@@ -116,7 +112,7 @@ export function Sidebar({ sidebarOpen, setSidebarOpen }: SidebarProps) {
                       <UserPlus className="mr-2 h-4 w-4" /> Create Account
                     </Button>
                   </DialogTrigger>
-                  <DialogContent className="p-0 border-none max-w-2xl">
+                  <DialogContent className="p-0 border-none sm:max-w-xl lg:max-w-2xl">
                     <DialogHeader className="p-4 bg-white rounded-t-xl border-b">
                       <DialogTitle>Create Your Account</DialogTitle>
                       <DialogDescription>

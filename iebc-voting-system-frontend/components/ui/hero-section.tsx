@@ -1,6 +1,9 @@
 'use client';
 
-import Link from 'next/link';
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog"
+import { SignInForm } from "@/app/auth/signIn/page"
+import { SignUpForm } from "@/app/auth/signUp/page"
+import RegisterVoter from "@/app/registration/registerVoter/page"
 
 export function HeroSection() {
   return (
@@ -16,24 +19,58 @@ export function HeroSection() {
           </p>
 
           <div className="grid gap-3 sm:grid-cols-3">
-            <Link
-              href="/auth/signIn"
-              className="inline-flex items-center justify-center rounded-2xl bg-green-500 px-5 py-3 text-sm font-semibold text-white transition hover:bg-green-600"
-            >
-              Access Portal
-            </Link>
-            <Link
-              href="/auth/signUp"
-              className="inline-flex items-center justify-center rounded-2xl bg-white px-5 py-3 text-sm font-semibold text-slate-950 transition hover:bg-slate-100"
-            >
-              Create Account
-            </Link>
-            <Link
-              href="/registration/registerVoter"
-              className="inline-flex items-center justify-center rounded-2xl border border-white/20 bg-white/10 px-5 py-3 text-sm font-semibold text-white transition hover:bg-white/20"
-            >
-              Register to Vote
-            </Link>
+            <Dialog>
+              <DialogTrigger asChild>
+                <button type="button" className="inline-flex items-center justify-center rounded-2xl bg-green-500 px-5 py-3 text-sm font-semibold text-white transition hover:bg-green-600">
+                  Access Portal
+                </button>
+              </DialogTrigger>
+              <DialogContent className="p-0 border-none sm:max-w-lg lg:max-w-xl">
+                <DialogHeader className="p-4 bg-white rounded-t-xl border-b">
+                  <DialogTitle>Sign In to Your Account</DialogTitle>
+                  <DialogDescription>Enter your credentials to access the voting system.</DialogDescription>
+                </DialogHeader>
+                <div className="p-1 overflow-y-auto max-h-[80vh]">
+                  <SignInForm />
+                </div>
+              </DialogContent>
+            </Dialog>
+
+            <Dialog>
+              <DialogTrigger asChild>
+                <button type="button" className="inline-flex items-center justify-center rounded-2xl bg-white px-5 py-3 text-sm font-semibold text-slate-950 transition hover:bg-slate-100">
+                  Create Account
+                </button>
+              </DialogTrigger>
+              <DialogContent className="p-0 border-none sm:max-w-xl lg:max-w-2xl">
+                <DialogHeader className="p-4 bg-white rounded-t-xl border-b">
+                  <DialogTitle>Create Your Account</DialogTitle>
+                  <DialogDescription>Register your details for the IEBC Voting System.</DialogDescription>
+                </DialogHeader>
+                <div className="p-1 overflow-y-auto max-h-[80vh]">
+                  <SignUpForm />
+                </div>
+              </DialogContent>
+            </Dialog>
+
+            <Dialog>
+              <DialogTrigger asChild>
+                <button type="button" className="inline-flex items-center justify-center rounded-2xl border border-white/20 bg-white/10 px-5 py-3 text-sm font-semibold text-white transition hover:bg-white/20">
+                  Register to Vote
+                </button>
+              </DialogTrigger>
+              <DialogContent className="p-0 border-none sm:max-w-4xl lg:max-w-5xl">
+                <DialogHeader className="p-4 bg-white rounded-t-xl border-b">
+                  <DialogTitle>Voter Registry</DialogTitle>
+                  <DialogDescription>
+                    Enroll and manage eligible voters with biometric security.
+                  </DialogDescription>
+                </DialogHeader>
+                <div className="p-6 overflow-y-auto max-h-[85vh]">
+                  <RegisterVoter />
+                </div>
+              </DialogContent>
+            </Dialog>
           </div>
         </div>
 

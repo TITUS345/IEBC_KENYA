@@ -4,7 +4,9 @@ using IEBCVotingSystemV10.Model;
 using IEBCVotingSystemV10.Model.Entity;
 using IEBCVotingSystemV10.Model.Roles;
 using IEBCVotingSystemV10.Services;
+using IEBCVotingSystemV10.Model.DTOs;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -218,6 +220,76 @@ namespace IEBCVotingSystemV10.Controller.Auth
             }
         }
 
+        // POST: api/auth/forgot-password
+        [HttpPost("forgot-password")]
+        public async Task<IActionResult> ForgotPassword([FromBody] ForgotPasswordDTO model)
+        {
+            if (!ModelState.IsValid) return BadRequest(ModelState);
+
+            var user = await _userManager.FindByEmailAsync(model.Email);
+            if (user == null)
+            {
+                // For security, don't reveal that the user doesn't exist
+                return Ok(new { message = "If your email is registered, you will receive a reset link shortly." });
+            }
+
+            var token = await _userManager.GeneratePasswordResetTokenAsync(user);
+            var encodedToken = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(token));
+
+            var frontendUrl = _config["FRONTEND_BASE_URL"] ?? "http://localhost:3000";
+            var resetURL = $"{frontendUrl}/auth/reset-password?token={encodedToken}&email={user.Email}";
+
+            string messageBody = $@"
+                <h2>Reset Your IEBC Password</h2>
+                <p>We received a request to reset your password. Click the link below to proceed:</p>
+                <div style='margin: 20px 0;'>
+                    <a href='{resetURL}' style='padding: 10px 20px; background: #16a34a; color: white; text-decoration: none; border-radius: 5px; font-weight: bold;'>Reset Password</a>
+                </div>
+                <p>If you did not request this, you can safely ignore this email.</p>";
+
+            await _emailService.SendEmailAsync(user.Email, "Reset Your Password - IEBC", messageBody);
+
+            return Ok(new { message = "Reset link sent to your email." });
+        }
+
+        // POST: api/auth/reset-password
+        [HttpPost("reset-password")]
+        public async Task<IActionResult> ResetPassword([FromBody] ResetPasswordDTO model)
+        {
+            if (!ModelState.IsValid) return BadRequest(ModelState);
+
+            var user = await _userManager.FindByEmailAsync(model.Email);
+            if (user == null) return BadRequest("Invalid request.");
+
+            string decodedToken;
+            try
+            {
+                var decodedTokenBytes = WebEncoders.Base64UrlDecode(model.Token);
+                decodedToken = Encoding.UTF8.GetString(decodedTokenBytes);
+            }
+            catch { return BadRequest("Invalid token format."); }
+
+            var result = await _userManager.ResetPasswordAsync(user, decodedToken, model.NewPassword);
+            if (result.Succeeded) return Ok(new { message = "Password has been reset successfully." });
+
+            return BadRequest(new { errors = result.Errors.Select(e => e.Description) });
+        }
+
+        // POST: api/auth/change-password
+        [Authorize]
+        [HttpPost("change-password")]
+        public async Task<IActionResult> ChangePassword([FromBody] ChangePasswordDTO model)
+        {
+            if (!ModelState.IsValid) return BadRequest(ModelState);
+
+            var user = await _userManager.GetUserAsync(User);
+            if (user == null) return Unauthorized();
+
+            var result = await _userManager.ChangePasswordAsync(user, model.CurrentPassword, model.NewPassword);
+            if (result.Succeeded) return Ok(new { message = "Password changed successfully." });
+
+            return BadRequest(new { errors = result.Errors.Select(e => e.Description) });
+        }
 
     }
 }
