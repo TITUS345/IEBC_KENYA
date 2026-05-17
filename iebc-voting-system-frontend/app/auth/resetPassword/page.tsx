@@ -44,7 +44,7 @@ export function ResetPasswordForm() {
   useEffect(() => {
     const token = searchParams.get("token")
     const email = searchParams.get("email")
-    if (token) setValue("token", token)
+    if (token) setValue("token", decodeURIComponent(token))
     if (email) setValue("email", email)
   }, [searchParams, setValue])
 

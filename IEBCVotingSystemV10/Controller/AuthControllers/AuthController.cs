@@ -237,7 +237,7 @@ namespace IEBCVotingSystemV10.Controller.Auth
             var encodedToken = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(token));
 
             var frontendUrl = _config["FRONTEND_BASE_URL"] ?? "http://localhost:3000";
-            var resetURL = $"{frontendUrl}/auth/reset-password?token={encodedToken}&email={user.Email}";
+            var resetURL = $"{frontendUrl}/auth/resetPassword?token={encodedToken}&email={user.Email}";
 
             string messageBody = $@"
                 <h2>Reset Your IEBC Password</h2>
