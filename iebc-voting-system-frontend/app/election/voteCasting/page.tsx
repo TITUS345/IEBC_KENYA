@@ -4,10 +4,10 @@ import React, { useState, useEffect } from 'react';
 import FaceRecognition from '@/components/FaceRecognition';
 import { useRouter } from 'next/navigation';
 
-export default function CastVotePage() {
+export default function CastVotePage({ electionId }: { electionId?: number }) {
     const [elections, setElections] = useState<any[]>([]);
     const [candidates, setCandidates] = useState<any[]>([]);
-    const [selectedElectionId, setSelectedElectionId] = useState<string>('');
+    const [selectedElectionId, setSelectedElectionId] = useState<string>(electionId?.toString() || '');
     const [selectedCandidateId, setSelectedCandidateId] = useState<string>('');
     const [voterEmail, setVoterEmail] = useState<string>('');
     const [liveEmbeddings, setLiveEmbeddings] = useState<number[] | null>(null);
@@ -151,6 +151,7 @@ export default function CastVotePage() {
                             value={selectedElectionId}
                             onChange={(e) => setSelectedElectionId(e.target.value)}
                             className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 outline-none"
+                            disabled={electionId !== undefined}
                             required
                         >
                             <option value="">-- Choose Election --</option>

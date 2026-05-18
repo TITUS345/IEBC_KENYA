@@ -17,7 +17,7 @@ import {
   Settings
 } from 'lucide-react';
 import { SignUpForm } from '@/app/auth/signUp/page';
-import { Button } from "@/components/ui/button";
+import { Button } from '@/components/ui/button';
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetDescription, SheetTrigger } from "@/components/ui/sheet";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogTrigger } from "@/components/ui/dialog";
 import RegisterCandidatePage from '@/app/registration/registerCandidate/page';
@@ -28,8 +28,81 @@ import PartiesDirectoryPage from '@/app/election/electionParty/parties/page';
 import ElectionPositionsDirectoryPage from '@/app/election/electionPosition/positions/page';
 import ExistingElectionsPage from '@/app/election/elections/existingElections/page';
 import ExistingElectionTypesPage from '@/app/election/electionType/existingElectionTypes/page';
-import { SignInForm } from '@/app/auth/signIn/page';
 import { ChangePasswordForm } from '@/app/auth/changePassword/page';
+import { SignInForm } from '@/app/auth/signIn/page';
+import { useState } from 'react';
+
+type SettingView = 'menu' | 'changePassword' | 'profileSettings' | 'notificationSettings';
+
+const SettingsContentManager = () => {
+  const [currentView, setCurrentView] = useState<SettingView>('menu');
+
+  const renderContent = () => {
+    switch (currentView) {
+      case 'menu':
+        return (
+          <div className="space-y-2">
+            <Button variant="ghost" className="flex h-auto w-full items-center justify-start rounded-xl px-4 py-3 text-sm font-medium text-slate-700 hover:bg-slate-100" onClick={() => setCurrentView('changePassword')}>
+              <ShieldCheck className="mr-2 h-4 w-4" /> Change Password
+            </Button>
+            {/* Add more settings options here */}
+            <Button variant="ghost" className="flex h-auto w-full items-center justify-start rounded-xl px-4 py-3 text-sm font-medium text-slate-700 hover:bg-slate-100" disabled>
+              <Settings className="mr-2 h-4 w-4" /> Profile Settings (Coming Soon)
+            </Button>
+          </div>
+        );
+      case 'changePassword':
+        return (
+          <>
+            <Button variant="ghost" className="mb-4 flex items-center gap-2" onClick={() => setCurrentView('menu')}>
+              &larr; Back to Settings Menu
+            </Button>
+            <ChangePasswordForm />
+          </>
+        );
+      default:
+        return null;
+    }
+  };
+
+  const getTitle = () => {
+    switch (currentView) {
+      case 'changePassword':
+        return 'Change Password';
+      case 'profileSettings':
+        return 'Profile Settings';
+      case 'notificationSettings':
+        return 'Notification Settings';
+      default:
+        return 'Settings';
+    }
+  };
+
+  const getDescription = () => {
+    switch (currentView) {
+      case 'changePassword':
+        return 'Update your account password.';
+      case 'profileSettings':
+        return 'Manage your personal profile details.';
+      case 'notificationSettings':
+        return 'Configure your notification preferences.';
+      default:
+        return 'Manage your account security and preferences.';
+    }
+  };
+
+  return (
+    <>
+      <DialogHeader className="p-4 bg-white rounded-t-xl border-b">
+        <DialogTitle>{getTitle()}</DialogTitle>
+        <DialogDescription>{getDescription()}</DialogDescription>
+      </DialogHeader>
+      <div className="p-4 overflow-y-auto max-h-[80vh]"> {/* Increased padding for better spacing */}
+        {renderContent()}
+      </div>
+    </>
+  );
+};
 
 interface SidebarProps {
   sidebarOpen: boolean;
@@ -281,19 +354,11 @@ export function Sidebar({ sidebarOpen, setSidebarOpen }: SidebarProps) {
                 <Dialog>
                   <DialogTrigger asChild>
                     <Button onClick={() => setSidebarOpen(false)} variant="ghost" className="flex h-auto w-full items-center justify-start rounded-2xl px-4 py-3 text-sm font-medium text-slate-700 transition hover:bg-slate-100">
-                      <Settings className="mr-2 h-4 w-4" /> Settings
+                      <Settings className="mr-2 h-4 w-4" /> Account Settings
                     </Button>
                   </DialogTrigger>
                   <DialogContent className="p-0 border-none sm:max-w-xl lg:max-w-2xl">
-                    <DialogHeader className="p-4 bg-white rounded-t-xl border-b">
-                      <DialogTitle>Settings</DialogTitle>
-                      <DialogDescription>
-                        Manage your account security and preferences.
-                      </DialogDescription>
-                    </DialogHeader>
-                    <div className="p-1 overflow-y-auto max-h-[80vh]">
-                      <ChangePasswordForm />
-                    </div>
+                    <SettingsContentManager />
                   </DialogContent>
                 </Dialog>
               </nav>

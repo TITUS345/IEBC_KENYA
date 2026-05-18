@@ -9,10 +9,12 @@ import {
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
+import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet"
 import { 
   Search, Calendar, Clock, Globe, Award, ListFilter, FilterX, ArrowRight
 } from "lucide-react"
 import Link from 'next/link'
+import CastVotePage from '../../voteCasting/page'
 
 interface Election {
   id: number;
@@ -153,12 +155,25 @@ export default function ExistingElectionsPage() {
 
                 <CardFooter className="bg-slate-50/30 p-4 border-t mt-auto">
                    {election.status === 'Ongoing' ? (
-                     <Button asChild variant="ghost" className="w-full justify-between group/btn text-green-600 hover:text-green-700 hover:bg-green-50">
-                       <Link href="/election/voteCasting">
-                        Cast Your Vote
-                        <ArrowRight className="h-4 w-4 transition-transform group-hover/btn:translate-x-1" />
-                       </Link>
-                     </Button>
+                     <Sheet>
+                       <SheetTrigger asChild>
+                         <Button variant="ghost" className="w-full justify-between group/btn text-green-600 hover:text-green-700 hover:bg-green-50">
+                           Cast Your Vote
+                           <ArrowRight className="h-4 w-4 transition-transform group-hover/btn:translate-x-1" />
+                         </Button>
+                       </SheetTrigger>
+                       <SheetContent side="right" className="p-0 border-none overflow-y-auto w-full lg:w-3/4">
+                         <SheetHeader className="p-4 bg-white rounded-t-xl border-b">
+                           <SheetTitle>Cast Your Vote</SheetTitle>
+                           <SheetDescription>
+                             Securely cast your vote for {election.electionName}.
+                           </SheetDescription>
+                         </SheetHeader>
+                         <div className="p-1">
+                           <CastVotePage electionId={election.id} />
+                         </div>
+                       </SheetContent>
+                     </Sheet>
                    ) : (
                      <div className={`w-full flex items-center gap-3 p-3 rounded-xl border ${
                        election.status === 'Upcoming' ? 'bg-amber-50 border-amber-100 text-amber-800' : 'bg-slate-100 border-slate-200 text-slate-500'

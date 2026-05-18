@@ -1,14 +1,11 @@
-using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Threading.Tasks;
+
 using IEBCVotingSystemV10.Data;
 using IEBCVotingSystemV10.Model.DTOs;
 using IEBCVotingSystemV10.Model.Entity;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Logging;
+
 
 namespace IEBCVotingSystemV10.Controller.Election
 {
@@ -24,7 +21,7 @@ namespace IEBCVotingSystemV10.Controller.Election
             this._dbContext = dbContext;
             this._logger = logger;
         }
-
+        [Authorize(Roles = "Admin")]
         [HttpPost("addPosition")]
         public async Task<IActionResult> AddPosition(ElectionPositionDTO positionDTO)
         {
@@ -56,6 +53,7 @@ namespace IEBCVotingSystemV10.Controller.Election
             }
         }
 
+        [Authorize(Roles = "Admin")]
         [HttpPut("updatePosition/{id}")]
         public async Task<IActionResult> UpdatePosition(int id, [FromBody] ElectionPositionDTO positionDTO)
         {
@@ -89,6 +87,7 @@ namespace IEBCVotingSystemV10.Controller.Election
             }
         }
 
+        [Authorize(Roles = "Admin")]
         [HttpDelete("deletePosition/{id}")]
         public async Task<IActionResult> DeletePosition(int id)
         {
