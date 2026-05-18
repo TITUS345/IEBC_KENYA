@@ -13,7 +13,8 @@ import {
   Briefcase, 
   Layers, 
   Calendar, 
-  ShieldCheck 
+  ShieldCheck,
+  Settings
 } from 'lucide-react';
 import { SignUpForm } from '@/app/auth/signUp/page';
 import { Button } from "@/components/ui/button";
@@ -28,6 +29,7 @@ import ElectionPositionsDirectoryPage from '@/app/election/electionPosition/posi
 import ExistingElectionsPage from '@/app/election/elections/existingElections/page';
 import ExistingElectionTypesPage from '@/app/election/electionType/existingElectionTypes/page';
 import { SignInForm } from '@/app/auth/signIn/page';
+import { ChangePasswordForm } from '@/app/auth/changePassword/page';
 
 interface SidebarProps {
   sidebarOpen: boolean;
@@ -272,6 +274,25 @@ export function Sidebar({ sidebarOpen, setSidebarOpen }: SidebarProps) {
                     </DialogHeader>
                     <div className="p-1 overflow-y-auto max-h-[80vh]">
                       <RoleForm />
+                    </div>
+                  </DialogContent>
+                </Dialog>
+
+                <Dialog>
+                  <DialogTrigger asChild>
+                    <Button onClick={() => setSidebarOpen(false)} variant="ghost" className="flex h-auto w-full items-center justify-start rounded-2xl px-4 py-3 text-sm font-medium text-slate-700 transition hover:bg-slate-100">
+                      <Settings className="mr-2 h-4 w-4" /> Settings
+                    </Button>
+                  </DialogTrigger>
+                  <DialogContent className="p-0 border-none sm:max-w-xl lg:max-w-2xl">
+                    <DialogHeader className="p-4 bg-white rounded-t-xl border-b">
+                      <DialogTitle>Settings</DialogTitle>
+                      <DialogDescription>
+                        Manage your account security and preferences.
+                      </DialogDescription>
+                    </DialogHeader>
+                    <div className="p-1 overflow-y-auto max-h-[80vh]">
+                      <ChangePasswordForm />
                     </div>
                   </DialogContent>
                 </Dialog>

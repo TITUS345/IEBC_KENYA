@@ -7,6 +7,7 @@ import { ContentArea } from '@/components/ui/content-area';
 import { Footer } from '@/components/ui/footer';
 import { HeroSection } from '@/components/ui/hero-section';
 import { FeaturesSection } from '@/components/ui/features-section';
+import { AnalyticsSection } from '@/components/ui/analytics-section';
 
 export default function Home() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
@@ -22,6 +23,7 @@ export default function Home() {
 
         <ContentArea>
           <HeroSection />
+          <AnalyticsSection />
           <FeaturesSection />
         </ContentArea>
 

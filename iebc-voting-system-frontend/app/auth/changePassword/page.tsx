@@ -23,7 +23,7 @@ const schema = z.object({
 
 type FormData = z.infer<typeof schema>
 
-export default function ChangePasswordPage() {
+export function ChangePasswordForm() {
   const [loading, setLoading] = useState(false)
   const [showPassword, setShowPassword] = useState(false)
   const apiUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5007"
@@ -67,20 +67,19 @@ export default function ChangePasswordPage() {
   }
 
   return (
-    <div className="max-w-lg mx-auto py-20 px-4">
-      <Card className="shadow-md border-t-4 border-t-green-600">
-        <CardHeader>
-          <CardTitle className="flex items-center gap-2 text-xl font-bold">
+      <Card className="w-full max-w-2xl shadow-xl border-t-4 border-t-green-600">
+        <CardHeader className="space-y-1">
+          <CardTitle className="flex items-center gap-2 text-3xl font-bold text-slate-800">
             <ShieldCheck className="h-6 w-6 text-green-600" />
             Security Settings
           </CardTitle>
-          <CardDescription>
+          <CardDescription className="text-slate-500">
             Regularly updating your password helps keep your voting account secure.
           </CardDescription>
         </CardHeader>
         <CardContent>
-          <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
-            <div className="space-y-2">
+          <form onSubmit={handleSubmit(onSubmit)} className="space-y-8">
+            <div className="space-y-3 pt-4">
               <Label htmlFor="currentPassword">Current Password</Label>
               <Input
                 id="currentPassword"
@@ -88,17 +87,19 @@ export default function ChangePasswordPage() {
                 placeholder="••••••••"
                 {...register("currentPassword")}
                 disabled={loading}
+                className="h-10"
               />
               {errors.currentPassword && <p className="text-xs text-red-500 font-medium">{errors.currentPassword.message}</p>}
             </div>
 
-            <div className="space-y-2">
-              <Label htmlFor="newPassword">New Password</Label>
+            <div className="space-y-3">
+              <Label htmlFor="newPassword">New Security Password</Label>
               <div className="relative">
                 <Input
                   id="newPassword"
                   type={showPassword ? "text" : "password"}
                   placeholder="••••••••"
+                  className="h-10 pr-10"
                   {...register("newPassword")}
                   disabled={loading}
                 />
@@ -113,24 +114,34 @@ export default function ChangePasswordPage() {
               {errors.newPassword && <p className="text-xs text-red-500 font-medium">{errors.newPassword.message}</p>}
             </div>
 
-            <div className="space-y-2">
-              <Label htmlFor="confirmPassword">Confirm New Password</Label>
+            <div className="space-y-3 pb-4">
+              <Label htmlFor="confirmPassword">Verify New Password</Label>
               <Input
                 id="confirmPassword"
                 type={showPassword ? "text" : "password"}
                 placeholder="••••••••"
+                className="h-10"
                 {...register("confirmPassword")}
                 disabled={loading}
               />
               {errors.confirmPassword && <p className="text-xs text-red-500 font-medium">{errors.confirmPassword.message}</p>}
             </div>
 
-            <Button type="submit" className="w-full bg-green-700 hover:bg-green-800 font-bold" disabled={loading}>
-              {loading ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : "Update Password"}
+            <Button type="submit" className="w-full bg-green-600 hover:bg-green-700 h-11 text-lg font-semibold transition-all shadow-md" disabled={loading}>
+              {loading ? <><Loader2 className="mr-2 h-5 w-5 animate-spin" /> Processing...</> : "Update Security Password"}
             </Button>
           </form>
         </CardContent>
       </Card>
+  )
+}
+
+export default function ChangePasswordPage() {
+  return (
+    <div className="flex w-full min-h-screen bg-slate-50 items-center justify-center p-6">
+      <div className="w-full max-w-2xl mx-auto">
+        <ChangePasswordForm />
+      </div>
     </div>
   )
 }

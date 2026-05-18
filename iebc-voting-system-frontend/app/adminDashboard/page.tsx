@@ -1,6 +1,7 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
 import {
   Sidebar,
   SidebarContent,
@@ -26,16 +27,19 @@ import {
   UserPlusIcon,
   SettingsIcon,
   BarChart3Icon,
+  Loader2,
   Search,
   Bell,
   ShieldCheck,
-  LogOut
+  LogOut,
+  RefreshCcw
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { RoleForm } from '@/app/roles/page';
+import { AnalyticsSection } from '@/components/ui/analytics-section';
 import ManageElections from '../election/elections/page';
 import ElectionTypes from '../election/electionType/page';
 import ElectionPositions from '../election/electionPosition/page';
@@ -44,51 +48,105 @@ import RegisterVoter from '../registration/registerVoter/page';
 import RegisterCandidatePage from '../registration/registerCandidate/page';
 import Link from 'next/link';
 
-const DashboardOverview = () => (
-  <div className="space-y-6">
-    <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-      <Card className="bg-green-700/5 border-green-700/20 border-t-4 border-t-green-700 shadow-sm">
-        <CardHeader className="pb-2">
-          <CardTitle className="text-sm font-medium text-muted-foreground uppercase tracking-wider">Active Elections</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <div className="text-3xl font-bold">12</div>
-          <p className="text-xs text-muted-foreground mt-1">4 starting this week</p>
-        </CardContent>
-      </Card>
-      <Card className="bg-green-600/5 border-green-600/20 border-t-4 border-t-green-600 shadow-sm">
-        <CardHeader className="pb-2">
-          <CardTitle className="text-sm font-medium text-muted-foreground uppercase tracking-wider">Total Voters</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <div className="text-3xl font-bold">2.4M</div>
-          <p className="text-xs text-muted-foreground mt-1">+12k since yesterday</p>
-        </CardContent>
-      </Card>
-      <Card className="bg-yellow-500/5 border-yellow-500/20 border-t-4 border-t-yellow-500 shadow-sm">
-        <CardHeader className="pb-2">
-          <CardTitle className="text-sm font-medium text-muted-foreground uppercase tracking-wider">Pending Approvals</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <div className="text-3xl font-bold">148</div>
-          <p className="text-xs text-muted-foreground mt-1">Requires immediate attention</p>
-        </CardContent>
-      </Card>
+const DashboardOverview = () => {
+  const [stats, setStats] = useState({
+    activeElections: 0,
+    totalVoters: 0,
+    totalCandidates: 0,
+    totalParties: 0
+  });
+  const [loading, setLoading] = useState(true);
+  const apiUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5007";
+
+  useEffect(() => {
+    const fetchStats = async () => {
+      try {
+        const [votersRes, candidatesRes, partiesRes, electionsRes] = await Promise.all([
+          axios.get(`${apiUrl}/api/voter/getAllVoters`),
+          axios.get(`${apiUrl}/api/candidate/getAllCandidates`),
+          axios.get(`${apiUrl}/api/party/getAllParties`),
+          axios.get(`${apiUrl}/api/elections/getAllElections`)
+        ]);
+
+        setStats({
+          totalVoters: votersRes.data.length,
+          totalCandidates: candidatesRes.data.length,
+          totalParties: partiesRes.data.length,
+          activeElections: electionsRes.data.filter((e: any) => e.status === 'Ongoing').length
+        });
+      } catch (error) {
+        console.error("Dashboard fetch error:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchStats();
+  }, []);
+
+  if (loading) return (
+    <div className="flex flex-col items-center justify-center py-20 gap-3">
+      <Loader2 className="w-10 h-10 animate-spin text-green-600" />
+      <p className="text-sm text-slate-400 font-medium italic">Generating insights...</p>
     </div>
+  );
+
+  return (
+    <div className="space-y-6">
+      <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
+        <Card className="bg-green-700/5 border-green-700/20 border-t-4 border-t-green-700 shadow-sm hover:shadow-md transition-shadow">
+          <CardHeader className="pb-2">
+            <CardTitle className="text-xs font-semibold text-muted-foreground uppercase tracking-widest leading-none">Active Polls</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="text-3xl font-black text-slate-900">{stats.activeElections}</div>
+            <p className="text-[10px] text-slate-500 mt-1.5 uppercase font-bold">Ongoing live events</p>
+          </CardContent>
+        </Card>
+        <Card className="bg-green-600/5 border-green-600/20 border-t-4 border-t-green-600 shadow-sm hover:shadow-md transition-shadow">
+          <CardHeader className="pb-2">
+            <CardTitle className="text-xs font-semibold text-muted-foreground uppercase tracking-widest leading-none">Registered Voters</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="text-3xl font-black text-slate-900">{stats.totalVoters.toLocaleString()}</div>
+            <p className="text-[10px] text-slate-500 mt-1.5 uppercase font-bold italic font-mono">Live Registry Count</p>
+          </CardContent>
+        </Card>
+        <Card className="bg-blue-600/5 border-blue-600/20 border-t-4 border-t-blue-600 shadow-sm hover:shadow-md transition-shadow">
+          <CardHeader className="pb-2">
+            <CardTitle className="text-xs font-semibold text-muted-foreground uppercase tracking-widest leading-none">Total Candidates</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="text-3xl font-black text-slate-900">{stats.totalCandidates}</div>
+            <p className="text-[10px] text-slate-500 mt-1.5 uppercase font-bold">Verified applicants</p>
+          </CardContent>
+        </Card>
+        <Card className="bg-amber-500/5 border-amber-500/20 border-t-4 border-t-amber-500 shadow-sm hover:shadow-md transition-shadow">
+          <CardHeader className="pb-2">
+            <CardTitle className="text-xs font-semibold text-muted-foreground uppercase tracking-widest leading-none">Political Parties</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="text-3xl font-black text-slate-900">{stats.totalParties}</div>
+            <p className="text-[10px] text-slate-500 mt-1.5 uppercase font-bold italic font-mono">Registered Entities</p>
+          </CardContent>
+        </Card>
+      </div>
 
     <Card>
       <CardHeader>
-        <CardTitle>System Activity</CardTitle>
+        <CardTitle className="text-sm font-bold flex items-center gap-2 px-6 pt-4">
+          <RefreshCcw className="h-4 w-4 text-green-600" />
+          Real-time Election Activity
+        </CardTitle>
       </CardHeader>
-      <CardContent className="h-[300px] flex items-center justify-center border-2 border-dashed rounded-md mx-6 mb-6">
-        <div className="text-center space-y-2">
-          <BarChart3Icon className="h-10 w-10 text-muted-foreground mx-auto" />
-          <p className="text-muted-foreground">Analytics visualization will be integrated here.</p>
+      <CardContent className="pb-6">
+        <div className="rounded-xl border border-slate-100 bg-slate-50/50 p-1 overflow-hidden">
+           <AnalyticsSection />
         </div>
       </CardContent>
     </Card>
   </div>
-);
+  );
+};
 
 const PlaceholderView = ({ title, description }: { title: string, description: string }) => (
   <div className="p-1 border rounded-xl bg-card border-t-8 border-t-green-700 shadow-lg">
@@ -111,7 +169,7 @@ const components = {
   electionTypes: <ElectionTypes/>,
   voters: <RegisterVoter />,
   candidates: <RegisterCandidatePage/>,
-  analytics: <PlaceholderView title="Analytics & Reports" description="Comprehensive data visualization for system performance and voting trends." />,
+  analytics: <div className="p-1 border rounded-xl bg-card border-t-8 border-t-green-700 shadow-lg overflow-hidden"><AnalyticsSection /></div>,
 };
 
 type ComponentKey = keyof typeof components;
