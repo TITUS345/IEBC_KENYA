@@ -45,6 +45,7 @@ import ElectionTypes from '../election/electionType/page';
 import ElectionPositions from '../election/electionPosition/page';
 import PartyManagementPage from '../election/electionParty/page';
 import RegisterVoter from '../registration/registerVoter/page';
+import UserManagementPage from '../auth/manageUser/page';
 import RegisterCandidatePage from '../registration/registerCandidate/page';
 import Link from 'next/link';
 
@@ -167,6 +168,7 @@ const components = {
   electionPositions: <ElectionPositions/>,
   elections: <ManageElections/>,
   electionTypes: <ElectionTypes/>,
+  manageUsers: <UserManagementPage />,
   voters: <RegisterVoter />,
   candidates: <RegisterCandidatePage/>,
   analytics: <div className="p-1 border rounded-xl bg-card border-t-8 border-t-green-700 shadow-lg overflow-hidden"><AnalyticsSection /></div>,
@@ -209,6 +211,12 @@ export default function AdminDashboardPage() {
 
               <SidebarGroup>
                 <SidebarGroupLabel>User Management</SidebarGroupLabel>
+                <SidebarMenuItem>
+                  <SidebarMenuButton onClick={() => setActiveComponent('manageUsers')} isActive={activeComponent === 'manageUsers'}>
+                    <UsersIcon className="h-5 w-5" />
+                    <span>Manage Users</span>
+                  </SidebarMenuButton>
+                </SidebarMenuItem>
                 <SidebarMenuItem>
                   <SidebarMenuButton onClick={() => setActiveComponent('roles')} isActive={activeComponent === 'roles'}>
                     <UsersIcon className="h-5 w-5" />
